@@ -636,7 +636,7 @@ export const MOCK_POIS: POI[] = [
     storyExcerpt:
       "Strasbourg's most picturesque quarter straddles four canals of the River Ill. Its 16th- and 17th-century half-timbered houses, once home to tanners and fishermen, now form a UNESCO World Heritage site of extraordinary charm.",
     thumbnailUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Strasbourg_-_Petite_France_-_1.jpg/800px-Strasbourg_-_Petite_France_-_1.jpg",
+      "https://images.unsplash.com/photo-1583265627959-fb7042f5133b?w=800&h=600&fit=crop",
     day: 2,
     storyBody: [
       "The name 'Petite France' has nothing to do with patriotism — it derives from a 15th-century hospice for soldiers suffering from syphilis, then called the 'French disease.' The tanners, millers, and fishermen who originally inhabited these half-timbered houses would hardly recognise the quarter's glamorous present.",
