@@ -215,7 +215,17 @@ export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
     };
   }, [initMap]);
 
-  const handleRecenter = () => {
+  // Filter markers by active categories
+  useEffect(() => {
+    markersRef.current.forEach((marker) => {
+      const cat = markerCategoryRef.current.get(marker);
+      const visible =
+        activeCategories.length === 0 || (cat && activeCategories.includes(cat));
+      marker.getElement().style.display = visible ? "flex" : "none";
+    });
+  }, [activeCategories]);
+
+
     mapRef.current?.flyTo({
       center: VESSEL_POSITION,
       zoom: 8,
