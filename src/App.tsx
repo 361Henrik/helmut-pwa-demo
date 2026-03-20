@@ -10,6 +10,7 @@ import JourneyPage from "./pages/JourneyPage";
 import MapPage from "./pages/MapPage";
 import SavedPage from "./pages/SavedPage";
 import SettingsPage from "./pages/SettingsPage";
+import StoryPage from "./pages/StoryPage";
 import NotFound from "./pages/NotFound";
 import { AppShell } from "./components/layout/AppShell";
 
@@ -25,6 +26,7 @@ const App = () => (
           {/* Standalone screens (no bottom nav) */}
           <Route path="/" element={<WelcomePage />} />
           <Route path="/onboarding" element={<OnboardingPage />} />
+          <Route path="/story/:id" element={<StoryPage />} />
 
           {/* App shell with persistent bottom tab bar */}
           <Route element={<AppShell />}>

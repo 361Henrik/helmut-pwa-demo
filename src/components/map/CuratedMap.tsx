@@ -1,4 +1,5 @@
 import { useEffect, useRef, useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import {
@@ -34,6 +35,7 @@ interface CuratedMapProps {
 }
 
 export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
+  const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const markersRef = useRef<mapboxgl.Marker[]>([]);
@@ -289,8 +291,9 @@ export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
         poi={selectedPoi}
         onClose={handleCloseSheet}
         onExpand={() => {
-          // Phase 4: navigate to full story screen
-          console.log("Expand to full story:", selectedPoi?.id);
+          if (selectedPoi) {
+            navigate(`/story/${selectedPoi.id}`);
+          }
         }}
       />
     </div>
