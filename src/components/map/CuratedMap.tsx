@@ -12,7 +12,7 @@ import { QuickInfoSheet } from "./QuickInfoSheet";
 
 /** Free public token — replace with operator token in production */
 const MAPBOX_TOKEN =
-  "pk.eyJ1IjoibG92YWJsZS1kZW1vIiwiYSI6ImNtOTdvMXJzbTAyczQya3M4dm15c3BreXoifQ.placeholder";
+  "pk.eyJ1IjoiaGVucmlrMzYxIiwiYSI6ImNtbXluN3BnejM0cW4ycXF0N3lkeWs4dmwifQ.gTD21EnpHl9W-a5VgFhyJQ";
 
 /** Category icon mapping to simple unicode for markers */
 const CATEGORY_ICONS: Record<string, string> = {
