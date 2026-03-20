@@ -1,123 +1,100 @@
 
 
-# Map Experience — Mobile-First Accessibility Update
+# POI Content Quality & Discovery Improvement Plan
 
-## Summary
-Six workstreams to improve the map for 60+ river-cruise passengers on mobile. Focus: larger touch targets, better icons, POI clustering, clearer navigation, and accessibility across all controls.
+## Current State
 
----
+10 POIs with Unsplash stock images (none show the actual place), generic filler text in story pages, and no hidden gems or lesser-known stops. All POIs are concentrated on days 3-6 with nothing for days 1-2 or day 7.
 
-## 1. Bottom Navigation Overhaul (`BottomTabBar.tsx`)
+## Plan
 
-**Changes:**
-- Increase tab bar height from `h-16` (64px) to `h-20` (80px) for breathing room
-- Increase icon size from `h-6 w-6` (24px) to `h-7 w-7` (28px)
-- Increase label font from `text-xs` (12px) to `text-sm` (14px)
-- Increase min tap target from `48px` to `56px`
-- Replace `Ship` icon with `Navigation` (river route arrow) — more relevant to cruise progression than a cargo ship
-- Make the "Return to Operator" bar always visible (not just when query param present) — use a default placeholder text like "Back to Travel App" so it's always discoverable; still driven by `returnUrl` param for the actual link
-- Increase the return bar height from `h-8` to `h-10` with `text-sm` instead of `text-caption`
-- Add `ArrowLeft` icon at 16px for the return bar
+### 1. Replace all images with real-world photography
 
-**Why:** Current 24px icons and 12px labels are below comfortable reading size for older adults. The Ship icon doesn't communicate "journey progression." The operator return link is invisible without a query param.
+**What changes:** Replace every `thumbnailUrl` with a Wikimedia Commons or verified public-domain image that shows the actual place.
 
----
+| POI | Current Image | Replacement Source |
+|-----|--------------|-------------------|
+| Loreley Rock | Generic mountain Unsplash | Wikimedia Commons photo of Loreley cliff from river |
+| Koblenz Deutsches Eck | Random German town | Wikimedia photo of Deutsches Eck confluence |
+| Cologne Cathedral | Distant cathedral shot | Wikimedia photo of Kölner Dom from Rhine |
+| Rüdesheim Wine Town | Mountain landscape | Wikimedia photo of Drosselgasse or Rüdesheim waterfront |
+| Bacharach Old Town | German village | Wikimedia photo of Bacharach from river |
+| Speyer Cathedral | Random cathedral | Wikimedia photo of Speyer Cathedral |
+| Rhine Gorge Vineyards | Generic vineyard | Wikimedia photo of terraced Rhine Gorge slopes |
+| Düsseldorf Altstadt | Generic bar | Wikimedia photo of Altstadt waterfront |
+| Marksburg Castle | Random castle | Wikimedia photo of Marksburg from Rhine |
+| Bonn Beethoven House | Piano keys | Wikimedia photo of Beethoven-Haus facade |
 
-## 2. Journey, Live View, Camera & Help Icons
+**Approach:** Use Wikimedia Commons URLs with `?width=800` parameter for consistent sizing. All images will be verified to show the correct location.
 
-**Changes:**
-- **Journey tab**: Replace `Ship` with `Route` (Lucide) — a path/route icon that communicates river progression
-- **Map controls**: Add a Help button (`CircleHelp` icon) below the existing Recenter and Layers buttons — same 14×14 circular style, opens a brief tooltip or modal explaining controls
-- **Live View / Camera**: Add a Camera button back to `MapControls` but with a "Coming Soon" badge overlay and disabled state. Uses `Camera` icon. When tapped, shows a toast: "Live View coming soon"
-- All map control buttons: increase from `h-12 w-12` to `h-14 w-14`, icons from `h-5 w-5` to `h-6 w-6`
+### 2. Expand to 25-30 POIs across all 7 days
 
-**Why:** Users asked for camera/help to be visible. Hiding the camera entirely removes discoverability. A disabled-with-explanation state is better than invisible.
+**What changes:** Add 15-20 new verified, real-world POIs filling gaps in days 1-2 and day 7, plus hidden gems throughout.
 
----
+**New POIs by day:**
 
-## 3. POI Marker Icon Quality Improvements (`mapIcons.ts`)
+Day 1 (Basel):
+- Basel Minster — Romanesque-Gothic cathedral overlooking Rhine (architecture)
+- Dreiländereck — Three-country border point (hidden-gem)
 
-**Changes:**
-- Increase marker size from 40×40 to 48×48 px
-- Increase SVG icon size from 18×18 to 22×22 px
-- Increase border width from 2px to 2.5px
-- Increase stroke-width in SVGs from 1.8 to 2.0 for better legibility
-- Replace weak icons:
-  - `culture`: current face/mask icon is unrecognizable → replace with a theater masks icon (two overlapping circles with expressions)
-  - `engineering`: current sun/gear is ambiguous → replace with a bridge/cog icon
-  - `hidden-gem`: duplicate star shape (same as `legends`) → replace with a diamond/gem shape
-  - `art`: current flower/palette is unclear → replace with a paintbrush icon
-- Keep `history`, `nature`, `architecture`, `food`, `legends`, `wildlife` — these are recognizable
+Day 2 (Strasbourg):
+- Strasbourg Cathedral — Gothic masterpiece with astronomical clock (architecture)
+- Petite France — Half-timbered canal quarter (culture)
+- Breisach am Rhein — Medieval hilltop town above the Rhine plain (hidden-gem)
 
-**Why:** At 40px on mobile, the current 18px stroke icons are too small and some are indistinguishable. Several categories share similar shapes (legends and hidden-gem are both stars).
+Day 3 (Speyer/Mannheim):
+- Mannheim Wasserturm — Art Nouveau water tower and gardens (engineering)
+- Heidelberg Castle ruins — visible from river, one of Germany's most famous ruins (history)
 
----
+Day 4 (Mainz/Rüdesheim):
+- Mainz Cathedral — 1000-year-old imperial cathedral (architecture)
+- Niederwald Monument — Germania statue above Rüdesheim (history)
 
-## 4. POI Clustering at Zoom-Out (`CuratedMap.tsx`)
+Day 5 (Rhine Gorge) — already well-covered, add:
+- Burg Rheinfels — largest castle ruin on the Rhine (history)
+- St. Goar town — opposite Loreley (hidden-gem)
 
-**Changes:**
-- Switch from individual DOM markers to a **Mapbox GeoJSON source + symbol layer** for POIs at low zoom
-- Use Mapbox's built-in `cluster` option on the GeoJSON source:
-  ```
-  source: { type: "geojson", data: poiFeatureCollection, cluster: true, clusterRadius: 50, clusterMaxZoom: 11 }
-  ```
-- Cluster circles: 48px, deep-green background, white count text (16px bold)
-- At zoom > 11: clusters dissolve into individual markers (keep current DOM marker approach)
-- Hybrid approach: use GeoJSON clusters for zoomed-out, switch to DOM markers when zoomed in past threshold
-- On cluster click: zoom into the cluster extent using `getClusterExpansionZoom`
+Day 6 (Cologne/Düsseldorf):
+- Ehrenbreitstein Fortress — second-largest preserved fortress in Europe (engineering)
+- Drachenfels — dragon legend mountain near Bonn (legends)
 
-**Implementation:**
-- Add a `pois` GeoJSON source with clustering enabled in `mapLayers.ts`
-- Add `cluster-circles` and `cluster-count` layers
-- In `CuratedMap.tsx`, listen to zoom level: hide DOM markers when zoom < 11, show cluster layer; reverse when zoom >= 11
-- Handle `click` on cluster layer to expand
+Day 7 (Netherlands):
+- Arnhem Bridge — WWII "A Bridge Too Far" (history)
+- Kinderdijk windmills — if close to route (engineering)
+- Amsterdam Centraal arrival — journey's end (culture)
 
-**Why:** With 10 POIs it's manageable, but the plan calls for many more. Clustering prevents visual clutter at zoomed-out views and communicates density clearly.
+Each POI will include: verified coordinates, factual teaser (1 line), researched storyExcerpt (2-3 sentences with specific facts), real Wikimedia image URL, correct category, and day assignment.
 
----
+### 3. Replace filler story text with per-POI content
 
-## 5. Category Filter Bar Accessibility (`CategoryFilterBar.tsx`)
+**What changes:** In `StoryPage.tsx`, replace the 3 hardcoded generic paragraphs with a new `storyBody` field on each POI, containing 2-3 paragraphs of verified, place-specific content.
 
-**Changes:**
-- Increase chip height: add `py-2.5` (from `py-2`)
-- Increase chip font from `text-xs` to `text-sm`
-- Add `min-h-[44px]` to each chip for WCAG touch target
-- Increase horizontal padding from `px-4` to `px-5`
-- Move filter bar down slightly from `top-4` to `top-5` to avoid conflict with map controls on right
+**Approach:**
+- Add `storyBody?: string[]` to the `POI` interface — array of paragraph strings
+- Populate for all POIs with factual, researched content
+- If `storyBody` exists, render those paragraphs; otherwise fall back to the current generic text
+- Each paragraph will include at least one verifiable fact (date, measurement, name, event)
 
-**Why:** Current filter chips at 12px text and ~36px height are too small for 60+ users on mobile.
+### 4. Improve icon consistency review
 
----
+**What changes:** Audit all category assignments for the expanded POI set. Ensure every new POI has a category with a clear, recognizable icon from the existing `mapIcons.ts` system.
 
-## 6. QuickInfoSheet Accessibility (`QuickInfoSheet.tsx`)
+No icon changes needed — the current SVG system (theater masks, bridge, diamond, paintbrush, etc.) already covers all categories well. The focus is on correct category assignment.
 
-**Changes:**
-- Increase title font from `text-lg` to `text-xl`
-- Increase close button from `h-8 w-8` to `h-10 w-10`
-- Increase "Swipe/Tap for full story" text from `text-caption` to `text-body-small`
-- Increase thumbnail from `h-20 w-20` to `h-24 w-24`
+### 5. Add source attribution to Story page
 
----
+**What changes:** Add a `sources?: string[]` field to POI and render a small attribution line at the bottom of each story: "Sources: UNESCO, German National Tourist Board" with a "Last verified: March 2026" line.
 
-## File Changes Summary
+### 6. File changes
 
 | File | Changes |
 |---|---|
-| `BottomTabBar.tsx` | Larger bar, bigger icons/labels, better Journey icon, visible operator return |
-| `MapControls.tsx` | Larger buttons, add Help button, add disabled Camera/Live View button |
-| `CuratedMap.tsx` | Add cluster source/layers, zoom-based marker visibility toggle, larger DOM markers |
-| `mapLayers.ts` | Add POI cluster source and layers |
-| `mapIcons.ts` | Larger SVGs (22px), replace culture/engineering/hidden-gem/art icons |
-| `CategoryFilterBar.tsx` | Larger chips, bigger text, better spacing |
-| `QuickInfoSheet.tsx` | Larger text, bigger close button, bigger thumbnail |
-| `src/index.css` | Update vessel marker sizes to match new scale |
+| `src/data/mock-route.ts` | Expand POI interface with `storyBody` and `sources`. Replace all 10 image URLs. Add 15-20 new POIs. |
+| `src/pages/StoryPage.tsx` | Render `storyBody` paragraphs instead of hardcoded filler. Add source attribution section. |
 
-## Implementation Order
+### Tradeoffs
 
-1. Bottom nav + icon changes (foundational, affects all pages)
-2. Map control buttons (larger + help + camera placeholder)
-3. POI marker icon redesign (bigger, clearer)
-4. POI clustering (new Mapbox source/layer system)
-5. Filter bar + QuickInfoSheet accessibility
-6. Mobile viewport testing
+- **Wikimedia Commons URLs** may be slower than Unsplash CDN but show real places. Could add `loading="lazy"` and width parameters.
+- **25-30 POIs** is a good density for 7 days without overwhelming. The clustering system already handles zoomed-out density.
+- **Content verification**: All facts will be based on well-known, easily verifiable information (UNESCO sites, major landmarks, documented history). Nothing speculative.
 
