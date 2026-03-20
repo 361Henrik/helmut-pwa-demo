@@ -90,7 +90,7 @@ export function QuickInfoSheet({ poi, onClose, onExpand }: QuickInfoSheetProps) 
                 className="mt-space-4 flex w-full items-center justify-center gap-1 text-caption text-muted-foreground"
               >
                 <ChevronUp className="h-4 w-4" />
-                <span>Swipe up for full story</span>
+                <span>{"ontouchstart" in window ? "Swipe up for full story" : "Tap for full story"}</span>
               </button>
             </div>
 

@@ -3,32 +3,18 @@ import { useNavigate } from "react-router-dom";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import {
-  ROUTE_COORDINATES,
   VESSEL_POSITION,
   MOCK_POIS,
   type POI,
   type POICategory,
 } from "@/data/mock-route";
+import { CATEGORY_SVG_ICONS } from "./mapIcons";
+import { addRouteLayers, getRouteBounds } from "./mapLayers";
 import { MapControls } from "./MapControls";
 import { QuickInfoSheet } from "./QuickInfoSheet";
 
-/** Free public token — replace with operator token in production */
 const MAPBOX_TOKEN =
   "pk.eyJ1IjoiaGVucmlrMzYxIiwiYSI6ImNtbXluN3BnejM0cW4ycXF0N3lkeWs4dmwifQ.gTD21EnpHl9W-a5VgFhyJQ";
-
-/** Category icon mapping to simple unicode for markers */
-const CATEGORY_ICONS: Record<string, string> = {
-  history: "🏛",
-  nature: "🌿",
-  architecture: "⛪",
-  culture: "🎭",
-  food: "🍷",
-  engineering: "⚙",
-  legends: "✨",
-  wildlife: "🦅",
-  art: "🎵",
-  "hidden-gem": "💎",
-};
 
 interface CuratedMapProps {
   activeCategories?: POICategory[];
@@ -40,9 +26,85 @@ export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const markersRef = useRef<mapboxgl.Marker[]>([]);
   const markerCategoryRef = useRef<Map<mapboxgl.Marker, POICategory>>(new Map());
+  const vesselMarkerRef = useRef<mapboxgl.Marker | null>(null);
   const [selectedPoi, setSelectedPoi] = useState<POI | null>(null);
   const [mapReady, setMapReady] = useState(false);
   const [tokenError, setTokenError] = useState(false);
+
+  const routeBounds = useRef(getRouteBounds(0.5));
+
+  /** Create all POI markers and the vessel marker */
+  const createMarkers = useCallback((map: mapboxgl.Map) => {
+    // Clear existing
+    markersRef.current.forEach((m) => m.remove());
+    markersRef.current = [];
+    markerCategoryRef.current.clear();
+    vesselMarkerRef.current?.remove();
+
+    // POI markers
+    MOCK_POIS.forEach((poi) => {
+      const el = document.createElement("div");
+      el.className = "curated-marker";
+      el.innerHTML = CATEGORY_SVG_ICONS[poi.category] || "";
+      el.style.cssText = `
+        width: 40px; height: 40px;
+        background: hsl(37 31% 95%);
+        border: 2px solid hsl(120 9% 11%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        transition: border-color 0.3s, box-shadow 0.3s;
+        color: hsl(158 41% 21%);
+      `;
+
+      el.addEventListener("mouseenter", () => {
+        el.style.borderColor = "hsl(40 46% 53%)";
+        el.style.boxShadow = "0 2px 12px hsla(40,46%,53%,0.4)";
+      });
+      el.addEventListener("mouseleave", () => {
+        if (selectedPoi?.id !== poi.id) {
+          el.style.borderColor = "hsl(120 9% 11%)";
+          el.style.boxShadow = "0 2px 8px rgba(0,0,0,0.15)";
+        }
+      });
+
+      el.addEventListener("click", (e) => {
+        e.stopPropagation();
+        setSelectedPoi(poi);
+        markersRef.current.forEach((m) => {
+          const mEl = m.getElement();
+          mEl.style.borderColor = "hsl(120 9% 11%)";
+          mEl.style.boxShadow = "0 2px 8px rgba(0,0,0,0.15)";
+        });
+        el.style.borderColor = "hsl(40 46% 53%)";
+        el.style.boxShadow = "0 2px 12px hsla(40,46%,53%,0.4)";
+        map.flyTo({ center: poi.coordinates, zoom: 11, duration: 800 });
+      });
+
+      const marker = new mapboxgl.Marker({ element: el })
+        .setLngLat(poi.coordinates)
+        .addTo(map);
+
+      markersRef.current.push(marker);
+      markerCategoryRef.current.set(marker, poi.category);
+    });
+
+    // Vessel marker with pulse
+    const vesselContainer = document.createElement("div");
+    vesselContainer.className = "vessel-marker-container";
+    vesselContainer.innerHTML = `
+      <div class="vessel-pulse-ring"></div>
+      <div class="vessel-dot"></div>
+      <div class="vessel-label">You are here</div>
+    `;
+
+    vesselMarkerRef.current = new mapboxgl.Marker({ element: vesselContainer })
+      .setLngLat(VESSEL_POSITION)
+      .addTo(map);
+  }, [selectedPoi]);
 
   const initMap = useCallback(() => {
     if (!containerRef.current || mapRef.current) return;
@@ -50,13 +112,16 @@ export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
     mapboxgl.accessToken = MAPBOX_TOKEN;
 
     try {
+      const bounds = routeBounds.current;
+
       const map = new mapboxgl.Map({
         container: containerRef.current,
         style: "mapbox://styles/mapbox/light-v11",
-        center: VESSEL_POSITION,
-        zoom: 8,
-        minZoom: 5,
+        bounds: bounds,
+        fitBoundsOptions: { padding: 40 },
+        minZoom: 5.5,
         maxZoom: 16,
+        maxBounds: getRouteBounds(1.0), // wider bounds for panning limit
         attributionControl: false,
         pitchWithRotate: false,
       });
@@ -66,131 +131,20 @@ export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
         "bottom-left"
       );
 
-      map.on("load", () => {
-        // Custom map styling overrides
-        try {
-          // Water color
-          map.setPaintProperty("water", "fill-color", "#D4E4ED");
-          // Land color
-          if (map.getLayer("land")) {
-            map.setPaintProperty("land", "background-color", "#F0EDE8");
-          }
-        } catch {
-          // Some layers may not exist in the style
-        }
-
-        // Route line
-        map.addSource("route", {
-          type: "geojson",
-          data: {
-            type: "Feature",
-            properties: {},
-            geometry: {
-              type: "LineString",
-              coordinates: ROUTE_COORDINATES,
-            },
-          },
-        });
-
-        // Upcoming route (warm grey)
-        map.addLayer({
-          id: "route-upcoming",
-          type: "line",
-          source: "route",
-          layout: {
-            "line-join": "round",
-            "line-cap": "round",
-          },
-          paint: {
-            "line-color": "#B8B0A4",
-            "line-width": 3,
-            "line-opacity": 0.6,
-          },
-        });
-
-        // Active route (deep green)
-        map.addLayer({
-          id: "route-active",
-          type: "line",
-          source: "route",
-          layout: {
-            "line-join": "round",
-            "line-cap": "round",
-          },
-          paint: {
-            "line-color": "#1F4A3A",
-            "line-width": 4,
-          },
-        });
-
-        // POI Markers
-        MOCK_POIS.forEach((poi) => {
-          const el = document.createElement("div");
-          el.className = "curated-marker";
-          el.innerHTML = `<span class="curated-marker-icon">${CATEGORY_ICONS[poi.category] || "📍"}</span>`;
-          el.style.cssText = `
-            width: 40px; height: 40px;
-            background: white;
-            border: 2px solid #1A1F1A;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            transition: border-color 0.3s, box-shadow 0.3s;
-            font-size: 18px;
-          `;
-
-          el.addEventListener("mouseenter", () => {
-            el.style.borderColor = "#C9A962";
-            el.style.boxShadow = "0 2px 12px rgba(201,169,98,0.4)";
-          });
-          el.addEventListener("mouseleave", () => {
-            if (selectedPoi?.id !== poi.id) {
-              el.style.borderColor = "#1A1F1A";
-              el.style.boxShadow = "0 2px 8px rgba(0,0,0,0.15)";
-            }
-          });
-
-          el.addEventListener("click", (e) => {
-            e.stopPropagation();
-            setSelectedPoi(poi);
-            // Bronze ring on selected
-            markersRef.current.forEach((m) => {
-              const mEl = m.getElement();
-              mEl.style.borderColor = "#1A1F1A";
-              mEl.style.boxShadow = "0 2px 8px rgba(0,0,0,0.15)";
-            });
-            el.style.borderColor = "#C9A962";
-            el.style.boxShadow = "0 2px 12px rgba(201,169,98,0.4)";
-
-            map.flyTo({ center: poi.coordinates, zoom: 11, duration: 800 });
-          });
-
-          const marker = new mapboxgl.Marker({ element: el })
-            .setLngLat(poi.coordinates)
-            .addTo(map);
-
-          markersRef.current.push(marker);
-          markerCategoryRef.current.set(marker, poi.category);
-        });
-
-        // Vessel position marker
-        const vesselEl = document.createElement("div");
-        vesselEl.style.cssText = `
-          width: 16px; height: 16px;
-          background: #1F4A3A;
-          border: 3px solid white;
-          border-radius: 50%;
-          box-shadow: 0 0 0 2px #1F4A3A, 0 2px 8px rgba(0,0,0,0.3);
-        `;
-
-        new mapboxgl.Marker({ element: vesselEl })
-          .setLngLat(VESSEL_POSITION)
-          .addTo(map);
-
+      const setupMap = () => {
+        addRouteLayers(map);
+        createMarkers(map);
         setMapReady(true);
+      };
+
+      map.on("load", setupMap);
+
+      // Re-add layers after style change
+      map.on("style.load", () => {
+        // Only re-add if map was already initialized
+        if (mapReady || map.isStyleLoaded()) {
+          addRouteLayers(map);
+        }
       });
 
       map.on("error", (e) => {
@@ -206,7 +160,7 @@ export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
       console.error("Map init error:", err);
       setTokenError(true);
     }
-  }, []);
+  }, [createMarkers, mapReady]);
 
   useEffect(() => {
     initMap();
@@ -228,9 +182,8 @@ export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
   }, [activeCategories]);
 
   const handleRecenter = () => {
-    mapRef.current?.flyTo({
-      center: VESSEL_POSITION,
-      zoom: 8,
+    mapRef.current?.fitBounds(routeBounds.current, {
+      padding: 40,
       duration: 1000,
     });
   };
@@ -243,14 +196,14 @@ export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
         ? "mapbox://styles/mapbox/outdoors-v12"
         : "mapbox://styles/mapbox/light-v11";
     mapRef.current.setStyle(nextStyle);
+    // Markers survive (DOM elements), layers re-added via style.load handler
   };
 
   const handleCloseSheet = () => {
     setSelectedPoi(null);
-    // Reset all marker styles
     markersRef.current.forEach((m) => {
       const mEl = m.getElement();
-      mEl.style.borderColor = "#1A1F1A";
+      mEl.style.borderColor = "hsl(120 9% 11%)";
       mEl.style.boxShadow = "0 2px 8px rgba(0,0,0,0.15)";
     });
   };
@@ -266,11 +219,6 @@ export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
         </h2>
         <p className="max-w-xs text-center text-body-small text-muted-foreground">
           A Mapbox access token is required to display the interactive map.
-          Please add your token to the project secrets as{" "}
-          <code className="rounded bg-card px-1.5 py-0.5 text-xs">
-            MAPBOX_TOKEN
-          </code>
-          .
         </p>
       </div>
     );
