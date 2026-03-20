@@ -562,7 +562,7 @@ export const MOCK_POIS: POI[] = [
     storyExcerpt:
       "Basel Minster's distinctive red sandstone facade and colourful tiled roof have dominated the city's skyline since the 12th century. Rebuilt after the 1356 earthquake — one of Europe's most destructive — the cathedral blends Romanesque and Gothic styles.",
     thumbnailUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Basel_-_M%C3%BCnster3.jpg/800px-Basel_-_M%C3%BCnster3.jpg",
+      "https://images.unsplash.com/photo-1597466599360-3b9775841aec?w=800&h=600&fit=crop",
     day: 1,
     storyBody: [
       "Basel Minster stands on the highest point of the old city, its terrace offering panoramic views across the Rhine into France and Germany. The original church was consecrated in 1019 in the presence of Emperor Henry II, whose tomb lies within.",
