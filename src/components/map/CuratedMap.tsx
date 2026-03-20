@@ -18,6 +18,22 @@ const MAPBOX_TOKEN =
 
 /** Zoom threshold: above this, show individual DOM markers; below, show clusters */
 const CLUSTER_ZOOM_THRESHOLD = 10;
+const PROXIMITY_KM = 50;
+
+function haversineKm(
+  [lng1, lat1]: [number, number],
+  [lng2, lat2]: [number, number]
+): number {
+  const R = 6371;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLng = ((lng2 - lng1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
 
 interface CuratedMapProps {
   activeCategories?: POICategory[];
@@ -29,6 +45,7 @@ export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const markersRef = useRef<mapboxgl.Marker[]>([]);
   const markerCategoryRef = useRef<Map<mapboxgl.Marker, POICategory>>(new Map());
+  const markerCoordsRef = useRef<Map<mapboxgl.Marker, [number, number]>>(new Map());
   const vesselMarkerRef = useRef<mapboxgl.Marker | null>(null);
   const [selectedPoi, setSelectedPoi] = useState<POI | null>(null);
   const [mapReady, setMapReady] = useState(false);
@@ -42,10 +59,14 @@ export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
       const showDom = zoom >= CLUSTER_ZOOM_THRESHOLD;
       markersRef.current.forEach((marker) => {
         const cat = markerCategoryRef.current.get(marker);
+        const coords = markerCoordsRef.current.get(marker);
         const catVisible =
           activeCategories.length === 0 || (cat && activeCategories.includes(cat));
-        marker.getElement().style.display =
-          showDom && catVisible ? "flex" : "none";
+        const dist = coords ? haversineKm(VESSEL_POSITION, coords) : 999;
+        const isNearby = dist <= PROXIMITY_KM;
+        const el = marker.getElement();
+        el.style.display = showDom && catVisible ? "flex" : "none";
+        el.style.opacity = isNearby ? "1" : "0.3";
       });
     },
     [activeCategories]
@@ -58,6 +79,7 @@ export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
       markersRef.current.forEach((m) => m.remove());
       markersRef.current = [];
       markerCategoryRef.current.clear();
+      markerCoordsRef.current.clear();
       vesselMarkerRef.current?.remove();
 
       // POI markers (48×48)
@@ -109,6 +131,7 @@ export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
 
         markersRef.current.push(marker);
         markerCategoryRef.current.set(marker, poi.category);
+        markerCoordsRef.current.set(marker, poi.coordinates);
       });
 
       // Vessel marker with pulse

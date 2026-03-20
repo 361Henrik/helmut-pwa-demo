@@ -1,11 +1,11 @@
 import { useRef, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   Ship,
-  ChevronRight,
   ChevronDown,
   Anchor,
+  Navigation,
   Landmark,
   TreePine,
   Building2,
@@ -55,40 +55,24 @@ function CategoryChip({ category }: { category: POICategory }) {
   );
 }
 
-function POICard({ poi, isPast }: { poi: POI; isPast: boolean }) {
-  const navigate = useNavigate();
+/** Simple name + icon row for the overview — no card, no navigation */
+function POINameRow({ poi, isPast }: { poi: POI; isPast: boolean }) {
   const Icon = CATEGORY_ICONS[poi.category];
-
   return (
-    <button
-      onClick={() => navigate(`/story/${poi.id}`)}
-      className={`flex w-full items-center gap-3 rounded-md border p-3 text-left transition-colors duration-200 active:scale-[0.98] ${
-        isPast
-          ? "bg-card/50 border-border/50"
-          : "bg-card border-border hover:border-champagne"
+    <div
+      className={`flex items-center gap-2.5 py-1 ${
+        isPast ? "opacity-50" : ""
       }`}
     >
-      <div
-        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-deep-green/10 ${
-          isPast ? "opacity-60" : ""
+      <Icon className="h-4 w-4 shrink-0 text-deep-green" />
+      <span
+        className={`text-body-small ${
+          isPast ? "text-muted-foreground" : "text-foreground"
         }`}
       >
-        <Icon className="h-5 w-5 text-deep-green" />
-      </div>
-      <div className="min-w-0 flex-1">
-        <h4
-          className={`font-display text-sm font-medium truncate ${
-            isPast ? "text-muted-foreground" : "text-foreground"
-          }`}
-        >
-          {poi.name}
-        </h4>
-        <p className="text-caption text-muted-foreground truncate">
-          {CATEGORY_LABELS[poi.category]}
-        </p>
-      </div>
-      <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
-    </button>
+        {poi.name}
+      </span>
+    </div>
   );
 }
 
@@ -103,11 +87,11 @@ function DaySection({
   index: number;
   defaultOpen: boolean;
 }) {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(defaultOpen);
   const isCurrent = cruiseDay.status === "current";
   const isPast = cruiseDay.status === "past";
 
-  // Unique categories for summary chips
   const uniqueCategories = useMemo(() => {
     const cats = new Set<POICategory>();
     pois.forEach((p) => cats.add(p.category));
@@ -144,7 +128,6 @@ function DaySection({
       </div>
 
       <Collapsible open={open} onOpenChange={setOpen}>
-        {/* Day header — always visible, tappable */}
         <CollapsibleTrigger asChild>
           <button
             className="w-full text-left pb-2 group"
@@ -180,7 +163,7 @@ function DaySection({
               />
             </div>
 
-            {/* Collapsed summary: category chips + stop count */}
+            {/* Collapsed summary */}
             {!open && pois.length > 0 && (
               <div className="mt-2 flex flex-wrap items-center gap-1.5">
                 {uniqueCategories.slice(0, 4).map((cat) => (
@@ -194,7 +177,6 @@ function DaySection({
           </button>
         </CollapsibleTrigger>
 
-        {/* Expanded content */}
         <CollapsibleContent>
           <p
             className={`text-body-small leading-relaxed mb-3 ${
@@ -205,16 +187,27 @@ function DaySection({
           </p>
 
           {pois.length > 0 && (
-            <div className="space-y-2">
+            <div className="mb-2 space-y-0.5">
               {pois.map((poi) => (
-                <POICard key={poi.id} poi={poi} isPast={isPast} />
+                <POINameRow key={poi.id} poi={poi} isPast={isPast} />
               ))}
             </div>
           )}
+
+          {/* View on Live Map link */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate("/map");
+            }}
+            className="inline-flex items-center gap-1.5 text-caption font-medium text-deep-green active:scale-[0.97]"
+          >
+            <Navigation className="h-3.5 w-3.5" />
+            View on Live Map
+          </button>
         </CollapsibleContent>
       </Collapsible>
 
-      {/* Spacer */}
       <div className="pb-5" />
     </motion.div>
   );
@@ -223,7 +216,6 @@ function DaySection({
 export function JourneyTimeline() {
   const currentDayRef = useRef<HTMLDivElement>(null);
 
-  // Group POIs by day
   const poisByDay = useMemo(() => {
     const map = new Map<number, POI[]>();
     MOCK_POIS.forEach((poi) => {
@@ -236,7 +228,6 @@ export function JourneyTimeline() {
     return map;
   }, []);
 
-  // Auto-scroll to current day on mount
   useEffect(() => {
     const timer = setTimeout(() => {
       const el = document.querySelector("[data-current-day]");
@@ -247,7 +238,6 @@ export function JourneyTimeline() {
 
   return (
     <div className="relative flex flex-col">
-      {/* Timeline vertical line */}
       <div className="absolute bottom-0 left-[13px] top-0 w-px bg-border" />
 
       {CRUISE_ITINERARY.map((cruiseDay, index) => (
@@ -264,7 +254,6 @@ export function JourneyTimeline() {
         </div>
       ))}
 
-      {/* Journey end marker */}
       <div className="relative pl-10">
         <div className="absolute left-0 top-1 flex h-7 w-7 items-center justify-center">
           <Anchor className="h-4 w-4 text-muted-foreground" />
