@@ -18,6 +18,8 @@ export function QuickInfoSheet({ poi, onClose, onExpand }: QuickInfoSheetProps) 
     }
   };
 
+  const isTouch = typeof window !== "undefined" && "ontouchstart" in window;
+
   return (
     <AnimatePresence>
       {poi && (
@@ -50,8 +52,8 @@ export function QuickInfoSheet({ poi, onClose, onExpand }: QuickInfoSheetProps) 
 
             <div className="px-space-5 pb-space-6">
               <div className="flex gap-space-4">
-                {/* Thumbnail */}
-                <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg">
+                {/* Thumbnail — larger for accessibility */}
+                <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-lg">
                   <img
                     src={poi.thumbnailUrl}
                     alt={poi.name}
@@ -60,12 +62,12 @@ export function QuickInfoSheet({ poi, onClose, onExpand }: QuickInfoSheetProps) 
                   />
                 </div>
 
-                {/* Content */}
+                {/* Content — larger text */}
                 <div className="flex flex-1 flex-col justify-center">
-                  <span className="text-caption uppercase text-muted-foreground">
+                  <span className="text-body-small uppercase text-muted-foreground">
                     {CATEGORY_LABELS[poi.category]}
                   </span>
-                  <h3 className="font-display text-lg font-medium leading-tight text-foreground">
+                  <h3 className="font-display text-xl font-medium leading-tight text-foreground">
                     {poi.name}
                   </h3>
                   <p className="mt-1 text-body-small text-muted-foreground line-clamp-2">
@@ -76,7 +78,7 @@ export function QuickInfoSheet({ poi, onClose, onExpand }: QuickInfoSheetProps) 
                 {/* Audio shortcut */}
                 {poi.audioUrl !== undefined && (
                   <button
-                    className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-deep-green text-deep-green-foreground"
+                    className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-deep-green text-deep-green-foreground"
                     aria-label="Play audio"
                   >
                     <Play className="h-5 w-5" />
@@ -87,20 +89,22 @@ export function QuickInfoSheet({ poi, onClose, onExpand }: QuickInfoSheetProps) 
               {/* Expand hint */}
               <button
                 onClick={onExpand}
-                className="mt-space-4 flex w-full items-center justify-center gap-1 text-caption text-muted-foreground"
+                className="mt-space-4 flex w-full items-center justify-center gap-1 text-body-small text-muted-foreground"
               >
                 <ChevronUp className="h-4 w-4" />
-                <span>{"ontouchstart" in window ? "Swipe up for full story" : "Tap for full story"}</span>
+                <span>
+                  {isTouch ? "Swipe up for full story" : "Tap for full story"}
+                </span>
               </button>
             </div>
 
-            {/* Close button */}
+            {/* Close button — larger tap target */}
             <button
               onClick={onClose}
-              className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-card"
+              className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-card"
               aria-label="Close"
             >
-              <X className="h-4 w-4 text-muted-foreground" />
+              <X className="h-5 w-5 text-muted-foreground" />
             </button>
           </motion.div>
         </>

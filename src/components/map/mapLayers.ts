@@ -1,5 +1,5 @@
 import mapboxgl from "mapbox-gl";
-import { ROUTE_COORDINATES } from "@/data/mock-route";
+import { ROUTE_COORDINATES, MOCK_POIS } from "@/data/mock-route";
 
 /**
  * Generate a simplified corridor polygon around the route.
@@ -9,14 +9,12 @@ import { ROUTE_COORDINATES } from "@/data/mock-route";
 function generateCorridorPolygon(): [number, number][][] {
   const OFFSET = 0.15; // ~15km at these latitudes
 
-  // Build left and right offset paths
   const leftPath: [number, number][] = [];
   const rightPath: [number, number][] = [];
 
   for (let i = 0; i < ROUTE_COORDINATES.length; i++) {
     const [lng, lat] = ROUTE_COORDINATES[i];
 
-    // Compute perpendicular direction from segment
     let dx = 0, dy = 1;
     if (i < ROUTE_COORDINATES.length - 1) {
       dx = ROUTE_COORDINATES[i + 1][0] - lng;
@@ -26,7 +24,6 @@ function generateCorridorPolygon(): [number, number][][] {
       dy = lat - ROUTE_COORDINATES[i - 1][1];
     }
     const len = Math.sqrt(dx * dx + dy * dy) || 1;
-    // Perpendicular: rotate 90°
     const nx = -dy / len;
     const ny = dx / len;
 
@@ -34,14 +31,12 @@ function generateCorridorPolygon(): [number, number][][] {
     rightPath.push([lng - nx * OFFSET, lat - ny * OFFSET]);
   }
 
-  // Inner ring: left path forward, then right path reversed, closed
   const innerRing: [number, number][] = [
     ...leftPath,
     ...rightPath.reverse(),
-    leftPath[0], // close the ring
+    leftPath[0],
   ];
 
-  // Outer ring: world bounds
   const outerRing: [number, number][] = [
     [-180, -90],
     [180, -90],
@@ -71,6 +66,27 @@ export function getRouteBounds(padding = 0.5): mapboxgl.LngLatBounds {
     [minLng - padding, minLat - padding],
     [maxLng + padding, maxLat + padding]
   );
+}
+
+/**
+ * Build a GeoJSON FeatureCollection from POIs for clustering.
+ */
+export function buildPoiFeatureCollection(): GeoJSON.FeatureCollection {
+  return {
+    type: "FeatureCollection",
+    features: MOCK_POIS.map((poi) => ({
+      type: "Feature" as const,
+      properties: {
+        id: poi.id,
+        name: poi.name,
+        category: poi.category,
+      },
+      geometry: {
+        type: "Point" as const,
+        coordinates: poi.coordinates,
+      },
+    })),
+  };
 }
 
 /**
@@ -122,7 +138,6 @@ export function addRouteLayers(map: mapboxgl.Map) {
     });
   }
 
-  // Upcoming route (warm grey)
   if (!map.getLayer("route-upcoming")) {
     map.addLayer({
       id: "route-upcoming",
@@ -137,7 +152,6 @@ export function addRouteLayers(map: mapboxgl.Map) {
     });
   }
 
-  // Active route (deep green)
   if (!map.getLayer("route-active")) {
     map.addLayer({
       id: "route-active",
@@ -147,6 +161,49 @@ export function addRouteLayers(map: mapboxgl.Map) {
       paint: {
         "line-color": "#1F4A3A",
         "line-width": 4,
+      },
+    });
+  }
+
+  // --- POI clusters ---
+  if (!map.getSource("pois-cluster")) {
+    map.addSource("pois-cluster", {
+      type: "geojson",
+      data: buildPoiFeatureCollection(),
+      cluster: true,
+      clusterRadius: 50,
+      clusterMaxZoom: 11,
+    });
+  }
+
+  if (!map.getLayer("cluster-circles")) {
+    map.addLayer({
+      id: "cluster-circles",
+      type: "circle",
+      source: "pois-cluster",
+      filter: ["has", "point_count"],
+      paint: {
+        "circle-color": "#1F4A3A",
+        "circle-radius": 24,
+        "circle-stroke-width": 3,
+        "circle-stroke-color": "#F6F3EE",
+      },
+    });
+  }
+
+  if (!map.getLayer("cluster-count")) {
+    map.addLayer({
+      id: "cluster-count",
+      type: "symbol",
+      source: "pois-cluster",
+      filter: ["has", "point_count"],
+      layout: {
+        "text-field": ["get", "point_count_abbreviated"],
+        "text-font": ["DIN Pro Medium", "Arial Unicode MS Bold"],
+        "text-size": 15,
+      },
+      paint: {
+        "text-color": "#F6F3EE",
       },
     });
   }
