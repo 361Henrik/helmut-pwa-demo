@@ -34,6 +34,8 @@ const CATEGORIES = [
 ];
 
 export default function SettingsPage() {
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
   const [language, setLanguage] = useState(() => {
     return localStorage.getItem("curated-lens-language") ?? "en";
   });
