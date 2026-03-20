@@ -59,10 +59,14 @@ export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
       const showDom = zoom >= CLUSTER_ZOOM_THRESHOLD;
       markersRef.current.forEach((marker) => {
         const cat = markerCategoryRef.current.get(marker);
+        const coords = markerCoordsRef.current.get(marker);
         const catVisible =
           activeCategories.length === 0 || (cat && activeCategories.includes(cat));
-        marker.getElement().style.display =
-          showDom && catVisible ? "flex" : "none";
+        const dist = coords ? haversineKm(VESSEL_POSITION, coords) : 999;
+        const isNearby = dist <= PROXIMITY_KM;
+        const el = marker.getElement();
+        el.style.display = showDom && catVisible ? "flex" : "none";
+        el.style.opacity = isNearby ? "1" : "0.3";
       });
     },
     [activeCategories]
