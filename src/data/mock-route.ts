@@ -656,7 +656,7 @@ export const MOCK_POIS: POI[] = [
     storyExcerpt:
       "Built in 1030, Speyer Cathedral is the largest surviving Romanesque church. Four Holy Roman Emperors are buried in its crypt. The massive nave, with its alternating pillars and columns, creates a rhythm of light and shadow.",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1600623047481-697d463a0f49?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1567359781514-3b964e2b04d6?w=800&h=600&fit=crop",
     day: 3,
     storyBody: [
       "When Emperor Conrad II laid the foundation stone in 1030, he intended Speyer Cathedral to be the largest church in Christendom. Nearly a millennium later, it remains the largest surviving Romanesque church in the world, its dimensions still impressive: 134 metres long, 33 metres to the vault.",
