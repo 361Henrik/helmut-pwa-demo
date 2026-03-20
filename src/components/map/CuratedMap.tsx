@@ -37,6 +37,7 @@ export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const markersRef = useRef<mapboxgl.Marker[]>([]);
+  const markerCategoryRef = useRef<Map<mapboxgl.Marker, POICategory>>(new Map());
   const [selectedPoi, setSelectedPoi] = useState<POI | null>(null);
   const [mapReady, setMapReady] = useState(false);
   const [tokenError, setTokenError] = useState(false);
