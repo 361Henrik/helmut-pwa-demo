@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 
 const tabs = [
   { to: "/journey", label: "Journey", icon: Route },
-  { to: "/map", label: "Map", icon: Map },
+  { to: "/map", label: "Live", icon: Navigation },
   { to: "/saved", label: "Saved", icon: Bookmark },
   { to: "/settings", label: "Settings", icon: Settings },
 ] as const;

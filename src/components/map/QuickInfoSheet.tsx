@@ -1,7 +1,21 @@
 import { motion, AnimatePresence, PanInfo } from "framer-motion";
-import { ChevronUp, Play, X } from "lucide-react";
-import type { POI } from "@/data/mock-route";
+import { ChevronUp, Play, X, Landmark, TreePine, Building2, Theater, Wine, Cog, Star, Bird, Paintbrush, Gem } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import type { POI, POICategory } from "@/data/mock-route";
 import { CATEGORY_LABELS } from "@/data/mock-route";
+
+const CATEGORY_ICONS: Record<POICategory, LucideIcon> = {
+  history: Landmark,
+  nature: TreePine,
+  architecture: Building2,
+  culture: Theater,
+  food: Wine,
+  engineering: Cog,
+  legends: Star,
+  wildlife: Bird,
+  art: Paintbrush,
+  "hidden-gem": Gem,
+};
 
 interface QuickInfoSheetProps {
   poi: POI | null;
@@ -24,7 +38,6 @@ export function QuickInfoSheet({ poi, onClose, onExpand }: QuickInfoSheetProps) 
     <AnimatePresence>
       {poi && (
         <>
-          {/* Backdrop */}
           <motion.div
             className="absolute inset-0 z-10"
             initial={{ opacity: 0 }}
@@ -33,7 +46,6 @@ export function QuickInfoSheet({ poi, onClose, onExpand }: QuickInfoSheetProps) 
             onClick={onClose}
           />
 
-          {/* Sheet */}
           <motion.div
             className="absolute bottom-0 left-0 right-0 z-20 rounded-t-2xl bg-background shadow-[0_-4px_24px_rgba(0,0,0,0.12)]"
             initial={{ y: "100%" }}
@@ -45,27 +57,20 @@ export function QuickInfoSheet({ poi, onClose, onExpand }: QuickInfoSheetProps) 
             dragElastic={0.2}
             onDragEnd={handleDragEnd}
           >
-            {/* Drag handle */}
             <div className="flex justify-center pt-3 pb-1">
               <div className="h-1 w-10 rounded-full bg-border" />
             </div>
 
             <div className="px-space-5 pb-space-6">
               <div className="flex gap-space-4">
-                {/* Thumbnail — larger for accessibility */}
-                <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-lg">
-                  <img
-                    src={poi.thumbnailUrl}
-                    alt={poi.name}
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = "/placeholder.svg";
-                    }}
-                  />
+                {/* Category icon instead of image */}
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-deep-green/10">
+                  {(() => {
+                    const Icon = CATEGORY_ICONS[poi.category];
+                    return <Icon className="h-6 w-6 text-deep-green" />;
+                  })()}
                 </div>
 
-                {/* Content — larger text */}
                 <div className="flex flex-1 flex-col justify-center">
                   <span className="text-body-small uppercase text-muted-foreground">
                     {CATEGORY_LABELS[poi.category]}
@@ -78,10 +83,9 @@ export function QuickInfoSheet({ poi, onClose, onExpand }: QuickInfoSheetProps) 
                   </p>
                 </div>
 
-                {/* Audio shortcut */}
                 {poi.audioUrl !== undefined && (
                   <button
-                    className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-deep-green text-deep-green-foreground"
+                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-deep-green text-deep-green-foreground"
                     aria-label="Play audio"
                   >
                     <Play className="h-5 w-5" />
@@ -89,7 +93,6 @@ export function QuickInfoSheet({ poi, onClose, onExpand }: QuickInfoSheetProps) 
                 )}
               </div>
 
-              {/* Expand hint */}
               <button
                 onClick={onExpand}
                 className="mt-space-4 flex w-full items-center justify-center gap-1 text-body-small text-muted-foreground"
@@ -101,7 +104,6 @@ export function QuickInfoSheet({ poi, onClose, onExpand }: QuickInfoSheetProps) 
               </button>
             </div>
 
-            {/* Close button — larger tap target */}
             <button
               onClick={onClose}
               className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-card"

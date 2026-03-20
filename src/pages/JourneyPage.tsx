@@ -1,9 +1,37 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Ship, Compass, ArrowDown } from "lucide-react";
-import { CRUISE_ITINERARY, MOCK_POIS } from "@/data/mock-route";
+import {
+  Ship,
+  Navigation,
+  ArrowDown,
+  Landmark,
+  TreePine,
+  Building2,
+  Theater,
+  Wine,
+  Cog,
+  Star,
+  Bird,
+  Paintbrush,
+  Gem,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import { CRUISE_ITINERARY, MOCK_POIS, CATEGORY_LABELS, type POICategory } from "@/data/mock-route";
 import { JourneyTimeline } from "@/components/journey/JourneyTimeline";
 import { useMemo, useState, useEffect, useRef } from "react";
+
+const CATEGORY_ICONS: Record<POICategory, LucideIcon> = {
+  history: Landmark,
+  nature: TreePine,
+  architecture: Building2,
+  culture: Theater,
+  food: Wine,
+  engineering: Cog,
+  legends: Star,
+  wildlife: Bird,
+  art: Paintbrush,
+  "hidden-gem": Gem,
+};
 
 export default function JourneyPage() {
   const navigate = useNavigate();
@@ -20,12 +48,19 @@ export default function JourneyPage() {
     return Math.round(((currentDay.day - 0.5) / CRUISE_ITINERARY.length) * 100);
   }, [currentDay]);
 
-  // Show "Jump to Now" when user scrolls away from current day
+  // Category mix with counts
+  const categoryMix = useMemo(() => {
+    const counts = new Map<POICategory, number>();
+    MOCK_POIS.forEach((p) => counts.set(p.category, (counts.get(p.category) || 0) + 1));
+    return Array.from(counts.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5);
+  }, []);
+
   useEffect(() => {
     const container = scrollRef.current;
     if (!container) return;
     const handleScroll = () => {
-      // Simple heuristic: show button if scrolled more than 300px from top
       setShowJumpBtn(container.scrollTop > 400);
     };
     container.addEventListener("scroll", handleScroll, { passive: true });
@@ -65,14 +100,15 @@ export default function JourneyPage() {
             Your Voyage
           </h1>
           <p className="mt-1.5 text-body-small leading-relaxed text-muted-foreground">
-            Basel to Amsterdam along the Rhine — castles, cathedrals, vineyards, and hidden gems.
+            Basel to Amsterdam along the Rhine — castles, cathedrals, vineyards,
+            and hidden gems.
           </p>
           <p className="mt-1 text-caption text-muted-foreground">
             {MOCK_POIS.length} discoveries across {CRUISE_ITINERARY.length} days
           </p>
         </motion.div>
 
-        {/* Compact progress bar */}
+        {/* Progress bar */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -101,19 +137,41 @@ export default function JourneyPage() {
           )}
         </motion.div>
 
-        {/* Quick actions */}
+        {/* Category mix */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.3 }}
+          className="mt-space-4 flex flex-wrap gap-2"
+        >
+          {categoryMix.map(([cat, count]) => {
+            const Icon = CATEGORY_ICONS[cat];
+            return (
+              <span
+                key={cat}
+                className="inline-flex items-center gap-1 rounded-full bg-card px-2.5 py-1 text-caption text-muted-foreground"
+              >
+                <Icon className="h-3 w-3" />
+                {CATEGORY_LABELS[cat]}
+                <span className="ml-0.5 font-medium text-foreground">{count}</span>
+              </span>
+            );
+          })}
+        </motion.div>
+
+        {/* Go Live CTA */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.25, duration: 0.3 }}
           className="mt-space-4 flex gap-3"
         >
           <button
             onClick={() => navigate("/map")}
-            className="flex items-center gap-2 rounded-md border bg-card px-4 py-2.5 text-body-small font-medium text-foreground transition-colors active:scale-[0.98] hover:bg-card/80"
+            className="flex items-center gap-2 rounded-md bg-deep-green px-5 py-2.5 text-body-small font-medium text-deep-green-foreground transition-colors active:scale-[0.98]"
           >
-            <Compass className="h-4 w-4 text-deep-green" />
-            Open Map
+            <Navigation className="h-4 w-4" />
+            Go Live
           </button>
         </motion.div>
 
@@ -125,7 +183,7 @@ export default function JourneyPage() {
         <JourneyTimeline />
       </div>
 
-      {/* Jump to Now floating button */}
+      {/* Jump to Now */}
       {showJumpBtn && (
         <motion.button
           initial={{ opacity: 0, y: 8 }}
