@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
-import { Globe, Bell, MapPin, Wifi, HelpCircle, Info } from "lucide-react";
+import { Globe, Bell, MapPin, Wifi, HelpCircle, Info, LogIn, LogOut } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import {
   Select,
