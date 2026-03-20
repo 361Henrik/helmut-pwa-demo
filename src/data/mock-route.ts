@@ -712,7 +712,7 @@ export const MOCK_POIS: POI[] = [
     storyExcerpt:
       "Mainz Cathedral has been the seat of powerful prince-bishops since 975 AD. Rebuilt six times after fires and wars, its blend of Romanesque, Gothic, and Baroque elements records a millennium of architectural evolution in a single building.",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1597466607367-3e8a0f53e0d0?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800&h=600&fit=crop",
     day: 4,
     storyBody: [
       "The Archbishop of Mainz was the most powerful ecclesiastic in the Holy Roman Empire — an Elector with the right to crown the Emperor. His cathedral, founded in 975, reflects that authority. The building was completed on the day of its consecration in 1009, only to be destroyed by fire that same day.",
