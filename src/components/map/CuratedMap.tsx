@@ -171,6 +171,7 @@ export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
             .addTo(map);
 
           markersRef.current.push(marker);
+          markerCategoryRef.current.set(marker, poi.category);
         });
 
         // Vessel position marker
