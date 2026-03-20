@@ -14,7 +14,7 @@ function getOperatorReturn(): { name: string; url: string } | null {
   try {
     const params = new URLSearchParams(window.location.search);
     const url = params.get("returnUrl");
-    const name = params.get("operatorName") || "Travel App";
+    const name = params.get("operatorName") || "Viking River Cruises";
     if (url) return { name, url };
   } catch {
     // ignore
