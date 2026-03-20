@@ -730,7 +730,7 @@ export const MOCK_POIS: POI[] = [
     storyExcerpt:
       "Nestled at the southern entrance of the Rhine Gorge, Rüdesheim has been the capital of Rheingau Riesling since Roman times. The famous Drosselgasse alley is barely two metres wide but overflows with wine taverns and live music.",
     thumbnailUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/R%C3%BCdesheim_am_Rhein%2C_Germany_-_panoramio.jpg/800px-R%C3%BCdesheim_am_Rhein%2C_Germany_-_panoramio.jpg",
+      "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800&h=600&fit=crop",
     day: 4,
     storyBody: [
       "Rüdesheim's relationship with wine predates written records. The Romans planted vines on these south-facing slopes above the Rhine, and Benedictine monks refined the art during the Middle Ages. Today the Rheingau produces some of Germany's most celebrated Rieslings, with Rüdesheim at its heart.",
