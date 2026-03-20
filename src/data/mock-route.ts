@@ -876,7 +876,7 @@ export const MOCK_POIS: POI[] = [
     storyExcerpt:
       "The German Corner marks the dramatic confluence of two great European rivers. The monumental equestrian statue of Kaiser Wilhelm I, destroyed in 1945 and rebuilt in 1993, towers over the headland as a symbol of German reunification.",
     thumbnailUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Koblenz_im_Buga-Jahr_06-2011_%286115038728%29.jpg/800px-Koblenz_im_Buga-Jahr_06-2011_%286115038728%29.jpg",
+      "https://images.unsplash.com/photo-1597466599360-3b9775841aec?w=800&h=600&fit=crop&q=80",
     day: 5,
     storyBody: [
       "The Deutsches Eck — German Corner — is the dramatic headland where the Moselle pours into the Rhine. The Teutonic Knights established a commandery here in 1216, giving the site its name. For eight centuries, it has been a symbol of German identity and, at times, of German division.",
