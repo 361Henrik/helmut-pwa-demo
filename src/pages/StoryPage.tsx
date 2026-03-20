@@ -1,8 +1,22 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, Bookmark, BookmarkCheck, Share2 } from "lucide-react";
+import { ArrowLeft, Bookmark, BookmarkCheck, Share2, Landmark, TreePine, Building2, Theater, Wine, Cog, Star, Bird, Paintbrush, Gem } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { useMemo } from "react";
-import { MOCK_POIS, CATEGORY_LABELS } from "@/data/mock-route";
+import { MOCK_POIS, CATEGORY_LABELS, type POICategory } from "@/data/mock-route";
+
+const CATEGORY_ICONS: Record<POICategory, LucideIcon> = {
+  history: Landmark,
+  nature: TreePine,
+  architecture: Building2,
+  culture: Theater,
+  food: Wine,
+  engineering: Cog,
+  legends: Star,
+  wildlife: Bird,
+  art: Paintbrush,
+  "hidden-gem": Gem,
+};
 import { AudioPlayer } from "@/components/story/AudioPlayer";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
