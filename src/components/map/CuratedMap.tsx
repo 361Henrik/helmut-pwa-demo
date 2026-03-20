@@ -186,7 +186,8 @@ export function CuratedMap() {
 
       map.on("error", (e) => {
         console.error("Mapbox error:", e);
-        if (e.error?.status === 401 || e.error?.status === 403) {
+        const err = e.error as Record<string, unknown> | undefined;
+        if (err?.status === 401 || err?.status === 403) {
           setTokenError(true);
         }
       });
