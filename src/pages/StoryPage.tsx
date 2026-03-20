@@ -57,6 +57,7 @@ export default function StoryPage() {
           initial={{ scale: 1.1 }}
           animate={{ scale: 1 }}
           transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+          loading="lazy"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
 
@@ -123,25 +124,44 @@ export default function StoryPage() {
           <p className="text-body-large leading-relaxed text-foreground">
             {poi.storyExcerpt}
           </p>
-          <p className="mt-5 text-body leading-relaxed text-foreground/90">
-            As the vessel glides past, the landscape transforms into a living
-            canvas of history and natural beauty. Each bend in the river reveals
-            new perspectives on centuries of human endeavour intertwined with the
-            timeless flow of the Rhine.
-          </p>
-          <p className="mt-5 text-body leading-relaxed text-foreground/90">
-            Local guides speak of traditions passed down through generations —
-            stories that no guidebook can capture, moments that exist only in the
-            memory of those who have walked these paths and sailed these waters.
-          </p>
-          <p className="mt-5 text-body leading-relaxed text-foreground/90">
-            The interplay of light on water, the distant sound of church bells
-            echoing across the valley, the scent of wildflowers carried on the
-            breeze — these sensory impressions compose the true narrative of the
-            Rhine, one that unfolds not in pages but in the quiet spaces between
-            words.
-          </p>
+
+          {poi.storyBody && poi.storyBody.length > 0 ? (
+            poi.storyBody.map((paragraph, index) => (
+              <p
+                key={index}
+                className="mt-5 text-body leading-relaxed text-foreground/90"
+              >
+                {paragraph}
+              </p>
+            ))
+          ) : (
+            <>
+              <p className="mt-5 text-body leading-relaxed text-foreground/90">
+                As the vessel glides past, the landscape transforms into a living
+                canvas of history and natural beauty. Each bend in the river reveals
+                new perspectives on centuries of human endeavour intertwined with the
+                timeless flow of the Rhine.
+              </p>
+              <p className="mt-5 text-body leading-relaxed text-foreground/90">
+                Local guides speak of traditions passed down through generations —
+                stories that no guidebook can capture, moments that exist only in the
+                memory of those who have walked these paths and sailed these waters.
+              </p>
+            </>
+          )}
         </article>
+
+        {/* Source Attribution */}
+        {poi.sources && poi.sources.length > 0 && (
+          <div className="mt-6 rounded-lg bg-muted/50 px-4 py-3">
+            <p className="text-caption text-muted-foreground">
+              Sources: {poi.sources.join(", ")}
+            </p>
+            <p className="mt-1 text-caption text-muted-foreground/70">
+              Last verified: March 2026
+            </p>
+          </div>
+        )}
 
         {/* Save CTA */}
         <div className="mt-8 flex items-center justify-between rounded-xl bg-card p-4">

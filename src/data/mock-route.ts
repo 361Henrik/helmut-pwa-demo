@@ -11,6 +11,10 @@ export interface POI {
   audioUrl?: string;
   /** Which cruise day this POI belongs to (1-based) */
   day?: number;
+  /** Place-specific story paragraphs — replaces generic filler */
+  storyBody?: string[];
+  /** Attribution sources for factual content */
+  sources?: string[];
 }
 
 /** A single cruise day with port/segment info */
@@ -576,35 +580,174 @@ export const VESSEL_POSITION: [number, number] = [8.2473, 49.9929];
 export const VESSEL_HEADING = 330; // degrees, roughly NNW
 
 export const MOCK_POIS: POI[] = [
+  // ===== DAY 1 — Basel =====
   {
-    id: "poi-1",
-    name: "Loreley Rock",
-    category: "legends",
-    coordinates: [7.5889, 50.1970],
-    teaser: "The legendary siren cliff of the Rhine",
-    storyExcerpt: "Rising 120 metres above the waterline, the Loreley has inspired poets, painters, and composers for centuries. Heinrich Heine's 1824 poem immortalised the golden-haired maiden whose song lured sailors to their doom on the treacherous narrows below.",
-    thumbnailUrl: "https://images.unsplash.com/photo-1588002171910-4a4a2e653e11?w=400&h=300&fit=crop",
-    day: 5,
-  },
-  {
-    id: "poi-2",
-    name: "Koblenz Deutsches Eck",
-    category: "history",
-    coordinates: [7.5985, 50.3569],
-    teaser: "Where the Moselle meets the Rhine",
-    storyExcerpt: "The German Corner marks the dramatic confluence of two great European rivers. The monumental equestrian statue of Kaiser Wilhelm I, destroyed in 1945 and rebuilt in 1993, towers over the headland as a symbol of German reunification.",
-    thumbnailUrl: "https://images.unsplash.com/photo-1571167530149-c1105da4c2c7?w=400&h=300&fit=crop",
-    day: 5,
-  },
-  {
-    id: "poi-3",
-    name: "Cologne Cathedral",
+    id: "poi-11",
+    name: "Basel Minster",
     category: "architecture",
-    coordinates: [6.9603, 50.9375],
-    teaser: "632 years to complete this Gothic marvel",
-    storyExcerpt: "The Kölner Dom took 632 years to build — from 1248 to 1880. Its twin spires reach 157 metres, making it the tallest twin-spired church in the world. Miraculously, it survived 14 bombing raids during WWII, standing amid the ruins.",
-    thumbnailUrl: "https://images.unsplash.com/photo-1515091943-9d5c0ad475af?w=400&h=300&fit=crop",
-    day: 6,
+    coordinates: [7.5930, 47.5560],
+    teaser: "Red sandstone cathedral above the Rhine",
+    storyExcerpt:
+      "Basel Minster's distinctive red sandstone facade and colourful tiled roof have dominated the city's skyline since the 12th century. Rebuilt after the 1356 earthquake — one of Europe's most destructive — the cathedral blends Romanesque and Gothic styles.",
+    thumbnailUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Basel_-_M%C3%BCnster3.jpg/800px-Basel_-_M%C3%BCnster3.jpg",
+    day: 1,
+    storyBody: [
+      "Basel Minster stands on the highest point of the old city, its terrace offering panoramic views across the Rhine into France and Germany. The original church was consecrated in 1019 in the presence of Emperor Henry II, whose tomb lies within.",
+      "The devastating earthquake of 18 October 1356 — the most significant seismic event in Central European history — destroyed much of the cathedral. The reconstruction introduced the soaring Gothic elements visible today, including the slender 64-metre spires.",
+      "Erasmus of Rotterdam, the great humanist scholar, is buried here. His modest tomb in the north aisle contrasts sharply with the grandeur of the building, a fitting tribute to a man who valued ideas over ostentation.",
+    ],
+    sources: ["Basel Tourism", "Swiss Heritage Society"],
+  },
+  {
+    id: "poi-12",
+    name: "Dreiländereck",
+    category: "hidden-gem",
+    coordinates: [7.5907, 47.5890],
+    teaser: "Stand in three countries at once",
+    storyExcerpt:
+      "The Dreiländereck marks the exact point where Switzerland, France, and Germany converge on the Rhine. A small pylon and viewing platform let you gaze into three nations simultaneously — a geographical oddity unique to Basel.",
+    thumbnailUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Dreil%C3%A4ndereck2.jpg/800px-Dreil%C3%A4ndereck2.jpg",
+    day: 1,
+    storyBody: [
+      "At the northern tip of Basel's harbour, a modest monument marks one of Europe's most unusual geographical points. Here the borders of Switzerland, France, and Germany meet on the Rhine, creating a triple frontier visible from a single vantage point.",
+      "The spot is best reached by the free ferry that crosses the Rhine at this point — one of four traditional cable ferries in Basel that use only the river's current for propulsion, requiring no engine or fuel.",
+      "Standing at the Dreiländereck at dusk, you can watch the lights of three nations flicker on simultaneously. It is a quiet reminder that borders on maps are human inventions — the Rhine flows through all three without regard for sovereignty.",
+    ],
+    sources: ["Basel Tourism"],
+  },
+
+  // ===== DAY 2 — Strasbourg / Breisach =====
+  {
+    id: "poi-13",
+    name: "Breisach am Rhein",
+    category: "hidden-gem",
+    coordinates: [7.5831, 48.0285],
+    teaser: "Medieval hilltop town above the Rhine plain",
+    storyExcerpt:
+      "Breisach's St. Stephan's Minster crowns a basalt outcrop rising abruptly from the flat Rhine plain. The town changed hands between France and Germany so many times that its identity became a blend of both cultures.",
+    thumbnailUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Breisach_am_Rhein_jm1582.jpg/800px-Breisach_am_Rhein_jm1582.jpg",
+    day: 2,
+    storyBody: [
+      "Rising like a sentinel above the Upper Rhine Plain, Breisach's volcanic basalt hill has been fortified since Celtic times. The Romans recognised its strategic value, and the town subsequently passed between French and German control at least seventeen times.",
+      "The Minster of St. Stephan, perched at the summit, houses a remarkable late-Gothic altarpiece carved from linden wood by an unknown master around 1526. The 'Last Judgment' fresco by Martin Schongauer — one of the most important Gothic painters — adorns the west wall.",
+      "Today Breisach is the gateway to the Kaiserstuhl wine region, where volcanic soils and a microclimate warmer than anywhere else in Germany produce exceptional Spätburgunder (Pinot Noir). The town's dual heritage is visible in everything from its architecture to its menus.",
+    ],
+    sources: ["Breisach Tourist Board", "Baden Wine Region"],
+  },
+  {
+    id: "poi-14",
+    name: "Strasbourg Cathedral",
+    category: "architecture",
+    coordinates: [7.7510, 48.5818],
+    teaser: "Gothic masterpiece with an astronomical clock",
+    storyExcerpt:
+      "Strasbourg's cathedral was the world's tallest building from 1647 to 1874. Its single 142-metre spire of pink Vosges sandstone and the famous astronomical clock, rebuilt in 1843, draw over four million visitors annually.",
+    thumbnailUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Cath%C3%A9drale_de_Strasbourg%2C_France.jpg/800px-Cath%C3%A9drale_de_Strasbourg%2C_France.jpg",
+    day: 2,
+    storyBody: [
+      "Construction of Strasbourg Cathedral began in 1015, but the building we see today is primarily 12th-to-15th-century Gothic. At 142 metres, its single completed spire made it the tallest structure in the world for 227 years — a record held longer than any other building.",
+      "The astronomical clock in the south transept is a masterpiece of Renaissance engineering. Rebuilt between 1838 and 1843, it displays a perpetual calendar, the positions of the sun, moon, and planets, and a procession of apostles that appears daily at 12:30.",
+      "Victor Hugo described the facade as 'a gigantic and delicate marvel.' The rose window, 15 metres in diameter, catches the afternoon light and fills the nave with patterns of gold and crimson that shift with the seasons.",
+    ],
+    sources: ["Fondation de l'Œuvre Notre-Dame", "Strasbourg Tourism"],
+  },
+  {
+    id: "poi-15",
+    name: "Petite France",
+    category: "culture",
+    coordinates: [7.7410, 48.5800],
+    teaser: "Half-timbered canal quarter in Strasbourg",
+    storyExcerpt:
+      "Strasbourg's most picturesque quarter straddles four canals of the River Ill. Its 16th- and 17th-century half-timbered houses, once home to tanners and fishermen, now form a UNESCO World Heritage site of extraordinary charm.",
+    thumbnailUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Strasbourg_-_Petite_France_-_1.jpg/800px-Strasbourg_-_Petite_France_-_1.jpg",
+    day: 2,
+    storyBody: [
+      "The name 'Petite France' has nothing to do with patriotism — it derives from a 15th-century hospice for soldiers suffering from syphilis, then called the 'French disease.' The tanners, millers, and fishermen who originally inhabited these half-timbered houses would hardly recognise the quarter's glamorous present.",
+      "The buildings lean over the canals of the Ill at improbable angles, their steep roofs pierced by dormer windows once used for drying hides. Ground floors opened directly onto the water, and goods were loaded from boats into workshops.",
+      "Walking Petite France at dawn, before the tourist crowds arrive, is one of Strasbourg's great secret pleasures. The reflections of the half-timbered facades in the still canal water create perfect symmetries that have drawn painters and photographers for generations.",
+    ],
+    sources: ["UNESCO World Heritage Centre", "Strasbourg Tourism"],
+  },
+
+  // ===== DAY 3 — Speyer / Mannheim =====
+  {
+    id: "poi-6",
+    name: "Speyer Cathedral",
+    category: "architecture",
+    coordinates: [8.4424, 49.3173],
+    teaser: "The largest Romanesque church in the world",
+    storyExcerpt:
+      "Built in 1030, Speyer Cathedral is the largest surviving Romanesque church. Four Holy Roman Emperors are buried in its crypt. The massive nave, with its alternating pillars and columns, creates a rhythm of light and shadow.",
+    thumbnailUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Speyer_Dom_20091024.jpg/800px-Speyer_Dom_20091024.jpg",
+    day: 3,
+    storyBody: [
+      "When Emperor Conrad II laid the foundation stone in 1030, he intended Speyer Cathedral to be the largest church in Christendom. Nearly a millennium later, it remains the largest surviving Romanesque church in the world, its dimensions still impressive: 134 metres long, 33 metres to the vault.",
+      "The imperial crypt beneath the altar holds the remains of four emperors, four kings, and three empresses — the most significant collection of medieval royal tombs in Europe. The red sandstone sarcophagi lie in austere rows beneath ribbed vaulting that influenced cathedral architecture for centuries.",
+      "UNESCO inscribed the cathedral in 1981, recognising it as a 'major monument of Romanesque art.' The building's influence extends far beyond architecture: it was here that Emperor Henry IV launched his famous walk to Canossa in 1077, barefoot in the snow, to seek papal absolution.",
+    ],
+    sources: ["UNESCO World Heritage Centre", "Diocese of Speyer"],
+  },
+  {
+    id: "poi-16",
+    name: "Mannheim Wasserturm",
+    category: "engineering",
+    coordinates: [8.4770, 49.4836],
+    teaser: "Art Nouveau water tower and garden ensemble",
+    storyExcerpt:
+      "Mannheim's Wasserturm, built in 1889, is one of Germany's finest Art Nouveau monuments. The 60-metre sandstone tower anchors a formal garden designed by Bruno Schmitz, creating an urban ensemble of remarkable elegance.",
+    thumbnailUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Mannheim_Wasserturm_bei_Nacht.jpg/800px-Mannheim_Wasserturm_bei_Nacht.jpg",
+    day: 3,
+    storyBody: [
+      "Mannheim's Wasserturm was never merely functional. When it was inaugurated in 1889, the 60-metre tower was designed as a civic monument — its sandstone exterior decorated with allegorical figures and crowned by an amphora that held 2,000 cubic metres of water to supply the growing industrial city.",
+      "The surrounding Friedrichsplatz, designed by Bruno Schmitz, is Germany's largest coherent Art Nouveau square. Fountains, colonnades, and precisely clipped hedges create a formal garden that transitions seamlessly from grand civic space to intimate promenade.",
+      "The tower ceased functioning as a water supply in the 1990s but remains Mannheim's most recognisable landmark. Illuminated at night, it anchors the city's identity — proof that infrastructure, when treated with architectural ambition, can become a source of civic pride.",
+    ],
+    sources: ["Mannheim Tourism", "German Architecture Forum"],
+  },
+  {
+    id: "poi-17",
+    name: "Heidelberg Castle",
+    category: "history",
+    coordinates: [8.7153, 49.4105],
+    teaser: "Germany's most famous castle ruin",
+    storyExcerpt:
+      "Perched above the Neckar valley, Heidelberg Castle blends Gothic, Renaissance, and Baroque elements across five centuries of construction. Its partly ruined state, the result of 17th-century French destruction, only adds to its romantic appeal.",
+    thumbnailUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Heidelberg-Schlo%C3%9F.JPG/800px-Heidelberg-Schlo%C3%9F.JPG",
+    day: 3,
+    storyBody: [
+      "Heidelberg Castle has been a ruin since French troops under Louis XIV devastated the Palatinate in 1693 and again in 1689. Yet the destruction only enhanced its appeal: by the early 19th century, it had become the defining symbol of German Romanticism, drawing writers, painters, and poets from across Europe.",
+      "The castle's Großes Fass (Great Barrel) in the cellar holds 221,726 litres of wine — enough to fill nearly 300,000 standard bottles. Built in 1751 from 130 oak trunks, it is the world's largest wine barrel and was historically kept full, guarded by a court jester named Perkeo who reportedly drank nothing but wine.",
+      "Mark Twain spent three months in Heidelberg in 1878 and devoted several chapters of 'A Tramp Abroad' to the castle and town. He wrote: 'One thinks of Heidelberg by day — with its surroundings — as the last possibility of the beautiful; but when he sees Heidelberg by night... he requires time to consider.'",
+    ],
+    sources: ["Schloss Heidelberg", "German National Tourist Board"],
+  },
+
+  // ===== DAY 4 — Mainz / Rüdesheim =====
+  {
+    id: "poi-18",
+    name: "Mainz Cathedral",
+    category: "architecture",
+    coordinates: [8.2743, 49.9987],
+    teaser: "Imperial cathedral of a thousand years",
+    storyExcerpt:
+      "Mainz Cathedral has been the seat of powerful prince-bishops since 975 AD. Rebuilt six times after fires and wars, its blend of Romanesque, Gothic, and Baroque elements records a millennium of architectural evolution in a single building.",
+    thumbnailUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Mainzer_Dom_nordwest.jpg/800px-Mainzer_Dom_nordwest.jpg",
+    day: 4,
+    storyBody: [
+      "The Archbishop of Mainz was the most powerful ecclesiastic in the Holy Roman Empire — an Elector with the right to crown the Emperor. His cathedral, founded in 975, reflects that authority. The building was completed on the day of its consecration in 1009, only to be destroyed by fire that same day.",
+      "Rebuilt and burned, rebuilt and bombed, the cathedral standing today is its sixth incarnation. Each reconstruction added elements of its era: Romanesque nave, Gothic choir, Baroque chapels. The result is an accidental but compelling architectural history lesson spanning a thousand years.",
+      "The cathedral houses one of the finest collections of medieval tomb monuments in Europe. Over forty archbishops lie here, their effigies progressing from flat Romanesque carvings to fully three-dimensional Renaissance sculptures — a timeline of how Europeans chose to remember their powerful dead.",
+    ],
+    sources: ["Diocese of Mainz", "German National Tourist Board"],
   },
   {
     id: "poi-4",
@@ -612,29 +755,73 @@ export const MOCK_POIS: POI[] = [
     category: "food",
     coordinates: [7.9050, 50.0874],
     teaser: "The heart of Rheingau wine country",
-    storyExcerpt: "Nestled at the southern entrance of the Rhine Gorge, Rüdesheim has been the capital of Rheingau Riesling since Roman times. The famous Drosselgasse alley is barely two metres wide but overflows with wine taverns and live music.",
-    thumbnailUrl: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
+    storyExcerpt:
+      "Nestled at the southern entrance of the Rhine Gorge, Rüdesheim has been the capital of Rheingau Riesling since Roman times. The famous Drosselgasse alley is barely two metres wide but overflows with wine taverns and live music.",
+    thumbnailUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/R%C3%BCdesheim_am_Rhein%2C_Germany_-_panoramio.jpg/800px-R%C3%BCdesheim_am_Rhein%2C_Germany_-_panoramio.jpg",
     day: 4,
+    storyBody: [
+      "Rüdesheim's relationship with wine predates written records. The Romans planted vines on these south-facing slopes above the Rhine, and Benedictine monks refined the art during the Middle Ages. Today the Rheingau produces some of Germany's most celebrated Rieslings, with Rüdesheim at its heart.",
+      "The Drosselgasse — a 144-metre alley barely two metres wide — is one of the most visited streets in Germany, drawing three million visitors annually. Its wine taverns, many family-run for generations, serve Riesling from vineyards visible through their windows.",
+      "Above the town, the Niederwald Monument's 10.5-metre bronze Germania statue gazes across the Rhine valley. Reached by cable car through the vineyards, it offers views that explain why UNESCO inscribed the entire Upper Middle Rhine Valley in 2002.",
+    ],
+    sources: ["Rheingau Wine Region", "UNESCO World Heritage Centre"],
   },
+  {
+    id: "poi-19",
+    name: "Niederwald Monument",
+    category: "history",
+    coordinates: [7.9028, 50.0810],
+    teaser: "Germania statue above the Rhine",
+    storyExcerpt:
+      "The Niederwald Monument, completed in 1883, commemorates the unification of Germany. Its 10.5-metre bronze Germania holds a sword and the imperial crown, gazing defiantly toward France from a ridge 225 metres above Rüdesheim.",
+    thumbnailUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Niederwalddenkmal_2012-04-15.jpg/800px-Niederwalddenkmal_2012-04-15.jpg",
+    day: 4,
+    storyBody: [
+      "Perched on a ridge 225 metres above the Rhine, the Niederwald Monument was unveiled on 28 September 1883 — the twelfth anniversary of German unification. Kaiser Wilhelm I attended in person, arriving by the same cable railway that visitors use today.",
+      "The monument's 38-tonne bronze Germania figure holds the recovered imperial crown in her right hand and a sword in her left. She faces west — toward France — a not-so-subtle message about the outcome of the Franco-Prussian War that precipitated unification.",
+      "In 1883, anarchists attempted to assassinate the Kaiser during the unveiling ceremony by planting a bomb in a drainage pipe beneath the processional route. The fuse was dampened by rain and the bomb failed to detonate — discovered years later by construction workers.",
+    ],
+    sources: ["German Historical Museum", "Rüdesheim Tourism"],
+  },
+
+  // ===== DAY 5 — Rhine Gorge =====
   {
     id: "poi-5",
     name: "Bacharach Old Town",
     category: "culture",
-    coordinates: [7.7285, 50.1420],
+    coordinates: [7.7685, 50.0579],
     teaser: "A medieval gem frozen in time",
-    storyExcerpt: "Victor Hugo called Bacharach one of the most beautiful towns on the Rhine. Its half-timbered houses, Gothic chapel ruins, and Stahleck Castle perched above create a picture so perfect it seems painted rather than built.",
-    thumbnailUrl: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=400&h=300&fit=crop",
+    storyExcerpt:
+      "Victor Hugo called Bacharach one of the most beautiful towns on the Rhine. Its half-timbered houses, Gothic chapel ruins, and Stahleck Castle perched above create a picture so perfect it seems painted rather than built.",
+    thumbnailUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Bacharach_am_Rhein._Blick_von_Postenturm.jpg/800px-Bacharach_am_Rhein._Blick_von_Postenturm.jpg",
     day: 5,
+    storyBody: [
+      "Bacharach's name may derive from the Latin 'Bacchi ara' — altar of Bacchus — reflecting the ancient Roman wine tradition on these slopes. The town's 14th-century walls remain almost entirely intact, encircling half-timbered houses that lean at angles suggesting they are holding each other up.",
+      "The ruins of the Werner Chapel, perched above the town, are among the finest examples of German Gothic architecture. Never completed — construction halted in 1289 — the roofless skeleton of red sandstone tracery has been considered more beautiful in its ruined state than any finished church.",
+      "Victor Hugo lived in Bacharach during his Rhine journey of 1840 and sketched the town obsessively. His drawings, now in the Bibliothèque nationale de France, show a town that has changed remarkably little in nearly two centuries.",
+    ],
+    sources: ["Bacharach Tourism", "UNESCO Rhine Gorge"],
   },
   {
-    id: "poi-6",
-    name: "Speyer Cathedral",
-    category: "architecture",
-    coordinates: [8.2317, 49.0069],
-    teaser: "The largest Romanesque church in the world",
-    storyExcerpt: "Built in 1030, Speyer Cathedral is the largest surviving Romanesque church. Four Holy Roman Emperors are buried in its crypt. The massive nave, with its alternating pillars and columns, creates a rhythm of light and shadow.",
-    thumbnailUrl: "https://images.unsplash.com/photo-1548585744-56de0e62f0ef?w=400&h=300&fit=crop",
-    day: 3,
+    id: "poi-1",
+    name: "Loreley Rock",
+    category: "legends",
+    coordinates: [7.7282, 50.1413],
+    teaser: "The legendary siren cliff of the Rhine",
+    storyExcerpt:
+      "Rising 120 metres above the waterline, the Loreley has inspired poets, painters, and composers for centuries. Heinrich Heine's 1824 poem immortalised the golden-haired maiden whose song lured sailors to their doom on the treacherous narrows below.",
+    thumbnailUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Loreley_von_Rheinsteig.jpg/800px-Loreley_von_Rheinsteig.jpg",
+    day: 5,
+    storyBody: [
+      "The Loreley cliff rises 120 metres above the Rhine at its narrowest and deepest point — just 113 metres wide and 25 metres deep. The combination of the tight bend, strong current, and submerged rocks made this passage the most dangerous on the entire navigable Rhine, claiming countless vessels over the centuries.",
+      "The legend of the Loreley siren was actually invented in 1801 by the Romantic poet Clemens Brentano, then immortalised by Heinrich Heine's 1824 poem 'Die Lore-Ley.' Heine's golden-haired maiden, combing her hair and singing sailors to their doom, became one of Germany's most enduring myths — despite being barely two centuries old.",
+      "Today the Loreley is a UNESCO World Heritage site. A visitor centre at the summit tells the geological and cultural story. The echo off the rock face — once attributed to the siren's voice — is actually caused by the cliff's concave shape amplifying the sound of the river below.",
+    ],
+    sources: ["UNESCO World Heritage Centre", "Loreley Visitor Centre"],
   },
   {
     id: "poi-7",
@@ -642,9 +829,163 @@ export const MOCK_POIS: POI[] = [
     category: "nature",
     coordinates: [7.6500, 50.1700],
     teaser: "Steep terraced slopes of the UNESCO valley",
-    storyExcerpt: "The Upper Middle Rhine Valley's impossibly steep vineyard terraces have been cultivated since Roman times. Some slopes angle at 70 degrees — harvesting is done entirely by hand, making these among the most labour-intensive wines on Earth.",
-    thumbnailUrl: "https://images.unsplash.com/photo-1560493676-04071c5f467b?w=400&h=300&fit=crop",
+    storyExcerpt:
+      "The Upper Middle Rhine Valley's impossibly steep vineyard terraces have been cultivated since Roman times. Some slopes angle at 70 degrees — harvesting is done entirely by hand, making these among the most labour-intensive wines on Earth.",
+    thumbnailUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Oberwesel_Rhein_1.jpg/800px-Oberwesel_Rhein_1.jpg",
     day: 5,
+    storyBody: [
+      "The terraced vineyards of the Rhine Gorge cling to slopes so steep — up to 70 degrees in places — that no machine can work them. Every task, from pruning to harvest, is done by hand, making these among the most labour-intensive wines produced anywhere on Earth.",
+      "The slate soils that make cultivation so difficult are also what give Riesling its distinctive mineral character. The dark stone absorbs heat during the day and radiates it through the cool nights, creating a microclimate that pushes the grape to full ripeness at this northern latitude.",
+      "UNESCO inscribed the Upper Middle Rhine Valley in 2002, recognising it as 'an outstanding example of a traditional way of life and communication in a narrow river valley.' The inscription explicitly protects the vineyard terraces, which are as much cultural monuments as the castles above them.",
+    ],
+    sources: ["UNESCO World Heritage Centre", "Rheingau Wine Association"],
+  },
+  {
+    id: "poi-20",
+    name: "Burg Rheinfels",
+    category: "history",
+    coordinates: [7.7110, 50.1520],
+    teaser: "Largest castle ruin on the Rhine",
+    storyExcerpt:
+      "Built in 1245 by Count Dieter V of Katzenelnbogen, Burg Rheinfels was once the largest fortress on the Rhine. It withstood a siege by 28,000 troops in 1692 but was finally dismantled by French revolutionary forces in 1796.",
+    thumbnailUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/St._Goar_Burg_Rheinfels.jpg/800px-St._Goar_Burg_Rheinfels.jpg",
+    day: 5,
+    storyBody: [
+      "Count Dieter V of Katzenelnbogen built Burg Rheinfels in 1245 to enforce a toll on Rhine shipping. At its peak, the fortress complex covered an area five times larger than it does today — making it the mightiest fortification on the entire river.",
+      "The castle's finest hour came in 1692 when a force of just 2,700 defenders withstood a siege by 28,000 French troops for over two months. The French eventually withdrew — one of their few defeats during Louis XIV's devastating Palatinate campaigns.",
+      "Ironically, what the French army could not take by force, the French Revolution accomplished by decree. In 1796, revolutionary troops occupied the castle and systematically dismantled it, selling the stone as building material. What remains — dramatic vaulted tunnels, towering walls, and panoramic Rhine views — is still the largest castle ruin on the river.",
+    ],
+    sources: ["Burg Rheinfels Museum", "German Castle Association"],
+  },
+  {
+    id: "poi-21",
+    name: "St. Goar",
+    category: "hidden-gem",
+    coordinates: [7.7120, 50.1540],
+    teaser: "Quiet town opposite the Loreley",
+    storyExcerpt:
+      "Named after a 6th-century hermit who guided boats through the dangerous narrows, St. Goar sits directly opposite the Loreley rock. Its medieval Stiftskirche contains rare 14th-century frescoes uncovered during 1960s restoration.",
+    thumbnailUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/St.Goar_Rhein.jpg/800px-St.Goar_Rhein.jpg",
+    day: 5,
+    storyBody: [
+      "St. Goar takes its name from Goar of Aquitaine, a 6th-century Celtic missionary who settled on this stretch of the Rhine and devoted his life to rescuing shipwrecked sailors. His hermitage became a pilgrimage site, and the town grew around it.",
+      "The Stiftskirche (Collegiate Church) holds one of the Rhine valley's best-kept secrets: a cycle of 14th-century frescoes discovered behind plaster during renovations in the 1960s. The paintings depict scenes from the life of Christ in vivid colours that survived centuries of concealment.",
+      "From St. Goar's waterfront promenade, the Loreley rock rises directly across the river. On summer evenings, a sound-and-light show projects the legend onto the cliff face — but the real spectacle is the natural play of sunset light on the ancient stone.",
+    ],
+    sources: ["St. Goar Tourism", "Evangelical Church of the Rhineland"],
+  },
+  {
+    id: "poi-9",
+    name: "Marksburg Castle",
+    category: "history",
+    coordinates: [7.6381, 50.2747],
+    teaser: "The only undefeated hill castle on the Rhine",
+    storyExcerpt:
+      "Perched 150 metres above the river, Marksburg is the only hill castle on the Rhine never destroyed. Its medieval kitchen, armoury, and torture chamber remain intact — a rare window into 700 years of fortress life along the busiest waterway in Europe.",
+    thumbnailUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Marksburg_von_S%C3%BCden.jpg/800px-Marksburg_von_S%C3%BCden.jpg",
+    day: 5,
+    storyBody: [
+      "Of the forty-odd castles along the Rhine Gorge, Marksburg alone was never conquered or deliberately destroyed. Its survival is partly strategic — the steep approach made siege engines useless — and partly lucky: it was simply too remote to bother demolishing when the Palatinate was laid waste in the 1690s.",
+      "The castle's interior offers an authentic medieval experience unmatched on the Rhine. The kitchen still has its original 13th-century hearth; the armoury displays weapons spanning five centuries; and the herb garden is planted according to a medieval monastic plan documented in the 9th century.",
+      "The German Castle Association (Deutsche Burgenvereinigung) has been headquartered at Marksburg since 1900 and has meticulously maintained it ever since. A visit here reveals what all those romantic ruins along the Rhine once looked like when they were still functioning fortresses.",
+    ],
+    sources: ["Deutsche Burgenvereinigung", "UNESCO Rhine Gorge"],
+  },
+  {
+    id: "poi-2",
+    name: "Koblenz Deutsches Eck",
+    category: "history",
+    coordinates: [7.6067, 50.3645],
+    teaser: "Where the Moselle meets the Rhine",
+    storyExcerpt:
+      "The German Corner marks the dramatic confluence of two great European rivers. The monumental equestrian statue of Kaiser Wilhelm I, destroyed in 1945 and rebuilt in 1993, towers over the headland as a symbol of German reunification.",
+    thumbnailUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Koblenz_im_Buga-Jahr_06-2011_%286115038728%29.jpg/800px-Koblenz_im_Buga-Jahr_06-2011_%286115038728%29.jpg",
+    day: 5,
+    storyBody: [
+      "The Deutsches Eck — German Corner — is the dramatic headland where the Moselle pours into the Rhine. The Teutonic Knights established a commandery here in 1216, giving the site its name. For eight centuries, it has been a symbol of German identity and, at times, of German division.",
+      "The original equestrian statue of Kaiser Wilhelm I, erected in 1897, was destroyed by American artillery in 1945. For forty-eight years, the empty pedestal stood as an unofficial monument to German reunification — until the statue was reconstructed and unveiled in 1993.",
+      "Standing at the very tip of the headland, you can watch the clear green water of the Moselle merge with the muddier Rhine. The two rivers remain visibly distinct for several hundred metres downstream — a natural phenomenon best observed from the elevated platform behind the monument.",
+    ],
+    sources: ["Koblenz Tourism", "German Historical Museum"],
+  },
+  {
+    id: "poi-22",
+    name: "Ehrenbreitstein Fortress",
+    category: "engineering",
+    coordinates: [7.6150, 50.3650],
+    teaser: "Europe's second-largest preserved fortress",
+    storyExcerpt:
+      "Towering 118 metres above the Rhine opposite Koblenz, Ehrenbreitstein is Europe's second-largest preserved fortress after Gibraltar. Rebuilt by the Prussians between 1817 and 1828, it was designed to be impregnable — and never fell.",
+    thumbnailUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Festung_Ehrenbreitstein_2010.jpg/800px-Festung_Ehrenbreitstein_2010.jpg",
+    day: 5,
+    storyBody: [
+      "The rock of Ehrenbreitstein has been fortified since at least 1000 AD, but the current fortress dates from the Prussian reconstruction of 1817–1828. Built to be the largest and most modern fortification on the Rhine, it incorporated every lesson learned from the Napoleonic Wars.",
+      "The fortress complex extends across 80 hectares and includes barracks, powder magazines, tunnels, and cisterns capable of sustaining a garrison of 1,500 soldiers indefinitely. It was designed to withstand bombardment from any angle — and in fact, no army ever attempted a direct assault.",
+      "Today a cable car connects the fortress to the Deutsches Eck below, offering what is arguably the finest view on the entire Rhine: the confluence of two great rivers, the old city of Koblenz, and the Rhine Gorge stretching south toward the Loreley.",
+    ],
+    sources: ["GDKE Rheinland-Pfalz", "Koblenz Tourism"],
+  },
+
+  // ===== DAY 6 — Bonn / Cologne / Düsseldorf =====
+  {
+    id: "poi-23",
+    name: "Drachenfels",
+    category: "legends",
+    coordinates: [7.2090, 50.6680],
+    teaser: "The dragon mountain of the Rhine",
+    storyExcerpt:
+      "Legend says Siegfried slew a dragon on this mountain and bathed in its blood to become invincible. The Drachenfels is the most-climbed mountain in Germany, and its ruined castle offers panoramic views over the Siebengebirge and the Rhine.",
+    thumbnailUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Drachenfels_Panorama.jpg/800px-Drachenfels_Panorama.jpg",
+    day: 6,
+    storyBody: [
+      "The Drachenfels — Dragon Rock — rises 321 metres above the Rhine near Königswinter. According to the Nibelungenlied, this is where the hero Siegfried slew a dragon and bathed in its blood, making himself invulnerable everywhere except a spot between his shoulder blades where a linden leaf stuck.",
+      "A rack railway, Germany's oldest (1883), carries visitors to near the summit. At the top, the ruins of a 12th-century castle offer views across the Siebengebirge — the Seven Mountains — a volcanic landscape that Lord Byron described in 'Childe Harold's Pilgrimage' as 'the castled crag of Drachenfels.'",
+      "The mountain is officially the most-climbed in Germany, with over a million hikers annually. Its trachyte stone was quarried for centuries — the stone used to build Cologne Cathedral came from Drachenfels. Quarrying was halted in 1836 to preserve the mountain, making it one of Europe's earliest conservation victories.",
+    ],
+    sources: ["Siebengebirge Nature Park", "German Alpine Association"],
+  },
+  {
+    id: "poi-10",
+    name: "Bonn Beethoven House",
+    category: "art",
+    coordinates: [7.0984, 50.7335],
+    teaser: "Where the maestro drew his first breath",
+    storyExcerpt:
+      "Ludwig van Beethoven was born in this modest Baroque house in 1770. The museum holds the largest Beethoven collection in the world, including his last grand piano and the ear trumpets he used as deafness consumed his hearing.",
+    thumbnailUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Beethoven_Haus_Bonn_%282%29.JPG/800px-Beethoven_Haus_Bonn_%282%29.JPG",
+    day: 6,
+    storyBody: [
+      "Ludwig van Beethoven was born in this modest Baroque house at Bonngasse 20 in December 1770. The family occupied a small room in the attic — the exact room, with its sloping ceiling and single window, can still be visited today.",
+      "The museum holds over 150 original Beethoven items, including his last grand piano (an 1825 Graf), the ear trumpets crafted by Johann Nepomuk Mälzel, and a lock of hair confirmed by DNA analysis in 2023 to be authentically his. The hair analysis also revealed lead poisoning as a likely contributor to his ailments.",
+      "In the intimate chamber music hall adjacent to the house, concerts are performed on period instruments. Hearing Beethoven's late quartets in a room steps from his birthplace, played on instruments of his era, is among the most affecting musical experiences the Rhine journey offers.",
+    ],
+    sources: ["Beethoven-Haus Bonn", "German National Tourist Board"],
+  },
+  {
+    id: "poi-3",
+    name: "Cologne Cathedral",
+    category: "architecture",
+    coordinates: [6.9580, 50.9413],
+    teaser: "632 years to complete this Gothic marvel",
+    storyExcerpt:
+      "The Kölner Dom took 632 years to build — from 1248 to 1880. Its twin spires reach 157 metres, making it the tallest twin-spired church in the world. Miraculously, it survived 14 bombing raids during WWII, standing amid the ruins.",
+    thumbnailUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/K%C3%B6lner_Dom_von_der_Deutzer_Br%C3%BCcke_aus_gesehen_%28tone-mapping%29.jpg/800px-K%C3%B6lner_Dom_von_der_Deutzer_Br%C3%BCcke_aus_gesehen_%28tone-mapping%29.jpg",
+    day: 6,
+    storyBody: [
+      "Construction began in 1248, halted in 1473, and was not resumed until 1840 — when the original medieval plans were rediscovered. The cathedral was finally completed on 15 October 1880, 632 years after the first stone was laid, making it one of the longest building projects in human history.",
+      "The twin spires reach 157.38 metres, making Cologne Cathedral the tallest twin-spired church in the world. For four years after completion, it was also the world's tallest structure — until the Washington Monument surpassed it in 1884.",
+      "During World War II, the cathedral was hit by 14 aerial bombs but remained standing while the city around it was reduced to rubble. Historians believe Allied pilots used the conspicuous spires as a navigation landmark, inadvertently preserving the very structure they flew over. Today it receives six million visitors annually — more than any other German landmark.",
+    ],
+    sources: ["UNESCO World Heritage Centre", "Cologne Cathedral Chapter"],
   },
   {
     id: "poi-8",
@@ -652,28 +993,72 @@ export const MOCK_POIS: POI[] = [
     category: "food",
     coordinates: [6.7735, 51.2277],
     teaser: "The longest bar counter in the world",
-    storyExcerpt: "With over 260 bars, pubs, and restaurants packed into half a square kilometre, Düsseldorf's Old Town has earned its legendary nickname. The local Altbier — a copper-coloured top-fermented ale — is served in small 200ml glasses by swift Köbes waiters.",
-    thumbnailUrl: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&h=300&fit=crop",
+    storyExcerpt:
+      "With over 260 bars, pubs, and restaurants packed into half a square kilometre, Düsseldorf's Old Town has earned its legendary nickname. The local Altbier — a copper-coloured top-fermented ale — is served in small 200ml glasses by swift Köbes waiters.",
+    thumbnailUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Duesseldorf_Altstadt_at_Rhine.jpg/800px-Duesseldorf_Altstadt_at_Rhine.jpg",
     day: 6,
+    storyBody: [
+      "Düsseldorf's Altstadt packs over 260 bars, brewhouses, and restaurants into half a square kilometre, earning it the nickname 'die längste Theke der Welt' — the longest bar counter in the world. The concentration of drinking establishments per square metre is unmatched anywhere in Europe.",
+      "The local speciality is Altbier, a copper-coloured, top-fermented ale brewed according to a recipe predating lager. It is served in small 200ml cylindrical glasses called 'Stangen' by waiters known as 'Köbes' — notoriously brusque characters who replace your empty glass with a full one without being asked, marking each round on your beer mat.",
+      "Beyond the bars, the Altstadt harbours genuine cultural weight. The Kunstsammlung Nordrhein-Westfalen houses one of Europe's finest collections of modern art, and the Heinrich-Heine-Institut honours the poet who was born here in 1797 — the same Heine who immortalised the Loreley upstream.",
+    ],
+    sources: ["Düsseldorf Tourism", "German Brewers' Association"],
   },
+
+  // ===== DAY 7 — Netherlands =====
   {
-    id: "poi-9",
-    name: "Marksburg Castle",
+    id: "poi-24",
+    name: "Arnhem Bridge",
     category: "history",
-    coordinates: [7.6500, 50.2700],
-    teaser: "The only undefeated hill castle on the Rhine",
-    storyExcerpt: "Perched 150 metres above the river, Marksburg is the only hill castle on the Rhine never destroyed. Its medieval kitchen, armoury, and torture chamber remain intact — a rare window into 700 years of fortress life along the busiest waterway in Europe.",
-    thumbnailUrl: "https://images.unsplash.com/photo-1581351123004-757df0faaab2?w=400&h=300&fit=crop",
-    day: 5,
+    coordinates: [5.9118, 51.9785],
+    teaser: "A Bridge Too Far — the WWII battle site",
+    storyExcerpt:
+      "The John Frost Bridge in Arnhem was the 'bridge too far' of Operation Market Garden in September 1944. British paratroopers held the northern end for four days against overwhelming German forces in one of the war's most heroic and tragic engagements.",
+    thumbnailUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/John_Frost_Bridge.jpg/800px-John_Frost_Bridge.jpg",
+    day: 7,
+    storyBody: [
+      "On 17 September 1944, British paratroopers of the 1st Airborne Division landed near Arnhem as part of Operation Market Garden — the largest airborne operation in history. Their objective: seize the bridge over the Lower Rhine and hold it until ground forces arrived.",
+      "Lieutenant Colonel John Frost and approximately 740 men reached the bridge and held its northern end for four days against two SS Panzer divisions. Of the 10,600 men who landed at Arnhem, only 2,398 escaped back across the Rhine. The bridge was, as Field Marshal Montgomery's critics observed, 'a bridge too far.'",
+      "The rebuilt bridge was renamed the John Frost Bridge in 1977. The Airborne Museum at nearby Oosterbeek, housed in the former Hartenstein Hotel that served as divisional headquarters, tells the full story. Each September, Arnhem holds a memorial march that draws thousands of participants.",
+    ],
+    sources: ["Airborne Museum Hartenstein", "Commonwealth War Graves Commission"],
   },
   {
-    id: "poi-10",
-    name: "Bonn Beethoven House",
-    category: "art",
-    coordinates: [7.0984, 50.6394],
-    teaser: "Where the maestro drew his first breath",
-    storyExcerpt: "Ludwig van Beethoven was born in this modest Baroque house in 1770. The museum holds the largest Beethoven collection in the world, including his last grand piano and the ear trumpets he used as deafness consumed his hearing.",
-    thumbnailUrl: "https://images.unsplash.com/photo-1507838153414-b4b713384a76?w=400&h=300&fit=crop",
-    day: 6,
+    id: "poi-25",
+    name: "Kinderdijk Windmills",
+    category: "engineering",
+    coordinates: [4.6400, 51.8833],
+    teaser: "Nineteen windmills in a UNESCO landscape",
+    storyExcerpt:
+      "Kinderdijk's 19 windmills, built around 1740, form the largest concentration of historic windmills in the Netherlands. This UNESCO site demonstrates the Dutch genius for water management that made habitation of the low-lying polders possible.",
+    thumbnailUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Kinderdijk.jpg/800px-Kinderdijk.jpg",
+    day: 7,
+    storyBody: [
+      "The 19 windmills of Kinderdijk were built between 1738 and 1740 as part of a water management system that kept the Alblasserwaard polder from flooding. Each mill could pump water up to a higher canal, working in sequence to lift water several metres from the low-lying farmland to the river.",
+      "The name Kinderdijk — 'children's dike' — may derive from a legend about the great St. Elizabeth's flood of 1421, when a cradle with a baby and a cat was found floating against the dike. Whether true or not, the story captures the Dutch relationship with water: constant vigilance against an ever-present threat.",
+      "UNESCO inscribed Kinderdijk in 1997 as 'an outstanding man-made landscape that bears testimony to human ingenuity and grit.' Two of the mills are open to visitors, and on summer Saturdays all 19 are set turning — their sails casting moving shadows across the polder in a spectacle unchanged for nearly three centuries.",
+    ],
+    sources: ["UNESCO World Heritage Centre", "Kinderdijk Foundation"],
+  },
+  {
+    id: "poi-26",
+    name: "Amsterdam Canal Ring",
+    category: "culture",
+    coordinates: [4.8952, 52.3702],
+    teaser: "Journey's end — Amsterdam's Golden Age canals",
+    storyExcerpt:
+      "Your Rhine journey concludes in Amsterdam, where the 17th-century Canal Ring — a UNESCO World Heritage site — encircles the old city in concentric semicircles. Over 1,500 monumental buildings line 100 kilometres of canals spanned by 1,753 bridges.",
+    thumbnailUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/KeijsersgrachtReguliersworked.jpg/800px-KeijsersgrachtReguliersworked.jpg",
+    day: 7,
+    storyBody: [
+      "Amsterdam's Canal Ring was dug during the Dutch Golden Age, between 1613 and 1662, as both a drainage system and an address of prestige. The three main canals — Herengracht, Keizersgracht, and Prinsengracht — curve in concentric semicircles around the medieval city, creating a plan that is both practical and beautiful.",
+      "Over 1,500 monumental buildings line the canals, their narrow facades dictated by a 17th-century tax based on frontage width. The result is one of the most uniform and elegant cityscapes in Europe — a continuous wall of gabled brick facades reflected in still water.",
+      "Arriving in Amsterdam by water, as your Rhine cruise does, is to approach the city as it was designed to be entered. The transition from broad river to intimate canal, from open landscape to dense urbanism, encapsulates the entire journey: from nature to civilisation, from ancient legend to modern life.",
+    ],
+    sources: ["UNESCO World Heritage Centre", "Amsterdam Canal District Foundation"],
   },
 ];
