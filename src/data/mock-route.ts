@@ -600,7 +600,7 @@ export const MOCK_POIS: POI[] = [
     storyExcerpt:
       "Breisach's St. Stephan's Minster crowns a basalt outcrop rising abruptly from the flat Rhine plain. The town changed hands between France and Germany so many times that its identity became a blend of both cultures.",
     thumbnailUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Breisach_am_Rhein_jm1582.jpg/800px-Breisach_am_Rhein_jm1582.jpg",
+      "https://images.unsplash.com/photo-1590076082090-9b5a0c4e2a62?w=800&h=600&fit=crop",
     day: 2,
     storyBody: [
       "Rising like a sentinel above the Upper Rhine Plain, Breisach's volcanic basalt hill has been fortified since Celtic times. The Romans recognised its strategic value, and the town subsequently passed between French and German control at least seventeen times.",
