@@ -1,25 +1,51 @@
 
 
-# Fix Broken POI Images
+# Journey UI Refinement — Collapsible Days, Icon-Based POIs, Better Overview
 
-## Problem
-The screenshot shows POI thumbnails displaying alt text instead of images on the Journey page. The Unsplash URLs use arbitrary photo IDs that may not exist or return valid images. Several URLs are also duplicated across different POIs.
+## Changes
 
-## Root Cause
-The Unsplash photo IDs in `thumbnailUrl` fields are fabricated/guessed rather than verified. Unsplash returns 404 for non-existent IDs, and some IDs are reused across multiple POIs.
+### 1. Replace POI images with category icons (`JourneyTimeline.tsx`)
 
-## Fix
-Replace all 26 `thumbnailUrl` values in `src/data/mock-route.ts` with verified, working Unsplash photo URLs. Each URL will use a known-valid photo ID that visually relates to the POI's subject matter (cathedrals, castles, rivers, windmills, etc.).
+Remove `<img>` thumbnails from POI cards. Replace with a 40×40 rounded icon container showing the Lucide icon for each category. Create a `CATEGORY_LUCIDE_ICONS` map in `mock-route.ts` mapping each `POICategory` to a Lucide component name (e.g., `history` → `Landmark`, `nature` → `TreePine`, `architecture` → `Building2`, `food` → `Wine`, `culture` → `Theater`, `engineering` → `Cog`, `legends` → `Star`, `wildlife` → `Bird`, `art` → `Paintbrush`, `hidden-gem` → `Gem`).
 
-Additionally, add an `onError` fallback in the Journey timeline and QuickInfoSheet image elements so any future broken image gracefully shows a placeholder instead of alt text.
+POI card layout: `[icon 40px] [title + category label] [chevron]` — no teaser text in the collapsed day view, just name and category.
 
-### Files changed
+### 2. Make all days collapsible (`JourneyTimeline.tsx`)
+
+Wrap each day's content in a collapsible section using Radix Collapsible (already installed). 
+
+- **Default state**: Current day is expanded. Past and future days are collapsed.
+- **Collapsed view** shows: day number, title, port, and a compact summary row (see below).
+- **Expanded view** shows: full description + POI cards.
+- Tap the day header area to toggle. Add a small chevron indicator.
+
+### 3. Compact collapsed-day summary
+
+In the collapsed state, show a row of category icon pills below the day header. For each day, derive the unique categories from its POIs and render them as small chips: `[icon] Culture  [icon] Food  [icon] History`. This gives users an instant sense of what the day contains without text walls.
+
+Also show POI count: "4 stops" as a subtle label.
+
+### 4. Stronger voyage overview (`JourneyPage.tsx`)
+
+Enhance the header section:
+- Add a 1-line trip summary below "Your Voyage": "Basel to Amsterdam along the Rhine — castles, cathedrals, vineyards, and hidden gems."
+- Make "7 Nights" and port endpoints more prominent
+- Add total POI count: "26 discoveries across 7 days"
+
+### 5. Journey home page audit
+
+`/journey` IS the journey home page — it's the first tab in the bottom nav. No new page needed. The header already serves as the overview. The collapsible day redesign will make it function better as both overview and detail view.
+
+## Files Changed
+
 | File | Change |
 |---|---|
-| `src/data/mock-route.ts` | Replace all 26 thumbnailUrl values with verified working Unsplash IDs |
-| `src/components/journey/JourneyTimeline.tsx` | Add `onError` fallback on `<img>` tags |
-| `src/components/map/QuickInfoSheet.tsx` | Add `onError` fallback on `<img>` tag |
+| `src/data/mock-route.ts` | Add `CATEGORY_LUCIDE_ICONS` mapping |
+| `src/components/journey/JourneyTimeline.tsx` | Collapsible days, icon-based POI cards, category summary chips |
+| `src/pages/JourneyPage.tsx` | Enhanced header with trip summary and stats |
 
-### Image selection approach
-Use well-known, heavily-used Unsplash photos with stable IDs — prioritizing photos of European architecture, Rhine scenery, Dutch landscapes, and German landmarks. Each POI gets a unique image.
+## Implementation Order
+1. Add category-to-Lucide-icon mapping
+2. Rewrite `JourneyTimeline` with collapsible days + icon POI cards
+3. Update `JourneyPage` header
 
