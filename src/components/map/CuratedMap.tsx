@@ -6,6 +6,7 @@ import {
   VESSEL_POSITION,
   MOCK_POIS,
   type POI,
+  type POICategory,
 } from "@/data/mock-route";
 import { MapControls } from "./MapControls";
 import { QuickInfoSheet } from "./QuickInfoSheet";
@@ -28,10 +29,15 @@ const CATEGORY_ICONS: Record<string, string> = {
   "hidden-gem": "💎",
 };
 
-export function CuratedMap() {
+interface CuratedMapProps {
+  activeCategories?: POICategory[];
+}
+
+export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const markersRef = useRef<mapboxgl.Marker[]>([]);
+  const markerCategoryRef = useRef<Map<mapboxgl.Marker, POICategory>>(new Map());
   const [selectedPoi, setSelectedPoi] = useState<POI | null>(null);
   const [mapReady, setMapReady] = useState(false);
   const [tokenError, setTokenError] = useState(false);
@@ -165,6 +171,7 @@ export function CuratedMap() {
             .addTo(map);
 
           markersRef.current.push(marker);
+          markerCategoryRef.current.set(marker, poi.category);
         });
 
         // Vessel position marker
@@ -207,6 +214,16 @@ export function CuratedMap() {
       markersRef.current = [];
     };
   }, [initMap]);
+
+  // Filter markers by active categories
+  useEffect(() => {
+    markersRef.current.forEach((marker) => {
+      const cat = markerCategoryRef.current.get(marker);
+      const visible =
+        activeCategories.length === 0 || (cat && activeCategories.includes(cat));
+      marker.getElement().style.display = visible ? "flex" : "none";
+    });
+  }, [activeCategories]);
 
   const handleRecenter = () => {
     mapRef.current?.flyTo({

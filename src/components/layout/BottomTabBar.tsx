@@ -1,8 +1,9 @@
 import { NavLink } from "react-router-dom";
-import { Map, Bookmark, Settings } from "lucide-react";
+import { Ship, Map, Bookmark, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const tabs = [
+  { to: "/journey", label: "Journey", icon: Ship },
   { to: "/map", label: "Map", icon: Map },
   { to: "/saved", label: "Saved", icon: Bookmark },
   { to: "/settings", label: "Settings", icon: Settings },

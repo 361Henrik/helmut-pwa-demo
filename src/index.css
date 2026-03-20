@@ -152,4 +152,11 @@
     @apply font-body text-xs leading-normal tracking-wide;
     /* 12px */
   }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }
