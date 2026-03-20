@@ -161,7 +161,9 @@ export function addRouteLayers(map: mapboxgl.Map) {
       layout: { "line-join": "round", "line-cap": "round" },
       paint: {
         "line-color": "#1F4A3A",
-        "line-width": 4,
+        "line-width": 5,
+        "line-blur": 1.5,
+        "line-opacity": 0.75,
       },
     });
   }

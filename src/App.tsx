@@ -13,6 +13,7 @@ import SavedPage from "./pages/SavedPage";
 import SettingsPage from "./pages/SettingsPage";
 import StoryPage from "./pages/StoryPage";
 import AuthPage from "./pages/AuthPage";
+import HelpPage from "./pages/HelpPage";
 import NotFound from "./pages/NotFound";
 import { AppShell } from "./components/layout/AppShell";
 
@@ -38,6 +39,7 @@ const App = () => (
               <Route path="/map" element={<MapPage />} />
               <Route path="/saved" element={<SavedPage />} />
               <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/help" element={<HelpPage />} />
             </Route>
 
             <Route path="*" element={<NotFound />} />

@@ -88,9 +88,9 @@ export default function WelcomePage() {
           <Button
             size="lg"
             className="w-full text-lg"
-            onClick={() => navigate("/onboarding")}
+            onClick={() => navigate("/journey")}
           >
-            Start Exploring
+            Begin Your Journey
           </Button>
 
           <Button
@@ -98,7 +98,7 @@ export default function WelcomePage() {
             className="w-full text-muted-foreground"
             onClick={() => navigate("/map")}
           >
-            Login / Recover Saved Journey
+            Enter Demo
           </Button>
         </motion.div>
 

@@ -242,7 +242,10 @@ export default function SettingsPage() {
               </p>
             </div>
           </div>
-          <button className="flex w-full items-center gap-3 rounded-md border bg-card p-4 text-left transition-colors duration-default hover:bg-card/80">
+          <button
+            onClick={() => navigate("/help")}
+            className="flex w-full items-center gap-3 rounded-md border bg-card p-4 text-left transition-colors duration-default hover:bg-card/80"
+          >
             <HelpCircle className="h-5 w-5 text-deep-green" />
             <p className="text-body-small font-medium text-foreground">
               Help & Support
