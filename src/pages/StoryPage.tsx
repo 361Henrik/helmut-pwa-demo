@@ -1,8 +1,22 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, Bookmark, BookmarkCheck, Share2 } from "lucide-react";
+import { ArrowLeft, Bookmark, BookmarkCheck, Share2, Landmark, TreePine, Building2, Theater, Wine, Cog, Star, Bird, Paintbrush, Gem } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { useMemo } from "react";
-import { MOCK_POIS, CATEGORY_LABELS } from "@/data/mock-route";
+import { MOCK_POIS, CATEGORY_LABELS, type POICategory } from "@/data/mock-route";
+
+const CATEGORY_ICONS: Record<POICategory, LucideIcon> = {
+  history: Landmark,
+  nature: TreePine,
+  architecture: Building2,
+  culture: Theater,
+  food: Wine,
+  engineering: Cog,
+  legends: Star,
+  wildlife: Bird,
+  art: Paintbrush,
+  "hidden-gem": Gem,
+};
 import { AudioPlayer } from "@/components/story/AudioPlayer";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
@@ -48,31 +62,20 @@ export default function StoryPage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      {/* Hero Image */}
-      <div className="relative h-72 w-full flex-shrink-0 overflow-hidden">
-        <motion.img
-          src={poi.thumbnailUrl}
-          alt={poi.name}
-          className="h-full w-full object-cover"
-          initial={{ scale: 1.1 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
-
-        <div className="absolute left-0 right-0 top-0 flex items-center justify-between px-4 pt-safe-top">
+      {/* Category Icon Header */}
+      <div className="relative flex-shrink-0 bg-deep-green/5 pb-8 pt-safe-top">
+        <div className="flex items-center justify-between px-4 pt-3">
           <button
             onClick={() => navigate(-1)}
-            className="mt-3 flex h-10 w-10 items-center justify-center rounded-full bg-background/80 backdrop-blur-sm"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-background shadow-sm"
             aria-label="Go back"
           >
             <ArrowLeft className="h-5 w-5 text-foreground" />
           </button>
-          <div className="mt-3 flex gap-2">
+          <div className="flex gap-2">
             <button
               onClick={handleToggleSave}
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-background/80 backdrop-blur-sm"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-background shadow-sm"
               aria-label={saved ? "Remove from saved" : "Save to journey"}
             >
               {saved ? (
@@ -82,18 +85,32 @@ export default function StoryPage() {
               )}
             </button>
             <button
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-background/80 backdrop-blur-sm"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-background shadow-sm"
               aria-label="Share"
             >
               <Share2 className="h-5 w-5 text-foreground" />
             </button>
           </div>
         </div>
+
+        <motion.div
+          className="mt-6 flex flex-col items-center"
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-deep-green/10">
+            {(() => {
+              const Icon = CATEGORY_ICONS[poi.category];
+              return <Icon className="h-10 w-10 text-deep-green" />;
+            })()}
+          </div>
+        </motion.div>
       </div>
 
       {/* Content */}
       <motion.div
-        className="-mt-6 flex flex-1 flex-col rounded-t-2xl bg-background px-6 pb-8 pt-6"
+        className="flex flex-1 flex-col bg-background px-6 pb-8 pt-6"
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.4, delay: 0.2 }}
