@@ -786,7 +786,7 @@ export const MOCK_POIS: POI[] = [
     storyExcerpt:
       "Rising 120 metres above the waterline, the Loreley has inspired poets, painters, and composers for centuries. Heinrich Heine's 1824 poem immortalised the golden-haired maiden whose song lured sailors to their doom on the treacherous narrows below.",
     thumbnailUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Loreley_von_Rheinsteig.jpg/800px-Loreley_von_Rheinsteig.jpg",
+      "https://images.unsplash.com/photo-1590077428593-a55bb07c4665?w=800&h=600&fit=crop",
     day: 5,
     storyBody: [
       "The Loreley cliff rises 120 metres above the Rhine at its narrowest and deepest point — just 113 metres wide and 25 metres deep. The combination of the tight bend, strong current, and submerged rocks made this passage the most dangerous on the entire navigable Rhine, claiming countless vessels over the centuries.",
