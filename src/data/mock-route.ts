@@ -804,7 +804,7 @@ export const MOCK_POIS: POI[] = [
     storyExcerpt:
       "The Upper Middle Rhine Valley's impossibly steep vineyard terraces have been cultivated since Roman times. Some slopes angle at 70 degrees — harvesting is done entirely by hand, making these among the most labour-intensive wines on Earth.",
     thumbnailUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Oberwesel_Rhein_1.jpg/800px-Oberwesel_Rhein_1.jpg",
+      "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&h=600&fit=crop",
     day: 5,
     storyBody: [
       "The terraced vineyards of the Rhine Gorge cling to slopes so steep — up to 70 degrees in places — that no machine can work them. Every task, from pruning to harvest, is done by hand, making these among the most labour-intensive wines produced anywhere on Earth.",
