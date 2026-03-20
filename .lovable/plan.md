@@ -1,125 +1,101 @@
 
 
-# Map Experience Improvement Plan
+# Map Experience — Mobile-First Accessibility Update
 
-## Overview
-
-Five interconnected improvements to transform the map from a free-exploration tool into a constrained, premium journey companion.
-
----
-
-## 1. Zoom and Pan Constraints
-
-**What changes:**
-- Compute a `LngLatBounds` from `ROUTE_COORDINATES` with ~30km padding on each side
-- Set `maxBounds` on the Mapbox Map constructor to lock panning to the route corridor
-- Change `minZoom` from 5 to a value calculated so the full route fits portrait viewport (~5.5-6, determined dynamically via `map.fitBounds` logic)
-- Keep `maxZoom: 16` (already appropriate)
-- Update `handleRecenter` to use `fitBounds` instead of flying to a fixed center/zoom
-
-**Why it matters:** Prevents users from panning to Africa or zooming out to see the whole continent. Reinforces that this map serves one journey only.
-
-**Technical approach:**
-- Helper function `getRouteBounds()` that iterates `ROUTE_COORDINATES` to find min/max lng/lat, then pads by ~0.5 degrees
-- Pass `maxBounds` to the Map constructor
-- On init, call `map.fitBounds(routeBounds, { padding: 40 })` instead of hardcoded center/zoom
-
-**Tradeoffs:** Tight bounds may feel restrictive if POIs sit near the edge. The 30km padding handles this.
+## Summary
+Six workstreams to improve the map for 60+ river-cruise passengers on mobile. Focus: larger touch targets, better icons, POI clustering, clearer navigation, and accessibility across all controls.
 
 ---
 
-## 2. Journey Corridor Visualization
+## 1. Bottom Navigation Overhaul (`BottomTabBar.tsx`)
 
-**What changes:**
-- Add a GeoJSON polygon layer representing a ~15-20km buffer around the route line
-- Areas **outside** the corridor get a semi-transparent overlay (white/grey at ~40% opacity) that mutes the base map
-- The corridor itself remains clear, showing full map detail
-- The route line sits on top of the corridor
+**Changes:**
+- Increase tab bar height from `h-16` (64px) to `h-20` (80px) for breathing room
+- Increase icon size from `h-6 w-6` (24px) to `h-7 w-7` (28px)
+- Increase label font from `text-xs` (12px) to `text-sm` (14px)
+- Increase min tap target from `48px` to `56px`
+- Replace `Ship` icon with `Navigation` (river route arrow) — more relevant to cruise progression than a cargo ship
+- Make the "Return to Operator" bar always visible (not just when query param present) — use a default placeholder text like "Back to Travel App" so it's always discoverable; still driven by `returnUrl` param for the actual link
+- Increase the return bar height from `h-8` to `h-10` with `text-sm` instead of `text-caption`
+- Add `ArrowLeft` icon at 16px for the return bar
 
-**Why it matters:** Visually communicates "content lives here, not out there." Creates a productized, intentional feel rather than a generic map.
-
-**Technical approach:**
-- Generate a corridor polygon by offsetting `ROUTE_COORDINATES` left and right by ~0.15 degrees (simplified buffer — no Turf.js dependency needed)
-- Add an **inverted mask layer**: a full-world polygon with the corridor cut out as a hole, filled with `rgba(255, 255, 255, 0.4)`
-- Layer order: base map → mask overlay → route line → markers
-- The mask uses a `fill` layer with a GeoJSON `Polygon` that has an outer ring covering the world and an inner ring tracing the corridor
-
-**Implementation detail:**
-```
-Outer ring: [[-180,-90],[180,-90],[180,90],[-180,90],[-180,-90]]
-Inner ring: corridor polygon points (route offset left + route offset right reversed)
-```
-
-This is a standard Mapbox "inverted polygon" technique — no external libraries needed.
-
-**Tradeoffs:** The simplified offset (adding/subtracting a fixed lng/lat delta) won't produce a perfectly geodesic buffer, but at this scale the distortion is negligible.
+**Why:** Current 24px icons and 12px labels are below comfortable reading size for older adults. The Ship icon doesn't communicate "journey progression." The operator return link is invisible without a query param.
 
 ---
 
-## 3. Route Accuracy — Style Toggle Fix
+## 2. Journey, Live View, Camera & Help Icons
 
-**What changes:**
-- The current `handleToggleStyle` calls `map.setStyle()` which destroys all custom sources and layers (route, corridor mask)
-- Add a `style.load` event handler that re-adds the route source, corridor mask, and route layers after any style change
-- Extract the "add sources and layers" logic into a reusable function called from both initial load and style change
+**Changes:**
+- **Journey tab**: Replace `Ship` with `Route` (Lucide) — a path/route icon that communicates river progression
+- **Map controls**: Add a Help button (`CircleHelp` icon) below the existing Recenter and Layers buttons — same 14×14 circular style, opens a brief tooltip or modal explaining controls
+- **Live View / Camera**: Add a Camera button back to `MapControls` but with a "Coming Soon" badge overlay and disabled state. Uses `Camera` icon. When tapped, shows a toast: "Live View coming soon"
+- All map control buttons: increase from `h-12 w-12` to `h-14 w-14`, icons from `h-5 w-5` to `h-6 w-6`
 
-**Why it matters:** Currently switching map styles breaks the entire route display. This is a critical bug.
-
-**Technical approach:**
-- Create `addRouteLayers(map)` function containing the route source, mask source, and all layer definitions
-- Call it in `map.on('load')` and also in `map.on('style.load')` (which fires after `setStyle`)
-- Re-add POI markers after style change as well (they persist as DOM elements but may need re-attachment)
+**Why:** Users asked for camera/help to be visible. Hiding the camera entirely removes discoverability. A disabled-with-explanation state is better than invisible.
 
 ---
 
-## 4. Icon and Marker Design Improvements
+## 3. POI Marker Icon Quality Improvements (`mapIcons.ts`)
 
-**What changes:**
-- Replace emoji-based markers (`🏛`, `🌿`, `⛪`, etc.) with SVG icons rendered inline
-- Use a consistent design language: monochrome deep-green icons on white circular markers
-- Each category gets a purpose-designed SVG path (e.g., column for history, leaf for nature, church for architecture, wine glass for food, gear for engineering, star for legends, binoculars for wildlife, note for art, diamond for hidden-gem, masks for culture)
-- Markers get a subtle category color accent on the border instead of all being `#1A1F1A`
-- Selected state uses champagne bronze border (already exists, keep)
-- Add a pulsing ring animation to the vessel marker to make it more prominent
+**Changes:**
+- Increase marker size from 40×40 to 48×48 px
+- Increase SVG icon size from 18×18 to 22×22 px
+- Increase border width from 2px to 2.5px
+- Increase stroke-width in SVGs from 1.8 to 2.0 for better legibility
+- Replace weak icons:
+  - `culture`: current face/mask icon is unrecognizable → replace with a theater masks icon (two overlapping circles with expressions)
+  - `engineering`: current sun/gear is ambiguous → replace with a bridge/cog icon
+  - `hidden-gem`: duplicate star shape (same as `legends`) → replace with a diamond/gem shape
+  - `art`: current flower/palette is unclear → replace with a paintbrush icon
+- Keep `history`, `nature`, `architecture`, `food`, `legends`, `wildlife` — these are recognizable
 
-**Why it matters:** Emoji render inconsistently across devices, are not accessible, and undermine the premium visual identity. SVG icons give full control.
-
-**Technical approach:**
-- Define `CATEGORY_SVG_ICONS: Record<POICategory, string>` with inline SVG markup
-- Replace `el.innerHTML` in marker creation with the SVG string
-- Style the SVG to be 18x18px, stroke-based, using `currentColor`
-- Add a CSS animation for the vessel pulse ring
-
-**Tradeoffs:** More code for icon definitions, but eliminates platform inconsistency entirely.
+**Why:** At 40px on mobile, the current 18px stroke icons are too small and some are indistinguishable. Several categories share similar shapes (legends and hidden-gem are both stars).
 
 ---
 
-## 5. "Return to Travel Operator App" Navigation
+## 4. POI Clustering at Zoom-Out (`CuratedMap.tsx`)
 
-**What changes:**
-- Add a subtle button in the bottom tab bar area or as a fixed element above the tab bar
-- Label: "Return to [Operator]" or a generic "Back to App"
-- Uses `window.parent.postMessage()` for iframe embedding, or `window.close()` / deep link for native webview embedding
-- Visually: a small text link with a left-arrow icon, placed at the top of the screen or integrated into the tab bar as a 5th minimal element
+**Changes:**
+- Switch from individual DOM markers to a **Mapbox GeoJSON source + symbol layer** for POIs at low zoom
+- Use Mapbox's built-in `cluster` option on the GeoJSON source:
+  ```
+  source: { type: "geojson", data: poiFeatureCollection, cluster: true, clusterRadius: 50, clusterMaxZoom: 11 }
+  ```
+- Cluster circles: 48px, deep-green background, white count text (16px bold)
+- At zoom > 11: clusters dissolve into individual markers (keep current DOM marker approach)
+- Hybrid approach: use GeoJSON clusters for zoomed-out, switch to DOM markers when zoomed in past threshold
+- On cluster click: zoom into the cluster extent using `getClusterExpansionZoom`
 
-**Recommended placement:** A small persistent bar **above** the bottom tab bar, or a link in the Settings page under an "App" section. For the map specifically, it should not compete with map controls.
+**Implementation:**
+- Add a `pois` GeoJSON source with clustering enabled in `mapLayers.ts`
+- Add `cluster-circles` and `cluster-count` layers
+- In `CuratedMap.tsx`, listen to zoom level: hide DOM markers when zoom < 11, show cluster layer; reverse when zoom >= 11
+- Handle `click` on cluster layer to expand
 
-**Best approach:** Add it to `BottomTabBar.tsx` as a top-edge link above the tab icons — a thin strip with "← Back to [Operator Name]" in muted text. This is always visible but unobtrusive.
-
-**Technical approach:**
-- Add an optional `operatorName` and `returnUrl` to app config (could be env vars or query params)
-- If `returnUrl` is present, show the return bar
-- On tap: `window.location.href = returnUrl` for deep links, or `postMessage` for iframe
-
-**Tradeoffs:** Needs coordination with the travel operator on integration method (iframe vs webview vs standalone). For now, implement as a configurable link that can be hidden when not embedded.
+**Why:** With 10 POIs it's manageable, but the plan calls for many more. Clustering prevents visual clutter at zoomed-out views and communicates density clearly.
 
 ---
 
-## 6. Additional Quick Fixes (bundled)
+## 5. Category Filter Bar Accessibility (`CategoryFilterBar.tsx`)
 
-- **Remove Camera button** from `MapControls` until Live View is implemented
-- **Add vessel label**: a small tooltip "You are here" on the vessel marker
-- **Fix "Swipe up" text**: detect touch support, show "Tap for full story" on non-touch devices
+**Changes:**
+- Increase chip height: add `py-2.5` (from `py-2`)
+- Increase chip font from `text-xs` to `text-sm`
+- Add `min-h-[44px]` to each chip for WCAG touch target
+- Increase horizontal padding from `px-4` to `px-5`
+- Move filter bar down slightly from `top-4` to `top-5` to avoid conflict with map controls on right
+
+**Why:** Current filter chips at 12px text and ~36px height are too small for 60+ users on mobile.
+
+---
+
+## 6. QuickInfoSheet Accessibility (`QuickInfoSheet.tsx`)
+
+**Changes:**
+- Increase title font from `text-lg` to `text-xl`
+- Increase close button from `h-8 w-8` to `h-10 w-10`
+- Increase "Swipe/Tap for full story" text from `text-caption` to `text-body-small`
+- Increase thumbnail from `h-20 w-20` to `h-24 w-24`
 
 ---
 
@@ -127,21 +103,21 @@ This is a standard Mapbox "inverted polygon" technique — no external libraries
 
 | File | Changes |
 |---|---|
-| `src/components/map/CuratedMap.tsx` | Bounds calculation, maxBounds, corridor mask layer, SVG markers, vessel pulse, style toggle fix, extract layer setup function |
-| `src/components/map/MapControls.tsx` | Remove Camera button |
-| `src/components/map/QuickInfoSheet.tsx` | Touch detection for "swipe up" vs "tap" text |
-| `src/components/layout/BottomTabBar.tsx` | Add optional "Return to Operator" bar |
-| `src/data/mock-route.ts` | Add corridor polygon helper or export bounds constant |
-| `src/index.css` | Add vessel pulse animation CSS |
-
----
+| `BottomTabBar.tsx` | Larger bar, bigger icons/labels, better Journey icon, visible operator return |
+| `MapControls.tsx` | Larger buttons, add Help button, add disabled Camera/Live View button |
+| `CuratedMap.tsx` | Add cluster source/layers, zoom-based marker visibility toggle, larger DOM markers |
+| `mapLayers.ts` | Add POI cluster source and layers |
+| `mapIcons.ts` | Larger SVGs (22px), replace culture/engineering/hidden-gem/art icons |
+| `CategoryFilterBar.tsx` | Larger chips, bigger text, better spacing |
+| `QuickInfoSheet.tsx` | Larger text, bigger close button, bigger thumbnail |
+| `src/index.css` | Update vessel marker sizes to match new scale |
 
 ## Implementation Order
 
-1. Zoom/pan bounds + recenter fix (foundational)
-2. Style toggle fix (bug fix, needed before corridor work)
-3. Corridor mask overlay (visual hierarchy)
-4. SVG icon system (design quality)
-5. Return-to-operator nav (integration)
-6. Quick fixes (cleanup)
+1. Bottom nav + icon changes (foundational, affects all pages)
+2. Map control buttons (larger + help + camera placeholder)
+3. POI marker icon redesign (bigger, clearer)
+4. POI clustering (new Mapbox source/layer system)
+5. Filter bar + QuickInfoSheet accessibility
+6. Mobile viewport testing
 
