@@ -7,7 +7,7 @@ export interface POI {
   coordinates: [number, number]; // [lng, lat]
   teaser: string;
   storyExcerpt: string;
-  thumbnailUrl: string;
+  thumbnailUrl?: string;
   audioUrl?: string;
   /** Which cruise day this POI belongs to (1-based) */
   day?: number;

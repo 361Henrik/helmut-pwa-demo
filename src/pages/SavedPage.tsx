@@ -135,12 +135,12 @@ export default function SavedPage() {
                 transition={{ duration: 0.3, delay: i * 0.06 }}
                 layout
               >
-                <img
-                  src={item.thumbnailUrl}
-                  alt={item.name}
-                  className="h-16 w-16 flex-shrink-0 rounded-lg object-cover"
-                  loading="lazy"
-                />
+                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-deep-green/10">
+                  {(() => {
+                    const Icon = CATEGORY_ICONS[item.category];
+                    return <Icon className="h-6 w-6 text-deep-green" />;
+                  })()}
+                </div>
                 <div className="flex flex-1 flex-col justify-center overflow-hidden">
                   <span className="text-caption uppercase text-muted-foreground">
                     {CATEGORY_LABELS[item.category]}

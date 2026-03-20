@@ -110,7 +110,7 @@ export default function StoryPage() {
 
       {/* Content */}
       <motion.div
-        className="-mt-6 flex flex-1 flex-col rounded-t-2xl bg-background px-6 pb-8 pt-6"
+        className="flex flex-1 flex-col bg-background px-6 pb-8 pt-6"
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.4, delay: 0.2 }}

@@ -211,6 +211,74 @@ export function addRouteLayers(map: mapboxgl.Map) {
     });
   }
 
+  // --- Passive port labels ---
+  if (!map.getSource("port-labels")) {
+    map.addSource("port-labels", {
+      type: "geojson",
+      data: {
+        type: "FeatureCollection",
+        features: CRUISE_ITINERARY.map((day) => ({
+          type: "Feature" as const,
+          properties: {
+            label: `Day ${day.day} · ${day.port}`,
+            status: day.status,
+          },
+          geometry: {
+            type: "Point" as const,
+            coordinates: day.coordinates,
+          },
+        })),
+      },
+    });
+  }
+
+  if (!map.getLayer("port-label-dots")) {
+    map.addLayer({
+      id: "port-label-dots",
+      type: "circle",
+      source: "port-labels",
+      paint: {
+        "circle-radius": 4,
+        "circle-color": [
+          "match",
+          ["get", "status"],
+          "current", "#1F4A3A",
+          "past", "#B8B0A4",
+          "#B8B0A4",
+        ],
+        "circle-stroke-width": 2,
+        "circle-stroke-color": "#F6F3EE",
+      },
+    });
+  }
+
+  if (!map.getLayer("port-label-text")) {
+    map.addLayer({
+      id: "port-label-text",
+      type: "symbol",
+      source: "port-labels",
+      layout: {
+        "text-field": ["get", "label"],
+        "text-font": ["DIN Pro Medium", "Arial Unicode MS Bold"],
+        "text-size": 12,
+        "text-offset": [0, 1.4],
+        "text-anchor": "top",
+        "text-max-width": 10,
+      },
+      paint: {
+        "text-color": [
+          "match",
+          ["get", "status"],
+          "current", "#1F4A3A",
+          "past", "#8A8478",
+          "#8A8478",
+        ],
+        "text-halo-color": "#F6F3EE",
+        "text-halo-width": 1.5,
+      },
+    });
+  }
+
   // Custom water/land colors
   try {
     map.setPaintProperty("water", "fill-color", "#D4E4ED");
