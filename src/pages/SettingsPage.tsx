@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
-import { Globe, Bell, MapPin, Wifi, HelpCircle, Info } from "lucide-react";
+import { Globe, Bell, MapPin, Wifi, HelpCircle, Info, LogIn, LogOut } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import {
   Select,
@@ -31,6 +34,8 @@ const CATEGORIES = [
 ];
 
 export default function SettingsPage() {
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
   const [language, setLanguage] = useState(() => {
     return localStorage.getItem("curated-lens-language") ?? "en";
   });
@@ -193,7 +198,34 @@ export default function SettingsPage() {
         </div>
       </section>
 
-      {/* About */}
+      {/* Account */}
+      <section className="mt-space-6">
+        <h2 className="font-display text-lg font-medium text-foreground">
+          Account
+        </h2>
+        <div className="mt-space-3">
+          {user ? (
+            <div className="flex items-center justify-between rounded-md border bg-card p-4">
+              <div>
+                <p className="text-body-small font-medium text-foreground">
+                  {user.email}
+                </p>
+                <p className="text-caption text-muted-foreground">Signed in</p>
+              </div>
+              <Button variant="outline" size="sm" onClick={() => signOut()}>
+                <LogOut className="h-4 w-4" />
+                Sign Out
+              </Button>
+            </div>
+          ) : (
+            <Button className="w-full" onClick={() => navigate("/auth")}>
+              <LogIn className="h-5 w-5" />
+              Sign In
+            </Button>
+          )}
+        </div>
+      </section>
+
       <section className="mt-space-6 pb-space-5">
         <h2 className="font-display text-lg font-medium text-foreground">
           About

@@ -1,15 +1,19 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, Bookmark, BookmarkCheck, Share2 } from "lucide-react";
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { MOCK_POIS, CATEGORY_LABELS } from "@/data/mock-route";
 import { AudioPlayer } from "@/components/story/AudioPlayer";
 import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/hooks/useAuth";
+import { useSavedStories } from "@/hooks/useSavedStories";
+import { toast } from "sonner";
 
 export default function StoryPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [saved, setSaved] = useState(false);
+  const { user } = useAuth();
+  const { isSaved, toggleSave } = useSavedStories();
 
   const poi = useMemo(() => MOCK_POIS.find((p) => p.id === id), [id]);
 
@@ -27,9 +31,19 @@ export default function StoryPage() {
     );
   }
 
+  const saved = id ? isSaved(id) : false;
+
   const handleToggleSave = () => {
-    setSaved((s) => !s);
-    // Phase 5: persist to Supabase
+    if (!user) {
+      toast("Sign in to save stories", {
+        action: {
+          label: "Sign in",
+          onClick: () => navigate("/auth"),
+        },
+      });
+      return;
+    }
+    if (id) toggleSave.mutate(id);
   };
 
   return (
@@ -44,10 +58,8 @@ export default function StoryPage() {
           animate={{ scale: 1 }}
           transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
         />
-        {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
 
-        {/* Top bar */}
         <div className="absolute left-0 right-0 top-0 flex items-center justify-between px-4 pt-safe-top">
           <button
             onClick={() => navigate(-1)}
@@ -85,7 +97,6 @@ export default function StoryPage() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.4, delay: 0.2 }}
       >
-        {/* Category badge */}
         <Badge
           variant="secondary"
           className="w-fit text-caption uppercase tracking-wider"
@@ -93,40 +104,25 @@ export default function StoryPage() {
           {CATEGORY_LABELS[poi.category]}
         </Badge>
 
-        {/* Title */}
         <h1 className="mt-3 font-display text-3xl font-medium leading-tight text-foreground">
           {poi.name}
         </h1>
 
-        {/* Teaser */}
         <p className="mt-2 text-body-large text-muted-foreground italic">
           {poi.teaser}
         </p>
 
         {/* Audio Player */}
-        {poi.audioUrl !== undefined && (
-          <div className="mt-5">
-            <AudioPlayer src={poi.audioUrl} title={poi.name} />
-          </div>
-        )}
+        <div className="mt-5">
+          <AudioPlayer src={poi.audioUrl} title={poi.name} />
+        </div>
 
-        {/* Mock audio player for POIs without audio */}
-        {poi.audioUrl === undefined && (
-          <div className="mt-5">
-            <AudioPlayer title={poi.name} />
-          </div>
-        )}
-
-        {/* Divider */}
         <div className="my-5 h-px bg-border" />
 
-        {/* Narrative text */}
         <article className="prose-curated">
           <p className="text-body-large leading-relaxed text-foreground">
             {poi.storyExcerpt}
           </p>
-
-          {/* Extended narrative — mock content for richness */}
           <p className="mt-5 text-body leading-relaxed text-foreground/90">
             As the vessel glides past, the landscape transforms into a living
             canvas of history and natural beauty. Each bend in the river reveals
@@ -147,7 +143,7 @@ export default function StoryPage() {
           </p>
         </article>
 
-        {/* Save CTA at bottom */}
+        {/* Save CTA */}
         <div className="mt-8 flex items-center justify-between rounded-xl bg-card p-4">
           <div>
             <p className="text-body font-medium text-foreground">
