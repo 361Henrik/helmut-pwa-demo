@@ -1,82 +1,28 @@
 
 
-## Audit: Phases 1-3 Gaps and Missing Elements
+## Make the Route Follow the Actual Rhine River
 
-After reviewing every file in the project, here is what exists and what is missing.
+### Problem
+The current `ROUTE_COORDINATES` array has ~25 city-level waypoints connected by straight lines. This creates a jagged path that cuts across land instead of following the Rhine's actual course.
 
-### What is built
-- Design system (tokens, typography, spacing, colors)
-- Welcome screen with language picker
-- Onboarding flow (narrative cards, permissions, interests)
-- AppShell with bottom tab bar (Map, Saved, Settings)
-- Mapbox map with Rhine route, POI markers, vessel position
-- QuickInfoSheet for POI details
-- Map controls (recenter, style toggle, camera)
+### Approach: Use Mapbox Directions API (river-snapped polyline)
 
-### What is missing or incomplete
+There are two viable options:
 
-**1. No Home tab or way to return to the welcome/landing experience**
-The bottom nav has Map / Saved / Settings but no "Home" or "Journey" entry point. Once past onboarding, there is no way back.
+**Option A — Pre-baked detailed coordinates (recommended)**
+Replace the 25-point array with ~200-400 points that trace the actual Rhine river path. I will generate these coordinates by densely sampling the Rhine's known geography from Basel to Amsterdam. This requires no API calls at runtime and keeps the app fully offline-capable.
 
-**2. Settings page is an empty placeholder**
-Needs: language selector (reusing the Welcome page languages), notification preferences, location toggle, offline data management, about/help section.
+**Option B — Mapbox Map Matching API at runtime**
+Call the Mapbox Map Matching API with the existing waypoints to snap them to waterways. This adds a network dependency and complexity.
 
-**3. Saved page is an empty placeholder**
-Needs: empty state with call-to-action, and the UI skeleton for a chronological timeline of saved POIs (actual saving comes in Phase 5, but the shell should exist).
+### Recommendation: Option A
 
-**4. Category filter chips missing from map**
-The onboarding collects up to 5 interest categories but the map has no filter UI to toggle them. Needs horizontal scrollable chip bar above the map.
+I will replace `ROUTE_COORDINATES` in `src/data/mock-route.ts` with a dense array of ~200+ coordinates that closely follow the Rhine's actual river path from Basel through Strasbourg, Mannheim, Mainz, Koblenz, Cologne, Düsseldorf, and on to Amsterdam. The route will also be corrected to remove the current detour through Konstanz/Tuttlingen (which is Lake Constance, not the navigable Rhine cruise route).
 
-**5. PWA app icons do not exist**
-`manifest.json` references `/icons/icon-192.png` and `/icons/icon-512.png` but the files are missing.
+### Changes
+1. **`src/data/mock-route.ts`** — Replace `ROUTE_COORDINATES` with a dense, river-accurate coordinate array (~200-400 points tracing the Rhine)
+2. No other files need changes — `CuratedMap.tsx` already renders the route from this array
 
-**6. Map page has no header or contextual info**
-No indication of current journey, cruise name, or voyage context. No top-level branding visible in the app shell.
-
-**7. Camera button on map does nothing**
-The camera FAB in MapControls has no action attached.
-
----
-
-## Plan
-
-### Step 1 — Add a Home/Journey tab to the bottom nav
-- Add a "Journey" tab (Ship/Compass icon) as the first tab, linking to a new `/journey` route
-- Create `JourneyPage.tsx` — a dashboard showing: current voyage name, progress along route, next POI approaching, quick links
-- This gives users a "home base" within the app
-
-### Step 2 — Build the Settings page
-- Language selector (EN, DE, FR, ES, NO — same list as Welcome)
-- Notification preferences toggle (on/off)
-- Location sharing toggle
-- Interest categories editor (reuse the category grid from onboarding)
-- About section with app version
-- Uses Switch, Select, and existing UI components
-
-### Step 3 — Build the Saved page skeleton
-- Empty state with illustration and "Start saving stories" message
-- Skeleton list layout for future saved items (card-based timeline)
-- Each card shows: POI thumbnail, name, category badge, date saved
-- No backend wiring yet — just the UI shell with mock empty state
-
-### Step 4 — Add category filter chips to the map
-- Horizontal scrollable chip bar at top of map (below any header)
-- Reads selected categories from localStorage (set during onboarding)
-- Tapping a chip toggles POI marker visibility by category
-- "All" chip to reset filters
-
-### Step 5 — Add a minimal top bar to the AppShell
-- Shows "The Curated Lens" branding (small logo + text) on the left
-- Help icon on the right (consistent with Welcome page)
-- Semi-transparent, does not obscure map when on map tab
-
-### Step 6 — Generate PWA icons
-- Create simple SVG-based icons with the "CL" monogram in deep-green circle
-- Place at `/public/icons/icon-192.png` and `/public/icons/icon-512.png`
-
-### Technical details
-- New files: `src/pages/JourneyPage.tsx`, update `SettingsPage.tsx`, update `SavedPage.tsx`, `src/components/map/CategoryFilterBar.tsx`, update `AppShell.tsx` (top bar), update `BottomTabBar.tsx` (add Journey tab), update `App.tsx` (add route)
-- Modified files: `CuratedMap.tsx` (integrate filter bar), `MapPage.tsx` (pass filter state)
-- All state is local (localStorage + React state) — no backend needed yet
-- Reuses existing shadcn components (Switch, Badge, ScrollArea)
+### Corrected route geography
+The current array incorrectly routes through Schaffhausen → Konstanz → Tuttlingen → Breisach. The actual Basel-Amsterdam cruise follows: Basel → Breisach → Strasbourg → Speyer → Mannheim → Mainz → northward. This will be fixed.
 
