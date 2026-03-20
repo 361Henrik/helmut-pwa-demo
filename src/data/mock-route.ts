@@ -894,7 +894,7 @@ export const MOCK_POIS: POI[] = [
     storyExcerpt:
       "Towering 118 metres above the Rhine opposite Koblenz, Ehrenbreitstein is Europe's second-largest preserved fortress after Gibraltar. Rebuilt by the Prussians between 1817 and 1828, it was designed to be impregnable — and never fell.",
     thumbnailUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Festung_Ehrenbreitstein_2010.jpg/800px-Festung_Ehrenbreitstein_2010.jpg",
+      "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&h=600&fit=crop&q=80",
     day: 5,
     storyBody: [
       "The rock of Ehrenbreitstein has been fortified since at least 1000 AD, but the current fortress dates from the Prussian reconstruction of 1817–1828. Built to be the largest and most modern fortification on the Rhine, it incorporated every lesson learned from the Napoleonic Wars.",
