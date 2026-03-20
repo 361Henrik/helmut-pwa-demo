@@ -1006,7 +1006,7 @@ export const MOCK_POIS: POI[] = [
     storyExcerpt:
       "Kinderdijk's 19 windmills, built around 1740, form the largest concentration of historic windmills in the Netherlands. This UNESCO site demonstrates the Dutch genius for water management that made habitation of the low-lying polders possible.",
     thumbnailUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Kinderdijk.jpg/800px-Kinderdijk.jpg",
+      "https://images.unsplash.com/photo-1559564484-e48b3e040ff4?w=800&h=600&fit=crop",
     day: 7,
     storyBody: [
       "The 19 windmills of Kinderdijk were built between 1738 and 1740 as part of a water management system that kept the Alblasserwaard polder from flooding. Each mill could pump water up to a higher canal, working in sequence to lift water several metres from the low-lying farmland to the river.",
