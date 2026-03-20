@@ -674,7 +674,7 @@ export const MOCK_POIS: POI[] = [
     storyExcerpt:
       "Mannheim's Wasserturm, built in 1889, is one of Germany's finest Art Nouveau monuments. The 60-metre sandstone tower anchors a formal garden designed by Bruno Schmitz, creating an urban ensemble of remarkable elegance.",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1567359781514-3b964e2b04d6?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1555992336-fb0d29498b13?w=800&h=600&fit=crop",
     day: 3,
     storyBody: [
       "Mannheim's Wasserturm was never merely functional. When it was inaugurated in 1889, the 60-metre tower was designed as a civic monument — its sandstone exterior decorated with allegorical figures and crowned by an amphora that held 2,000 cubic metres of water to supply the growing industrial city.",
