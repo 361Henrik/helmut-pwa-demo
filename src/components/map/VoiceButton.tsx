@@ -32,7 +32,7 @@ export function VoiceButton({ onCommand }: VoiceButtonProps) {
     recognition.onerror = () => {
       setListening(false);
       toast("Couldn't hear you", {
-        description: "Try again — say "tell me about this" or "play audio".",
+        description: 'Try again — say "tell me about this" or "play audio".',
       });
     };
 
