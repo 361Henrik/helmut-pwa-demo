@@ -32,23 +32,25 @@ export function CategoryFilterBar({
 
   const toggle = (cat: POICategory) => {
     if (allActive) {
-      // From "All" → select just this one
       onFilterChange([cat]);
     } else if (activeCategories.includes(cat)) {
       const next = activeCategories.filter((c) => c !== cat);
-      onFilterChange(next.length === 0 ? [] : next); // empty = all
+      onFilterChange(next.length === 0 ? [] : next);
     } else {
       onFilterChange([...activeCategories, cat]);
     }
   };
 
+  const chipBase =
+    "shrink-0 rounded-full px-5 py-2.5 font-body text-sm font-medium shadow-sm transition-colors duration-default min-h-[44px] flex items-center";
+
   return (
-    <div className="absolute left-0 right-0 top-4 z-10 px-4">
+    <div className="absolute left-0 right-0 top-5 z-10 px-4">
       <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
         {/* All chip */}
         <button
           onClick={() => onFilterChange([])}
-          className={`shrink-0 rounded-full px-4 py-2 font-body text-xs font-medium shadow-sm transition-colors duration-default ${
+          className={`${chipBase} ${
             allActive
               ? "bg-deep-green text-deep-green-foreground"
               : "bg-background/95 text-foreground backdrop-blur-sm"
@@ -63,7 +65,7 @@ export function CategoryFilterBar({
             <button
               key={cat}
               onClick={() => toggle(cat)}
-              className={`shrink-0 rounded-full px-4 py-2 font-body text-xs font-medium shadow-sm transition-colors duration-default ${
+              className={`${chipBase} ${
                 isActive
                   ? "bg-deep-green text-deep-green-foreground"
                   : "bg-background/95 text-foreground backdrop-blur-sm"
