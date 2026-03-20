@@ -103,6 +103,9 @@ function DayMarker({
                   isPast ? "opacity-60" : ""
                 }`}
                 loading="lazy"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = "/placeholder.svg";
+                }}
               />
               <div className="min-w-0 flex-1">
                 <h4

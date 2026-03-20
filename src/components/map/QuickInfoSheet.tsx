@@ -59,6 +59,9 @@ export function QuickInfoSheet({ poi, onClose, onExpand }: QuickInfoSheetProps) 
                     alt={poi.name}
                     className="h-full w-full object-cover"
                     loading="lazy"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "/placeholder.svg";
+                    }}
                   />
                 </div>
 
