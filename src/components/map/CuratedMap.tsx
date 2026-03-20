@@ -28,7 +28,11 @@ const CATEGORY_ICONS: Record<string, string> = {
   "hidden-gem": "💎",
 };
 
-export function CuratedMap() {
+interface CuratedMapProps {
+  activeCategories?: POICategory[];
+}
+
+export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const markersRef = useRef<mapboxgl.Marker[]>([]);
