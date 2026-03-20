@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { Route, Map, Bookmark, Settings, ArrowLeft } from "lucide-react";
+import { Route, Navigation, Bookmark, Settings, ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const tabs = [
