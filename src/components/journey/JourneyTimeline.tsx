@@ -1,35 +1,126 @@
-import { useRef, useEffect, useMemo } from "react";
+import { useRef, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import { Ship, MapPin, ChevronRight, Anchor } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Ship,
+  ChevronRight,
+  ChevronDown,
+  Anchor,
+  Landmark,
+  TreePine,
+  Building2,
+  Theater,
+  Wine,
+  Cog,
+  Star,
+  Bird,
+  Paintbrush,
+  Gem,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import {
   CRUISE_ITINERARY,
   MOCK_POIS,
   CATEGORY_LABELS,
   type CruiseDay,
   type POI,
+  type POICategory,
 } from "@/data/mock-route";
 
-function DayMarker({
+const CATEGORY_ICONS: Record<POICategory, LucideIcon> = {
+  history: Landmark,
+  nature: TreePine,
+  architecture: Building2,
+  culture: Theater,
+  food: Wine,
+  engineering: Cog,
+  legends: Star,
+  wildlife: Bird,
+  art: Paintbrush,
+  "hidden-gem": Gem,
+};
+
+function CategoryChip({ category }: { category: POICategory }) {
+  const Icon = CATEGORY_ICONS[category];
+  return (
+    <span className="inline-flex items-center gap-1 rounded-full bg-card px-2 py-0.5 text-caption text-muted-foreground">
+      <Icon className="h-3 w-3" />
+      {CATEGORY_LABELS[category]}
+    </span>
+  );
+}
+
+function POICard({ poi, isPast }: { poi: POI; isPast: boolean }) {
+  const navigate = useNavigate();
+  const Icon = CATEGORY_ICONS[poi.category];
+
+  return (
+    <button
+      onClick={() => navigate(`/story/${poi.id}`)}
+      className={`flex w-full items-center gap-3 rounded-md border p-3 text-left transition-colors duration-200 active:scale-[0.98] ${
+        isPast
+          ? "bg-card/50 border-border/50"
+          : "bg-card border-border hover:border-champagne"
+      }`}
+    >
+      <div
+        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-deep-green/10 ${
+          isPast ? "opacity-60" : ""
+        }`}
+      >
+        <Icon className="h-5 w-5 text-deep-green" />
+      </div>
+      <div className="min-w-0 flex-1">
+        <h4
+          className={`font-display text-sm font-medium truncate ${
+            isPast ? "text-muted-foreground" : "text-foreground"
+          }`}
+        >
+          {poi.name}
+        </h4>
+        <p className="text-caption text-muted-foreground truncate">
+          {CATEGORY_LABELS[poi.category]}
+        </p>
+      </div>
+      <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+    </button>
+  );
+}
+
+function DaySection({
   cruiseDay,
   pois,
   index,
+  defaultOpen,
 }: {
   cruiseDay: CruiseDay;
   pois: POI[];
   index: number;
+  defaultOpen: boolean;
 }) {
-  const navigate = useNavigate();
+  const [open, setOpen] = useState(defaultOpen);
   const isCurrent = cruiseDay.status === "current";
   const isPast = cruiseDay.status === "past";
 
+  // Unique categories for summary chips
+  const uniqueCategories = useMemo(() => {
+    const cats = new Set<POICategory>();
+    pois.forEach((p) => cats.add(p.category));
+    return Array.from(cats);
+  }, [pois]);
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{
         duration: 0.5,
-        delay: index * 0.08,
+        delay: index * 0.06,
         ease: [0.16, 1, 0.3, 1],
       }}
       className="relative pl-10"
@@ -52,88 +143,85 @@ function DayMarker({
         )}
       </div>
 
-      {/* Day header */}
-      <div className="pb-2">
-        <p
-          className={`text-caption uppercase tracking-wider ${
-            isCurrent ? "text-deep-green font-medium" : "text-muted-foreground"
-          }`}
-        >
-          {isCurrent && "● "}Day {cruiseDay.day}
-          {isCurrent && " — Today"}
-        </p>
-        <h3
-          className={`font-display text-lg font-medium leading-snug ${
-            isPast ? "text-muted-foreground" : "text-foreground"
-          }`}
-        >
-          {cruiseDay.title}
-        </h3>
-        <p className="mt-0.5 text-body-small text-muted-foreground">
-          {cruiseDay.port}
-        </p>
-      </div>
-
-      {/* Segment description */}
-      <p
-        className={`text-body-small leading-relaxed ${
-          isPast ? "text-muted-foreground/70" : "text-muted-foreground"
-        }`}
-      >
-        {cruiseDay.description}
-      </p>
-
-      {/* POI cards for this day */}
-      {pois.length > 0 && (
-        <div className="mt-3 space-y-2">
-          {pois.map((poi) => (
-            <button
-              key={poi.id}
-              onClick={() => navigate(`/story/${poi.id}`)}
-              className={`flex w-full items-center gap-3 rounded-md border p-3 text-left transition-colors duration-default active:scale-[0.98] ${
-                isPast
-                  ? "bg-card/50 border-border/50"
-                  : "bg-card border-border hover:border-champagne"
-              }`}
-            >
-              <img
-                src={poi.thumbnailUrl}
-                alt={poi.name}
-                className={`h-12 w-12 rounded object-cover ${
-                  isPast ? "opacity-60" : ""
-                }`}
-                loading="lazy"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = "/placeholder.svg";
-                }}
-              />
+      <Collapsible open={open} onOpenChange={setOpen}>
+        {/* Day header — always visible, tappable */}
+        <CollapsibleTrigger asChild>
+          <button
+            className="w-full text-left pb-2 group"
+            data-current-day={isCurrent ? true : undefined}
+          >
+            <div className="flex items-start justify-between">
               <div className="min-w-0 flex-1">
-                <h4
-                  className={`font-display text-sm font-medium truncate ${
+                <p
+                  className={`text-caption uppercase tracking-wider ${
+                    isCurrent
+                      ? "text-deep-green font-medium"
+                      : "text-muted-foreground"
+                  }`}
+                >
+                  {isCurrent && "● "}Day {cruiseDay.day}
+                  {isCurrent && " — Today"}
+                </p>
+                <h3
+                  className={`font-display text-lg font-medium leading-snug ${
                     isPast ? "text-muted-foreground" : "text-foreground"
                   }`}
                 >
-                  {poi.name}
-                </h4>
-                <p className="text-caption text-muted-foreground truncate">
-                  {CATEGORY_LABELS[poi.category]} · {poi.teaser}
+                  {cruiseDay.title}
+                </h3>
+                <p className="mt-0.5 text-body-small text-muted-foreground">
+                  {cruiseDay.port}
                 </p>
               </div>
-              <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
-            </button>
-          ))}
-        </div>
-      )}
+              <ChevronDown
+                className={`mt-1 h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200 ${
+                  open ? "rotate-180" : ""
+                }`}
+              />
+            </div>
 
-      {/* Spacer between days */}
-      <div className="pb-6" />
+            {/* Collapsed summary: category chips + stop count */}
+            {!open && pois.length > 0 && (
+              <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                {uniqueCategories.slice(0, 4).map((cat) => (
+                  <CategoryChip key={cat} category={cat} />
+                ))}
+                <span className="text-caption text-muted-foreground ml-1">
+                  · {pois.length} {pois.length === 1 ? "stop" : "stops"}
+                </span>
+              </div>
+            )}
+          </button>
+        </CollapsibleTrigger>
+
+        {/* Expanded content */}
+        <CollapsibleContent>
+          <p
+            className={`text-body-small leading-relaxed mb-3 ${
+              isPast ? "text-muted-foreground/70" : "text-muted-foreground"
+            }`}
+          >
+            {cruiseDay.description}
+          </p>
+
+          {pois.length > 0 && (
+            <div className="space-y-2">
+              {pois.map((poi) => (
+                <POICard key={poi.id} poi={poi} isPast={isPast} />
+              ))}
+            </div>
+          )}
+        </CollapsibleContent>
+      </Collapsible>
+
+      {/* Spacer */}
+      <div className="pb-5" />
     </motion.div>
   );
 }
 
 export function JourneyTimeline() {
   const currentDayRef = useRef<HTMLDivElement>(null);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // Group POIs by day
   const poisByDay = useMemo(() => {
@@ -151,18 +239,14 @@ export function JourneyTimeline() {
   // Auto-scroll to current day on mount
   useEffect(() => {
     const timer = setTimeout(() => {
-      currentDayRef.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }, 400);
+      const el = document.querySelector("[data-current-day]");
+      el?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 500);
     return () => clearTimeout(timer);
   }, []);
 
-  const currentDay = CRUISE_ITINERARY.find((d) => d.status === "current");
-
   return (
-    <div ref={scrollContainerRef} className="relative flex flex-col">
+    <div className="relative flex flex-col">
       {/* Timeline vertical line */}
       <div className="absolute bottom-0 left-[13px] top-0 w-px bg-border" />
 
@@ -170,12 +254,12 @@ export function JourneyTimeline() {
         <div
           key={cruiseDay.day}
           ref={cruiseDay.status === "current" ? currentDayRef : undefined}
-          data-current-day={cruiseDay.status === "current" ? true : undefined}
         >
-          <DayMarker
+          <DaySection
             cruiseDay={cruiseDay}
             pois={poisByDay.get(cruiseDay.day) || []}
             index={index}
+            defaultOpen={cruiseDay.status === "current"}
           />
         </div>
       ))}

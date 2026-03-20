@@ -121,6 +121,20 @@ export const CATEGORY_LABELS: Record<POICategory, string> = {
   "hidden-gem": "Hidden Gem",
 };
 
+/** Map POI categories to Lucide icon names for import */
+export const CATEGORY_ICON_NAMES: Record<POICategory, string> = {
+  history: "Landmark",
+  nature: "TreePine",
+  architecture: "Building2",
+  culture: "Theater",
+  food: "Wine",
+  engineering: "Cog",
+  legends: "Star",
+  wildlife: "Bird",
+  art: "Paintbrush",
+  "hidden-gem": "Gem",
+};
+
 /** Rhine cruise: Basel → Amsterdam — dense river-following coordinates */
 export const ROUTE_COORDINATES: [number, number][] = [
   // Basel — heading north along the Upper Rhine
