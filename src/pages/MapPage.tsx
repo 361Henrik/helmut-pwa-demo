@@ -11,7 +11,7 @@ export default function MapPage() {
   const [activeFilters, setActiveFilters] = useState<POICategory[]>([]);
 
   return (
-    <div className="absolute inset-0 bottom-20">
+    <div className="absolute inset-0 bottom-[120px]">
       <CuratedMap activeCategories={activeFilters} />
       <CategoryFilterBar
         activeCategories={activeFilters}
