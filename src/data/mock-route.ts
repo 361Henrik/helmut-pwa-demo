@@ -968,7 +968,7 @@ export const MOCK_POIS: POI[] = [
     storyExcerpt:
       "With over 260 bars, pubs, and restaurants packed into half a square kilometre, Düsseldorf's Old Town has earned its legendary nickname. The local Altbier — a copper-coloured top-fermented ale — is served in small 200ml glasses by swift Köbes waiters.",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1577019027784-4a9f5e895a72?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800&h=600&fit=crop",
     day: 6,
     storyBody: [
       "Düsseldorf's Altstadt packs over 260 bars, brewhouses, and restaurants into half a square kilometre, earning it the nickname 'die längste Theke der Welt' — the longest bar counter in the world. The concentration of drinking establishments per square metre is unmatched anywhere in Europe.",
