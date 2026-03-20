@@ -914,7 +914,7 @@ export const MOCK_POIS: POI[] = [
     storyExcerpt:
       "Legend says Siegfried slew a dragon on this mountain and bathed in its blood to become invincible. The Drachenfels is the most-climbed mountain in Germany, and its ruined castle offers panoramic views over the Siebengebirge and the Rhine.",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1590076082090-9b5a0c4e2a62?w=800&h=600&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&h=600&fit=crop",
     day: 6,
     storyBody: [
       "The Drachenfels — Dragon Rock — rises 321 metres above the Rhine near Königswinter. According to the Nibelungenlied, this is where the hero Siegfried slew a dragon and bathed in its blood, making himself invulnerable everywhere except a spot between his shoulder blades where a linden leaf stuck.",
