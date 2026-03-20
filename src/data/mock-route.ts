@@ -9,7 +9,88 @@ export interface POI {
   storyExcerpt: string;
   thumbnailUrl: string;
   audioUrl?: string;
+  /** Which cruise day this POI belongs to (1-based) */
+  day?: number;
 }
+
+/** A single cruise day with port/segment info */
+export interface CruiseDay {
+  day: number;
+  title: string;
+  port: string;
+  description: string;
+  /** Approximate coordinate for this day's main port */
+  coordinates: [number, number];
+  /** Whether the vessel has passed this day already */
+  status: "past" | "current" | "future";
+}
+
+/** 7-night Rhine cruise itinerary */
+export const CRUISE_ITINERARY: CruiseDay[] = [
+  {
+    day: 1,
+    title: "Embarkation",
+    port: "Basel",
+    description:
+      "Board your vessel in Basel, where Switzerland, France, and Germany converge. The city's medieval Altstadt and the Rhine promenade set the tone for the journey ahead.",
+    coordinates: [7.5886, 47.5596],
+    status: "past",
+  },
+  {
+    day: 2,
+    title: "The Upper Rhine Plain",
+    port: "Strasbourg",
+    description:
+      "Sail north through the wide Rhine plain past Breisach and into Alsace. Strasbourg's half-timbered Petite France quarter and Gothic cathedral await.",
+    coordinates: [7.5886, 48.5734],
+    status: "past",
+  },
+  {
+    day: 3,
+    title: "Imperial Cities",
+    port: "Speyer · Mannheim",
+    description:
+      "Two great cathedral cities in a single day. Speyer's Romanesque basilica — the largest surviving from its era — gives way to the industrial elegance of Mannheim at the Neckar confluence.",
+    coordinates: [8.4660, 49.4875],
+    status: "past",
+  },
+  {
+    day: 4,
+    title: "The Rheingau",
+    port: "Mainz · Rüdesheim",
+    description:
+      "The river narrows as vineyards climb steep slate slopes. Rüdesheim's Drosselgasse overflows with Riesling, and Mainz reveals Gutenberg's printing revolution.",
+    coordinates: [8.2473, 49.9929],
+    status: "current",
+  },
+  {
+    day: 5,
+    title: "The Rhine Gorge",
+    port: "Bacharach · Koblenz",
+    description:
+      "The legendary stretch: the river squeezes between 200-metre cliffs crowned with castles. The Loreley rock looms at the tightest bend. Koblenz marks the confluence with the Moselle.",
+    coordinates: [7.5985, 50.3569],
+    status: "future",
+  },
+  {
+    day: 6,
+    title: "Cathedral & Culture",
+    port: "Cologne · Düsseldorf",
+    description:
+      "Cologne's twin-spired Dom dominates the skyline — 632 years in the making. Downstream, Düsseldorf's Altstadt offers 260 bars in half a square kilometre.",
+    coordinates: [6.9603, 50.9375],
+    status: "future",
+  },
+  {
+    day: 7,
+    title: "Into the Netherlands",
+    port: "Arnhem · Amsterdam",
+    description:
+      "The Rhine splits into the Nederrijn as the landscape flattens into Dutch polders. Your voyage concludes in Amsterdam's historic harbour.",
+    coordinates: [4.8952, 52.3702],
+    status: "future",
+  },
+];
 
 export type POICategory =
   | "history"
@@ -503,6 +584,7 @@ export const MOCK_POIS: POI[] = [
     teaser: "The legendary siren cliff of the Rhine",
     storyExcerpt: "Rising 120 metres above the waterline, the Loreley has inspired poets, painters, and composers for centuries. Heinrich Heine's 1824 poem immortalised the golden-haired maiden whose song lured sailors to their doom on the treacherous narrows below.",
     thumbnailUrl: "https://images.unsplash.com/photo-1588002171910-4a4a2e653e11?w=400&h=300&fit=crop",
+    day: 5,
   },
   {
     id: "poi-2",
@@ -512,6 +594,7 @@ export const MOCK_POIS: POI[] = [
     teaser: "Where the Moselle meets the Rhine",
     storyExcerpt: "The German Corner marks the dramatic confluence of two great European rivers. The monumental equestrian statue of Kaiser Wilhelm I, destroyed in 1945 and rebuilt in 1993, towers over the headland as a symbol of German reunification.",
     thumbnailUrl: "https://images.unsplash.com/photo-1571167530149-c1105da4c2c7?w=400&h=300&fit=crop",
+    day: 5,
   },
   {
     id: "poi-3",
@@ -521,6 +604,7 @@ export const MOCK_POIS: POI[] = [
     teaser: "632 years to complete this Gothic marvel",
     storyExcerpt: "The Kölner Dom took 632 years to build — from 1248 to 1880. Its twin spires reach 157 metres, making it the tallest twin-spired church in the world. Miraculously, it survived 14 bombing raids during WWII, standing amid the ruins.",
     thumbnailUrl: "https://images.unsplash.com/photo-1515091943-9d5c0ad475af?w=400&h=300&fit=crop",
+    day: 6,
   },
   {
     id: "poi-4",
@@ -530,6 +614,7 @@ export const MOCK_POIS: POI[] = [
     teaser: "The heart of Rheingau wine country",
     storyExcerpt: "Nestled at the southern entrance of the Rhine Gorge, Rüdesheim has been the capital of Rheingau Riesling since Roman times. The famous Drosselgasse alley is barely two metres wide but overflows with wine taverns and live music.",
     thumbnailUrl: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
+    day: 4,
   },
   {
     id: "poi-5",
@@ -539,6 +624,7 @@ export const MOCK_POIS: POI[] = [
     teaser: "A medieval gem frozen in time",
     storyExcerpt: "Victor Hugo called Bacharach one of the most beautiful towns on the Rhine. Its half-timbered houses, Gothic chapel ruins, and Stahleck Castle perched above create a picture so perfect it seems painted rather than built.",
     thumbnailUrl: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=400&h=300&fit=crop",
+    day: 5,
   },
   {
     id: "poi-6",
@@ -548,6 +634,7 @@ export const MOCK_POIS: POI[] = [
     teaser: "The largest Romanesque church in the world",
     storyExcerpt: "Built in 1030, Speyer Cathedral is the largest surviving Romanesque church. Four Holy Roman Emperors are buried in its crypt. The massive nave, with its alternating pillars and columns, creates a rhythm of light and shadow.",
     thumbnailUrl: "https://images.unsplash.com/photo-1548585744-56de0e62f0ef?w=400&h=300&fit=crop",
+    day: 3,
   },
   {
     id: "poi-7",
@@ -557,6 +644,7 @@ export const MOCK_POIS: POI[] = [
     teaser: "Steep terraced slopes of the UNESCO valley",
     storyExcerpt: "The Upper Middle Rhine Valley's impossibly steep vineyard terraces have been cultivated since Roman times. Some slopes angle at 70 degrees — harvesting is done entirely by hand, making these among the most labour-intensive wines on Earth.",
     thumbnailUrl: "https://images.unsplash.com/photo-1560493676-04071c5f467b?w=400&h=300&fit=crop",
+    day: 5,
   },
   {
     id: "poi-8",
@@ -566,6 +654,7 @@ export const MOCK_POIS: POI[] = [
     teaser: "The longest bar counter in the world",
     storyExcerpt: "With over 260 bars, pubs, and restaurants packed into half a square kilometre, Düsseldorf's Old Town has earned its legendary nickname. The local Altbier — a copper-coloured top-fermented ale — is served in small 200ml glasses by swift Köbes waiters.",
     thumbnailUrl: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&h=300&fit=crop",
+    day: 6,
   },
   {
     id: "poi-9",
@@ -575,6 +664,7 @@ export const MOCK_POIS: POI[] = [
     teaser: "The only undefeated hill castle on the Rhine",
     storyExcerpt: "Perched 150 metres above the river, Marksburg is the only hill castle on the Rhine never destroyed. Its medieval kitchen, armoury, and torture chamber remain intact — a rare window into 700 years of fortress life along the busiest waterway in Europe.",
     thumbnailUrl: "https://images.unsplash.com/photo-1581351123004-757df0faaab2?w=400&h=300&fit=crop",
+    day: 5,
   },
   {
     id: "poi-10",
@@ -584,5 +674,6 @@ export const MOCK_POIS: POI[] = [
     teaser: "Where the maestro drew his first breath",
     storyExcerpt: "Ludwig van Beethoven was born in this modest Baroque house in 1770. The museum holds the largest Beethoven collection in the world, including his last grand piano and the ear trumpets he used as deafness consumed his hearing.",
     thumbnailUrl: "https://images.unsplash.com/photo-1507838153414-b4b713384a76?w=400&h=300&fit=crop",
+    day: 6,
   },
 ];
