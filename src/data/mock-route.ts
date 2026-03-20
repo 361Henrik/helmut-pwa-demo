@@ -1024,7 +1024,7 @@ export const MOCK_POIS: POI[] = [
     storyExcerpt:
       "Your Rhine journey concludes in Amsterdam, where the 17th-century Canal Ring — a UNESCO World Heritage site — encircles the old city in concentric semicircles. Over 1,500 monumental buildings line 100 kilometres of canals spanned by 1,753 bridges.",
     thumbnailUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/KeijsersgrachtReguliersworked.jpg/800px-KeijsersgrachtReguliersworked.jpg",
+      "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=800&h=600&fit=crop",
     day: 7,
     storyBody: [
       "Amsterdam's Canal Ring was dug during the Dutch Golden Age, between 1613 and 1662, as both a drainage system and an address of prestige. The three main canals — Herengracht, Keizersgracht, and Prinsengracht — curve in concentric semicircles around the medieval city, creating a plan that is both practical and beautiful.",
