@@ -692,7 +692,7 @@ export const MOCK_POIS: POI[] = [
     storyExcerpt:
       "Perched above the Neckar valley, Heidelberg Castle blends Gothic, Renaissance, and Baroque elements across five centuries of construction. Its partly ruined state, the result of 17th-century French destruction, only adds to its romantic appeal.",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1588696004707-4c18e1da53f3?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1544652478-6653e09f18a2?w=800&h=600&fit=crop",
     day: 3,
     storyBody: [
       "Heidelberg Castle has been a ruin since French troops under Louis XIV devastated the Palatinate in 1693 and again in 1689. Yet the destruction only enhanced its appeal: by the early 19th century, it had become the defining symbol of German Romanticism, drawing writers, painters, and poets from across Europe.",
