@@ -291,8 +291,9 @@ export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
         poi={selectedPoi}
         onClose={handleCloseSheet}
         onExpand={() => {
-          // Phase 4: navigate to full story screen
-          console.log("Expand to full story:", selectedPoi?.id);
+          if (selectedPoi) {
+            navigate(`/story/${selectedPoi.id}`);
+          }
         }}
       />
     </div>
