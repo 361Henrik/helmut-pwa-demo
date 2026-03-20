@@ -932,7 +932,7 @@ export const MOCK_POIS: POI[] = [
     storyExcerpt:
       "Ludwig van Beethoven was born in this modest Baroque house in 1770. The museum holds the largest Beethoven collection in the world, including his last grand piano and the ear trumpets he used as deafness consumed his hearing.",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1584811644165-33db3b146db5?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?w=800&h=600&fit=crop",
     day: 6,
     storyBody: [
       "Ludwig van Beethoven was born in this modest Baroque house at Bonngasse 20 in December 1770. The family occupied a small room in the attic — the exact room, with its sloping ceiling and single window, can still be visited today.",
