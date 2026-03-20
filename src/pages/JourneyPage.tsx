@@ -64,6 +64,12 @@ export default function JourneyPage() {
           <h1 className="mt-1 font-display text-2xl font-medium text-foreground">
             Your Voyage
           </h1>
+          <p className="mt-1.5 text-body-small leading-relaxed text-muted-foreground">
+            Basel to Amsterdam along the Rhine — castles, cathedrals, vineyards, and hidden gems.
+          </p>
+          <p className="mt-1 text-caption text-muted-foreground">
+            {MOCK_POIS.length} discoveries across {CRUISE_ITINERARY.length} days
+          </p>
         </motion.div>
 
         {/* Compact progress bar */}
