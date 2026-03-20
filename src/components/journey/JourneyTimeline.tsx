@@ -167,6 +167,7 @@ export function JourneyTimeline() {
         <div
           key={cruiseDay.day}
           ref={cruiseDay.status === "current" ? currentDayRef : undefined}
+          data-current-day={cruiseDay.status === "current" ? true : undefined}
         >
           <DayMarker
             cruiseDay={cruiseDay}
