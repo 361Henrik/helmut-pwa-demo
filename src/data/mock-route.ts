@@ -618,7 +618,7 @@ export const MOCK_POIS: POI[] = [
     storyExcerpt:
       "Strasbourg's cathedral was the world's tallest building from 1647 to 1874. Its single 142-metre spire of pink Vosges sandstone and the famous astronomical clock, rebuilt in 1843, draw over four million visitors annually.",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1555990538-1e7cdba4e912?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1531572753322-ad063cecc140?w=800&h=600&fit=crop",
     day: 2,
     storyBody: [
       "Construction of Strasbourg Cathedral began in 1015, but the building we see today is primarily 12th-to-15th-century Gothic. At 142 metres, its single completed spire made it the tallest structure in the world for 227 years — a record held longer than any other building.",
