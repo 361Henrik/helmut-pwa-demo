@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 
 import WelcomePage from "./pages/WelcomePage";
 import OnboardingPage from "./pages/OnboardingPage";
+import JourneyPage from "./pages/JourneyPage";
 import MapPage from "./pages/MapPage";
 import SavedPage from "./pages/SavedPage";
 import SettingsPage from "./pages/SettingsPage";
@@ -27,6 +28,7 @@ const App = () => (
 
           {/* App shell with persistent bottom tab bar */}
           <Route element={<AppShell />}>
+            <Route path="/journey" element={<JourneyPage />} />
             <Route path="/map" element={<MapPage />} />
             <Route path="/saved" element={<SavedPage />} />
             <Route path="/settings" element={<SettingsPage />} />
