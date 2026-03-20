@@ -950,7 +950,7 @@ export const MOCK_POIS: POI[] = [
     storyExcerpt:
       "The Kölner Dom took 632 years to build — from 1248 to 1880. Its twin spires reach 157 metres, making it the tallest twin-spired church in the world. Miraculously, it survived 14 bombing raids during WWII, standing amid the ruins.",
     thumbnailUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/K%C3%B6lner_Dom_von_der_Deutzer_Br%C3%BCcke_aus_gesehen_%28tone-mapping%29.jpg/800px-K%C3%B6lner_Dom_von_der_Deutzer_Br%C3%BCcke_aus_gesehen_%28tone-mapping%29.jpg",
+      "https://images.unsplash.com/photo-1573108724029-4c46571d6490?w=800&h=600&fit=crop",
     day: 6,
     storyBody: [
       "Construction began in 1248, halted in 1473, and was not resumed until 1840 — when the original medieval plans were rediscovered. The cathedral was finally completed on 15 October 1880, 632 years after the first stone was laid, making it one of the longest building projects in human history.",
