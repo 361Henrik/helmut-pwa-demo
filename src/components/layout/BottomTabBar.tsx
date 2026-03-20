@@ -14,7 +14,7 @@ function getOperatorReturn(): { name: string; url: string } | null {
   try {
     const params = new URLSearchParams(window.location.search);
     const url = params.get("returnUrl");
-    const name = params.get("operatorName") || "Travel App";
+    const name = params.get("operatorName") || "Viking River Cruises";
     if (url) return { name, url };
   } catch {
     // ignore
@@ -41,7 +41,7 @@ export function BottomTabBar() {
         )}
       >
         <ArrowLeft className="h-4 w-4" />
-        <span>Back to {operator?.name || "Travel App"}</span>
+        <span>Back to {operator?.name || "Viking River Cruises"}</span>
       </a>
 
       <div className="flex h-20 items-center justify-around px-space-4">

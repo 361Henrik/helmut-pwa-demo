@@ -1,50 +1,24 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "./useAuth";
+import { useState, useCallback } from "react";
 
+/** Demo-mode saved stories — uses in-memory state (no Supabase) */
 export function useSavedStories() {
-  const { user } = useAuth();
-  const queryClient = useQueryClient();
+  const [savedPoiIds, setSavedPoiIds] = useState<{ poi_id: string; created_at: string }[]>([]);
 
-  const { data: savedPoiIds = [], isLoading } = useQuery({
-    queryKey: ["saved_stories", user?.id],
-    queryFn: async () => {
-      if (!user) return [];
-      const { data, error } = await supabase
-        .from("saved_stories")
-        .select("poi_id, created_at")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return data;
+  const toggleSave = {
+    mutate: (poiId: string) => {
+      setSavedPoiIds((prev) => {
+        const exists = prev.some((s) => s.poi_id === poiId);
+        if (exists) return prev.filter((s) => s.poi_id !== poiId);
+        return [...prev, { poi_id: poiId, created_at: new Date().toISOString() }];
+      });
     },
-    enabled: !!user,
-  });
+    isPending: false,
+  };
 
-  const toggleSave = useMutation({
-    mutationFn: async (poiId: string) => {
-      if (!user) throw new Error("Not authenticated");
-      const isSaved = savedPoiIds.some((s) => s.poi_id === poiId);
-      if (isSaved) {
-        const { error } = await supabase
-          .from("saved_stories")
-          .delete()
-          .eq("user_id", user.id)
-          .eq("poi_id", poiId);
-        if (error) throw error;
-      } else {
-        const { error } = await supabase
-          .from("saved_stories")
-          .insert({ user_id: user.id, poi_id: poiId });
-        if (error) throw error;
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["saved_stories", user?.id] });
-    },
-  });
+  const isSaved = useCallback(
+    (poiId: string) => savedPoiIds.some((s) => s.poi_id === poiId),
+    [savedPoiIds]
+  );
 
-  const isSaved = (poiId: string) => savedPoiIds.some((s) => s.poi_id === poiId);
-
-  return { savedPoiIds, isLoading, toggleSave, isSaved };
+  return { savedPoiIds, isLoading: false, toggleSave, isSaved };
 }

@@ -39,6 +39,7 @@ export default function WelcomePage() {
 
       {/* Persistent help icon */}
       <button
+        onClick={() => navigate("/help")}
         className="absolute right-4 top-4 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-background/80 backdrop-blur-sm"
         aria-label="Help"
       >
@@ -87,9 +88,9 @@ export default function WelcomePage() {
           <Button
             size="lg"
             className="w-full text-lg"
-            onClick={() => navigate("/onboarding")}
+            onClick={() => navigate("/journey")}
           >
-            Start Exploring
+            Begin Your Journey
           </Button>
 
           <Button
@@ -97,7 +98,7 @@ export default function WelcomePage() {
             className="w-full text-muted-foreground"
             onClick={() => navigate("/map")}
           >
-            Login / Recover Saved Journey
+            Enter Demo
           </Button>
         </motion.div>
 
