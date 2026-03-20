@@ -584,6 +584,7 @@ export const MOCK_POIS: POI[] = [
     teaser: "The legendary siren cliff of the Rhine",
     storyExcerpt: "Rising 120 metres above the waterline, the Loreley has inspired poets, painters, and composers for centuries. Heinrich Heine's 1824 poem immortalised the golden-haired maiden whose song lured sailors to their doom on the treacherous narrows below.",
     thumbnailUrl: "https://images.unsplash.com/photo-1588002171910-4a4a2e653e11?w=400&h=300&fit=crop",
+    day: 5,
   },
   {
     id: "poi-2",
@@ -593,6 +594,7 @@ export const MOCK_POIS: POI[] = [
     teaser: "Where the Moselle meets the Rhine",
     storyExcerpt: "The German Corner marks the dramatic confluence of two great European rivers. The monumental equestrian statue of Kaiser Wilhelm I, destroyed in 1945 and rebuilt in 1993, towers over the headland as a symbol of German reunification.",
     thumbnailUrl: "https://images.unsplash.com/photo-1571167530149-c1105da4c2c7?w=400&h=300&fit=crop",
+    day: 5,
   },
   {
     id: "poi-3",
@@ -602,6 +604,7 @@ export const MOCK_POIS: POI[] = [
     teaser: "632 years to complete this Gothic marvel",
     storyExcerpt: "The Kölner Dom took 632 years to build — from 1248 to 1880. Its twin spires reach 157 metres, making it the tallest twin-spired church in the world. Miraculously, it survived 14 bombing raids during WWII, standing amid the ruins.",
     thumbnailUrl: "https://images.unsplash.com/photo-1515091943-9d5c0ad475af?w=400&h=300&fit=crop",
+    day: 6,
   },
   {
     id: "poi-4",
@@ -611,6 +614,7 @@ export const MOCK_POIS: POI[] = [
     teaser: "The heart of Rheingau wine country",
     storyExcerpt: "Nestled at the southern entrance of the Rhine Gorge, Rüdesheim has been the capital of Rheingau Riesling since Roman times. The famous Drosselgasse alley is barely two metres wide but overflows with wine taverns and live music.",
     thumbnailUrl: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
+    day: 4,
   },
   {
     id: "poi-5",
@@ -620,6 +624,7 @@ export const MOCK_POIS: POI[] = [
     teaser: "A medieval gem frozen in time",
     storyExcerpt: "Victor Hugo called Bacharach one of the most beautiful towns on the Rhine. Its half-timbered houses, Gothic chapel ruins, and Stahleck Castle perched above create a picture so perfect it seems painted rather than built.",
     thumbnailUrl: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=400&h=300&fit=crop",
+    day: 5,
   },
   {
     id: "poi-6",
@@ -629,6 +634,7 @@ export const MOCK_POIS: POI[] = [
     teaser: "The largest Romanesque church in the world",
     storyExcerpt: "Built in 1030, Speyer Cathedral is the largest surviving Romanesque church. Four Holy Roman Emperors are buried in its crypt. The massive nave, with its alternating pillars and columns, creates a rhythm of light and shadow.",
     thumbnailUrl: "https://images.unsplash.com/photo-1548585744-56de0e62f0ef?w=400&h=300&fit=crop",
+    day: 3,
   },
   {
     id: "poi-7",
@@ -638,6 +644,7 @@ export const MOCK_POIS: POI[] = [
     teaser: "Steep terraced slopes of the UNESCO valley",
     storyExcerpt: "The Upper Middle Rhine Valley's impossibly steep vineyard terraces have been cultivated since Roman times. Some slopes angle at 70 degrees — harvesting is done entirely by hand, making these among the most labour-intensive wines on Earth.",
     thumbnailUrl: "https://images.unsplash.com/photo-1560493676-04071c5f467b?w=400&h=300&fit=crop",
+    day: 5,
   },
   {
     id: "poi-8",
@@ -647,6 +654,7 @@ export const MOCK_POIS: POI[] = [
     teaser: "The longest bar counter in the world",
     storyExcerpt: "With over 260 bars, pubs, and restaurants packed into half a square kilometre, Düsseldorf's Old Town has earned its legendary nickname. The local Altbier — a copper-coloured top-fermented ale — is served in small 200ml glasses by swift Köbes waiters.",
     thumbnailUrl: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&h=300&fit=crop",
+    day: 6,
   },
   {
     id: "poi-9",
@@ -656,6 +664,7 @@ export const MOCK_POIS: POI[] = [
     teaser: "The only undefeated hill castle on the Rhine",
     storyExcerpt: "Perched 150 metres above the river, Marksburg is the only hill castle on the Rhine never destroyed. Its medieval kitchen, armoury, and torture chamber remain intact — a rare window into 700 years of fortress life along the busiest waterway in Europe.",
     thumbnailUrl: "https://images.unsplash.com/photo-1581351123004-757df0faaab2?w=400&h=300&fit=crop",
+    day: 5,
   },
   {
     id: "poi-10",
@@ -665,5 +674,6 @@ export const MOCK_POIS: POI[] = [
     teaser: "Where the maestro drew his first breath",
     storyExcerpt: "Ludwig van Beethoven was born in this modest Baroque house in 1770. The museum holds the largest Beethoven collection in the world, including his last grand piano and the ear trumpets he used as deafness consumed his hearing.",
     thumbnailUrl: "https://images.unsplash.com/photo-1507838153414-b4b713384a76?w=400&h=300&fit=crop",
+    day: 6,
   },
 ];
