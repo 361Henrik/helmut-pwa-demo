@@ -1,96 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Lexend:wght@300;400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* The Curated Lens — Design System Tokens
+   All colors are HSL. Semantic tokens only. */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Core Palette */
+    --background: 37 31% 95%;        /* Base Canvas #F6F3EE */
+    --foreground: 120 9% 11%;        /* Deep Charcoal #1A1F1A */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 33 16% 89%;              /* Warm Stone #E8E2D9 */
+    --card-foreground: 120 9% 11%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 37 31% 95%;
+    --popover-foreground: 120 9% 11%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 14 53% 50%;           /* Terracotta #C35C3C — interaction only */
+    --primary-foreground: 37 31% 95%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 33 16% 89%;         /* Warm Stone */
+    --secondary-foreground: 120 9% 11%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 33 16% 89%;
+    --muted-foreground: 45 8% 40%;   /* Muted #6E6A5E */
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 40 46% 53%;            /* Champagne Bronze #C9A962 */
+    --accent-foreground: 120 9% 11%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 37 31% 95%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 30 12% 76%;            /* Warm Border #CCC4B8 */
+    --input: 30 12% 76%;
+    --ring: 14 53% 50%;              /* Terracotta for focus rings */
 
-    --radius: 0.5rem;
+    /* Structural Colors */
+    --deep-green: 158 41% 21%;       /* #1F4A3A — structure & identity */
+    --deep-green-foreground: 37 31% 95%;
+    --champagne: 40 46% 53%;         /* #C9A962 — highlight only */
 
-    --sidebar-background: 0 0% 98%;
+    /* Map Palette */
+    --map-water: 207 40% 88%;        /* #D4E4ED */
+    --map-land: 30 18% 93%;          /* #F0EDE8 */
+    --map-terrain-shadow: 30 12% 87%; /* #E2DDD6 */
 
-    --sidebar-foreground: 240 5.3% 26.1%;
+    --radius: 0.375rem;              /* Restrained border-radius */
 
-    --sidebar-primary: 240 5.9% 10%;
+    /* Motion Tokens */
+    --duration-fast: 200ms;
+    --duration-default: 300ms;
+    --duration-slow: 400ms;
+    --ease-default: cubic-bezier(0.25, 0.1, 0.25, 1);
 
-    --sidebar-primary-foreground: 0 0% 98%;
+    /* Spacing Scale (mapped via Tailwind) */
+    /* space-1: 4px, space-2: 8px, space-3: 12px, space-4: 16px,
+       space-5: 24px, space-6: 32px, space-7: 48px, space-8: 64px, space-9: 96px */
 
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 37 31% 95%;
+    --sidebar-foreground: 120 9% 11%;
+    --sidebar-primary: 158 41% 21%;
+    --sidebar-primary-foreground: 37 31% 95%;
+    --sidebar-accent: 33 16% 89%;
+    --sidebar-accent-foreground: 120 9% 11%;
+    --sidebar-border: 30 12% 76%;
+    --sidebar-ring: 14 53% 50%;
   }
 }
 
@@ -100,6 +77,79 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-body antialiased;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Typography Roles */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+
+  /* Ensure minimum touch targets */
+  button, a, [role="button"], input, select, textarea {
+    min-height: 44px;
+  }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Senior-first scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 3px;
+  }
+}
+
+/* Typography utility classes */
+@layer utilities {
+  .text-display {
+    @apply font-display text-5xl font-medium leading-tight tracking-tight;
+    /* 48px */
+  }
+  .text-headline-1 {
+    @apply font-display text-4xl font-medium leading-tight;
+    /* 36px */
+  }
+  .text-headline-2 {
+    @apply font-display text-3xl font-medium leading-snug;
+    /* 30px */
+  }
+  .text-headline-3 {
+    @apply font-display text-2xl font-medium leading-snug;
+    /* 24px */
+  }
+  .text-title {
+    @apply font-display text-xl font-medium leading-normal;
+    /* 20px */
+  }
+  .text-body-large {
+    @apply font-body text-lg leading-relaxed;
+    /* 18px — primary guest content */
+  }
+  .text-body {
+    @apply font-body text-base leading-relaxed;
+    /* 16px */
+  }
+  .text-body-small {
+    @apply font-body text-sm leading-normal;
+    /* 14px */
+  }
+  .text-caption {
+    @apply font-body text-xs leading-normal tracking-wide;
+    /* 12px */
   }
 }
