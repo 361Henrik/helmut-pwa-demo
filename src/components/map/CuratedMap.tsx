@@ -131,6 +131,7 @@ export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
 
         markersRef.current.push(marker);
         markerCategoryRef.current.set(marker, poi.category);
+        markerCoordsRef.current.set(marker, poi.coordinates);
       });
 
       // Vessel marker with pulse
