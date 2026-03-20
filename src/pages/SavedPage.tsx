@@ -1,11 +1,25 @@
-import { Bookmark, MapPin, Trash2, LogIn } from "lucide-react";
+import { Bookmark, MapPin, Trash2, LogIn, Landmark, TreePine, Building2, Theater, Wine, Cog, Star, Bird, Paintbrush, Gem } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useSavedStories } from "@/hooks/useSavedStories";
-import { MOCK_POIS, CATEGORY_LABELS } from "@/data/mock-route";
+import { MOCK_POIS, CATEGORY_LABELS, type POICategory } from "@/data/mock-route";
 import { Skeleton } from "@/components/ui/skeleton";
+
+const CATEGORY_ICONS: Record<POICategory, LucideIcon> = {
+  history: Landmark,
+  nature: TreePine,
+  architecture: Building2,
+  culture: Theater,
+  food: Wine,
+  engineering: Cog,
+  legends: Star,
+  wildlife: Bird,
+  art: Paintbrush,
+  "hidden-gem": Gem,
+};
 
 export default function SavedPage() {
   const navigate = useNavigate();
