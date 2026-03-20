@@ -9,7 +9,88 @@ export interface POI {
   storyExcerpt: string;
   thumbnailUrl: string;
   audioUrl?: string;
+  /** Which cruise day this POI belongs to (1-based) */
+  day?: number;
 }
+
+/** A single cruise day with port/segment info */
+export interface CruiseDay {
+  day: number;
+  title: string;
+  port: string;
+  description: string;
+  /** Approximate coordinate for this day's main port */
+  coordinates: [number, number];
+  /** Whether the vessel has passed this day already */
+  status: "past" | "current" | "future";
+}
+
+/** 7-night Rhine cruise itinerary */
+export const CRUISE_ITINERARY: CruiseDay[] = [
+  {
+    day: 1,
+    title: "Embarkation",
+    port: "Basel",
+    description:
+      "Board your vessel in Basel, where Switzerland, France, and Germany converge. The city's medieval Altstadt and the Rhine promenade set the tone for the journey ahead.",
+    coordinates: [7.5886, 47.5596],
+    status: "past",
+  },
+  {
+    day: 2,
+    title: "The Upper Rhine Plain",
+    port: "Strasbourg",
+    description:
+      "Sail north through the wide Rhine plain past Breisach and into Alsace. Strasbourg's half-timbered Petite France quarter and Gothic cathedral await.",
+    coordinates: [7.5886, 48.5734],
+    status: "past",
+  },
+  {
+    day: 3,
+    title: "Imperial Cities",
+    port: "Speyer · Mannheim",
+    description:
+      "Two great cathedral cities in a single day. Speyer's Romanesque basilica — the largest surviving from its era — gives way to the industrial elegance of Mannheim at the Neckar confluence.",
+    coordinates: [8.4660, 49.4875],
+    status: "past",
+  },
+  {
+    day: 4,
+    title: "The Rheingau",
+    port: "Mainz · Rüdesheim",
+    description:
+      "The river narrows as vineyards climb steep slate slopes. Rüdesheim's Drosselgasse overflows with Riesling, and Mainz reveals Gutenberg's printing revolution.",
+    coordinates: [8.2473, 49.9929],
+    status: "current",
+  },
+  {
+    day: 5,
+    title: "The Rhine Gorge",
+    port: "Bacharach · Koblenz",
+    description:
+      "The legendary stretch: the river squeezes between 200-metre cliffs crowned with castles. The Loreley rock looms at the tightest bend. Koblenz marks the confluence with the Moselle.",
+    coordinates: [7.5985, 50.3569],
+    status: "future",
+  },
+  {
+    day: 6,
+    title: "Cathedral & Culture",
+    port: "Cologne · Düsseldorf",
+    description:
+      "Cologne's twin-spired Dom dominates the skyline — 632 years in the making. Downstream, Düsseldorf's Altstadt offers 260 bars in half a square kilometre.",
+    coordinates: [6.9603, 50.9375],
+    status: "future",
+  },
+  {
+    day: 7,
+    title: "Into the Netherlands",
+    port: "Arnhem · Amsterdam",
+    description:
+      "The Rhine splits into the Nederrijn as the landscape flattens into Dutch polders. Your voyage concludes in Amsterdam's historic harbour.",
+    coordinates: [4.8952, 52.3702],
+    status: "future",
+  },
+];
 
 export type POICategory =
   | "history"
