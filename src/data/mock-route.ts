@@ -822,7 +822,7 @@ export const MOCK_POIS: POI[] = [
     storyExcerpt:
       "Built in 1245 by Count Dieter V of Katzenelnbogen, Burg Rheinfels was once the largest fortress on the Rhine. It withstood a siege by 28,000 troops in 1692 but was finally dismantled by French revolutionary forces in 1796.",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1590077428295-2a21e61583e8?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?w=800&h=600&fit=crop",
     day: 5,
     storyBody: [
       "Count Dieter V of Katzenelnbogen built Burg Rheinfels in 1245 to enforce a toll on Rhine shipping. At its peak, the fortress complex covered an area five times larger than it does today — making it the mightiest fortification on the entire river.",
