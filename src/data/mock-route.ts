@@ -768,7 +768,7 @@ export const MOCK_POIS: POI[] = [
     storyExcerpt:
       "Victor Hugo called Bacharach one of the most beautiful towns on the Rhine. Its half-timbered houses, Gothic chapel ruins, and Stahleck Castle perched above create a picture so perfect it seems painted rather than built.",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1590076215667-875c2d0fade3?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=800&h=600&fit=crop",
     day: 5,
     storyBody: [
       "Bacharach's name may derive from the Latin 'Bacchi ara' — altar of Bacchus — reflecting the ancient Roman wine tradition on these slopes. The town's 14th-century walls remain almost entirely intact, encircling half-timbered houses that lean at angles suggesting they are holding each other up.",
