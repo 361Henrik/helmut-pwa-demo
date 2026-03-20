@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Ship, Compass, ArrowDown } from "lucide-react";
-import { CRUISE_ITINERARY } from "@/data/mock-route";
+import { CRUISE_ITINERARY, MOCK_POIS } from "@/data/mock-route";
 import { JourneyTimeline } from "@/components/journey/JourneyTimeline";
 import { useMemo, useState, useEffect, useRef } from "react";
 
