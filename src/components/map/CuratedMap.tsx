@@ -79,6 +79,7 @@ export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
       markersRef.current.forEach((m) => m.remove());
       markersRef.current = [];
       markerCategoryRef.current.clear();
+      markerCoordsRef.current.clear();
       vesselMarkerRef.current?.remove();
 
       // POI markers (48×48)
