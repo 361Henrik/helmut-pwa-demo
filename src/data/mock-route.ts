@@ -580,7 +580,7 @@ export const MOCK_POIS: POI[] = [
     storyExcerpt:
       "The Dreiländereck marks the exact point where Switzerland, France, and Germany converge on the Rhine. A small pylon and viewing platform let you gaze into three nations simultaneously — a geographical oddity unique to Basel.",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&h=600&fit=crop",
     day: 1,
     storyBody: [
       "At the northern tip of Basel's harbour, a modest monument marks one of Europe's most unusual geographical points. Here the borders of Switzerland, France, and Germany meet on the Rhine, creating a triple frontier visible from a single vantage point.",
