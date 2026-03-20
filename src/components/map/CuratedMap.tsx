@@ -45,6 +45,7 @@ export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const markersRef = useRef<mapboxgl.Marker[]>([]);
   const markerCategoryRef = useRef<Map<mapboxgl.Marker, POICategory>>(new Map());
+  const markerCoordsRef = useRef<Map<mapboxgl.Marker, [number, number]>>(new Map());
   const vesselMarkerRef = useRef<mapboxgl.Marker | null>(null);
   const [selectedPoi, setSelectedPoi] = useState<POI | null>(null);
   const [mapReady, setMapReady] = useState(false);
