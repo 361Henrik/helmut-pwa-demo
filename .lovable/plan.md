@@ -1,100 +1,83 @@
 
 
-# POI Content Quality & Discovery Improvement Plan
+# Demo-Ready Polish — Implementation Plan
 
-## Current State
+## Problem Summary
 
-10 POIs with Unsplash stock images (none show the actual place), generic filler text in story pages, and no hidden gems or lesser-known stops. All POIs are concentrated on days 3-6 with nothing for days 1-2 or day 7.
+From the screenshots:
+1. **Broken images** — POI thumbnails show alt text instead of images (Wikimedia Commons URLs are failing, likely due to hotlink restrictions)
+2. **Route cuts across land** — the route coordinates form a rough polyline that doesn't follow the actual river path precisely enough at zoomed-in views
+3. **Auth blocks demo flow** — Sign-in required for Saved page and story bookmarks
+4. **Help button does nothing** — Settings "Help & Support" has no destination; Welcome page help icon has no handler
+5. **"Back to Travel App"** — generic placeholder text, should use a realistic operator name
 
 ## Plan
 
-### 1. Replace all images with real-world photography
+### 1. Demo Access / Auth Bypass
 
-**What changes:** Replace every `thumbnailUrl` with a Wikimedia Commons or verified public-domain image that shows the actual place.
+**Changes:**
+- In `useAuth.tsx`, add a `demoMode` flag that creates a fake user/session so `user` is always truthy
+- The AuthProvider immediately sets a mock user object (no real Supabase call) so all auth-gated features (Saved, bookmarks) work without signing in
+- In `WelcomePage.tsx`, change "Login / Recover Saved Journey" to "Enter Demo" and route to `/journey` instead of `/auth`
+- In `SavedPage.tsx` and `StoryPage.tsx`, the existing auth checks will pass automatically since `user` is always set
+- In `useSavedStories.ts`, fall back to localStorage when Supabase queries fail (demo resilience)
 
-| POI | Current Image | Replacement Source |
-|-----|--------------|-------------------|
-| Loreley Rock | Generic mountain Unsplash | Wikimedia Commons photo of Loreley cliff from river |
-| Koblenz Deutsches Eck | Random German town | Wikimedia photo of Deutsches Eck confluence |
-| Cologne Cathedral | Distant cathedral shot | Wikimedia photo of Kölner Dom from Rhine |
-| Rüdesheim Wine Town | Mountain landscape | Wikimedia photo of Drosselgasse or Rüdesheim waterfront |
-| Bacharach Old Town | German village | Wikimedia photo of Bacharach from river |
-| Speyer Cathedral | Random cathedral | Wikimedia photo of Speyer Cathedral |
-| Rhine Gorge Vineyards | Generic vineyard | Wikimedia photo of terraced Rhine Gorge slopes |
-| Düsseldorf Altstadt | Generic bar | Wikimedia photo of Altstadt waterfront |
-| Marksburg Castle | Random castle | Wikimedia photo of Marksburg from Rhine |
-| Bonn Beethoven House | Piano keys | Wikimedia photo of Beethoven-Haus facade |
+### 2. Help / Support Flow
 
-**Approach:** Use Wikimedia Commons URLs with `?width=800` parameter for consistent sizing. All images will be verified to show the correct location.
+**Changes:**
+- Create a new `HelpPage.tsx` at `/help` with polished Getting Started content (how the app works, FAQ, support contact)
+- Wire the Settings "Help & Support" button to navigate to `/help`
+- Wire the WelcomePage help icon to navigate to `/help`
+- Wire the MapControls help button to show a richer toast (already works, but improve text)
+- Add the `/help` route to `App.tsx` inside AppShell
 
-### 2. Expand to 25-30 POIs across all 7 days
+### 3. Branding / Text Cleanup
 
-**What changes:** Add 15-20 new verified, real-world POIs filling gaps in days 1-2 and day 7, plus hidden gems throughout.
+**Changes:**
+- In `BottomTabBar.tsx`, change "Back to Travel App" default to "Back to Viking River Cruises"
+- In `WelcomePage.tsx`, change "Start Exploring" to "Begin Your Journey", fix subtitle
+- Consistent operator name across all surfaces
 
-**New POIs by day:**
+### 4. Images / Content Realism
 
-Day 1 (Basel):
-- Basel Minster — Romanesque-Gothic cathedral overlooking Rhine (architecture)
-- Dreiländereck — Three-country border point (hidden-gem)
+**Root cause:** Wikimedia Commons blocks hotlinking from external domains. The `thumbnailUrl` values use Wikimedia thumb URLs which return 403 or empty responses when loaded as `<img src>` from a different origin.
 
-Day 2 (Strasbourg):
-- Strasbourg Cathedral — Gothic masterpiece with astronomical clock (architecture)
-- Petite France — Half-timbered canal quarter (culture)
-- Breisach am Rhein — Medieval hilltop town above the Rhine plain (hidden-gem)
+**Fix:** Replace all Wikimedia Commons URLs with Unsplash URLs that reliably serve images via CDN. Use specific, place-appropriate Unsplash photos (river cruises, castles, cathedrals, Rhine scenery). Unsplash allows hotlinking via their CDN (`images.unsplash.com`).
 
-Day 3 (Speyer/Mannheim):
-- Mannheim Wasserturm — Art Nouveau water tower and gardens (engineering)
-- Heidelberg Castle ruins — visible from river, one of Germany's most famous ruins (history)
+Update all 26 POIs in `mock-route.ts` with working Unsplash URLs that match the real places.
 
-Day 4 (Mainz/Rüdesheim):
-- Mainz Cathedral — 1000-year-old imperial cathedral (architecture)
-- Niederwald Monument — Germania statue above Rüdesheim (history)
+### 5. River Route / Map Fix
 
-Day 5 (Rhine Gorge) — already well-covered, add:
-- Burg Rheinfels — largest castle ruin on the Rhine (history)
-- St. Goar town — opposite Loreley (hidden-gem)
+**Root cause:** The route coordinates are manually approximated and don't follow the actual Rhine river path. At zoomed-in views (e.g., the Bonn screenshot), the polyline cuts straight through land because the coordinate density isn't high enough and positions are interpolated rather than traced from the actual river.
 
-Day 6 (Cologne/Düsseldorf):
-- Ehrenbreitstein Fortress — second-largest preserved fortress in Europe (engineering)
-- Drachenfels — dragon legend mountain near Bonn (legends)
+**Recommended fix:** The current coordinate set has ~450 points, which is reasonable density. The real issue is that many coordinates are slightly off the river center, especially in curvy sections. The most impactful improvement without a complete data overhaul:
+- Increase the `line-width` slightly and use a more transparent line style so small deviations from the river are less obvious
+- Add `line-blur` to soften the line edges
+- Correct the most egregious straight-line segments (Bonn-Cologne area, Basel initial section where the route goes east into Switzerland before coming back)
 
-Day 7 (Netherlands):
-- Arnhem Bridge — WWII "A Bridge Too Far" (history)
-- Kinderdijk windmills — if close to route (engineering)
-- Amsterdam Centraal arrival — journey's end (culture)
+The Basel section (lines 127-200) has a serious geographic error: the route goes east along the Swiss-German border (toward Lake Constance) then loops back west — this is not the navigable Rhine path. Basel to Strasbourg should go straight north along the Upper Rhine plain. I will fix these coordinates.
 
-Each POI will include: verified coordinates, factual teaser (1 line), researched storyExcerpt (2-3 sentences with specific facts), real Wikimedia image URL, correct category, and day assignment.
+**Tradeoff:** A complete river-accurate trace would require thousands of coordinates from a GIS source. For demo purposes, fixing the worst offenders and softening the line style is the pragmatic approach.
 
-### 3. Replace filler story text with per-POI content
-
-**What changes:** In `StoryPage.tsx`, replace the 3 hardcoded generic paragraphs with a new `storyBody` field on each POI, containing 2-3 paragraphs of verified, place-specific content.
-
-**Approach:**
-- Add `storyBody?: string[]` to the `POI` interface — array of paragraph strings
-- Populate for all POIs with factual, researched content
-- If `storyBody` exists, render those paragraphs; otherwise fall back to the current generic text
-- Each paragraph will include at least one verifiable fact (date, measurement, name, event)
-
-### 4. Improve icon consistency review
-
-**What changes:** Audit all category assignments for the expanded POI set. Ensure every new POI has a category with a clear, recognizable icon from the existing `mapIcons.ts` system.
-
-No icon changes needed — the current SVG system (theater masks, bridge, diamond, paintbrush, etc.) already covers all categories well. The focus is on correct category assignment.
-
-### 5. Add source attribution to Story page
-
-**What changes:** Add a `sources?: string[]` field to POI and render a small attribution line at the bottom of each story: "Sources: UNESCO, German National Tourist Board" with a "Last verified: March 2026" line.
-
-### 6. File changes
+### File Changes
 
 | File | Changes |
 |---|---|
-| `src/data/mock-route.ts` | Expand POI interface with `storyBody` and `sources`. Replace all 10 image URLs. Add 15-20 new POIs. |
-| `src/pages/StoryPage.tsx` | Render `storyBody` paragraphs instead of hardcoded filler. Add source attribution section. |
+| `src/hooks/useAuth.tsx` | Add demo mode — mock user always set |
+| `src/hooks/useSavedStories.ts` | localStorage fallback for demo |
+| `src/pages/WelcomePage.tsx` | Update CTAs and help icon |
+| `src/pages/AuthPage.tsx` | Auto-redirect in demo mode |
+| `src/pages/HelpPage.tsx` | New — Getting Started / FAQ page |
+| `src/App.tsx` | Add `/help` route |
+| `src/components/layout/BottomTabBar.tsx` | Viking River Cruises branding |
+| `src/pages/SettingsPage.tsx` | Wire Help & Support to `/help` |
+| `src/data/mock-route.ts` | Fix Basel route coordinates, replace all image URLs |
+| `src/components/map/mapLayers.ts` | Soften route line style |
 
-### Tradeoffs
-
-- **Wikimedia Commons URLs** may be slower than Unsplash CDN but show real places. Could add `loading="lazy"` and width parameters.
-- **25-30 POIs** is a good density for 7 days without overwhelming. The clustering system already handles zoomed-out density.
-- **Content verification**: All facts will be based on well-known, easily verifiable information (UNESCO sites, major landmarks, documented history). Nothing speculative.
+### Implementation Order
+1. Fix images (biggest visual impact)
+2. Demo auth bypass
+3. Help page + wiring
+4. Branding cleanup
+5. Route coordinate fixes + line softening
 
