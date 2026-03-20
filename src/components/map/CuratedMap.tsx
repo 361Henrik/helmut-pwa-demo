@@ -6,6 +6,7 @@ import {
   VESSEL_POSITION,
   MOCK_POIS,
   type POI,
+  type POICategory,
 } from "@/data/mock-route";
 import { MapControls } from "./MapControls";
 import { QuickInfoSheet } from "./QuickInfoSheet";
