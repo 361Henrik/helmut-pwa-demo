@@ -225,7 +225,7 @@ export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
     });
   }, [activeCategories]);
 
-
+  const handleRecenter = () => {
     mapRef.current?.flyTo({
       center: VESSEL_POSITION,
       zoom: 8,
