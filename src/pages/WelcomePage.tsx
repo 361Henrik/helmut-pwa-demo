@@ -39,6 +39,7 @@ export default function WelcomePage() {
 
       {/* Persistent help icon */}
       <button
+        onClick={() => navigate("/help")}
         className="absolute right-4 top-4 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-background/80 backdrop-blur-sm"
         aria-label="Help"
       >
