@@ -748,7 +748,7 @@ export const MOCK_POIS: POI[] = [
     storyExcerpt:
       "The Niederwald Monument, completed in 1883, commemorates the unification of Germany. Its 10.5-metre bronze Germania holds a sword and the imperial crown, gazing defiantly toward France from a ridge 225 metres above Rüdesheim.",
     thumbnailUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Niederwalddenkmal_2012-04-15.jpg/800px-Niederwalddenkmal_2012-04-15.jpg",
+      "https://images.unsplash.com/photo-1609952048180-7b35ea6b083b?w=800&h=600&fit=crop",
     day: 4,
     storyBody: [
       "Perched on a ridge 225 metres above the Rhine, the Niederwald Monument was unveiled on 28 September 1883 — the twelfth anniversary of German unification. Kaiser Wilhelm I attended in person, arriving by the same cable railway that visitors use today.",
