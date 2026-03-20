@@ -840,7 +840,7 @@ export const MOCK_POIS: POI[] = [
     storyExcerpt:
       "Named after a 6th-century hermit who guided boats through the dangerous narrows, St. Goar sits directly opposite the Loreley rock. Its medieval Stiftskirche contains rare 14th-century frescoes uncovered during 1960s restoration.",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1549877452-9c387954fbc2?w=800&h=600&fit=crop",
     day: 5,
     storyBody: [
       "St. Goar takes its name from Goar of Aquitaine, a 6th-century Celtic missionary who settled on this stretch of the Rhine and devoted his life to rescuing shipwrecked sailors. His hermitage became a pilgrimage site, and the town grew around it.",
