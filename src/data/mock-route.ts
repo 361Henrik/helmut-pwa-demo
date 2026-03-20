@@ -988,7 +988,7 @@ export const MOCK_POIS: POI[] = [
     storyExcerpt:
       "The John Frost Bridge in Arnhem was the 'bridge too far' of Operation Market Garden in September 1944. British paratroopers held the northern end for four days against overwhelming German forces in one of the war's most heroic and tragic engagements.",
     thumbnailUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/John_Frost_Bridge.jpg/800px-John_Frost_Bridge.jpg",
+      "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&h=600&fit=crop&q=75",
     day: 7,
     storyBody: [
       "On 17 September 1944, British paratroopers of the 1st Airborne Division landed near Arnhem as part of Operation Market Garden — the largest airborne operation in history. Their objective: seize the bridge over the Lower Rhine and hold it until ground forces arrived.",
