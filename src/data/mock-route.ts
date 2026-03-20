@@ -858,7 +858,7 @@ export const MOCK_POIS: POI[] = [
     storyExcerpt:
       "Perched 150 metres above the river, Marksburg is the only hill castle on the Rhine never destroyed. Its medieval kitchen, armoury, and torture chamber remain intact — a rare window into 700 years of fortress life along the busiest waterway in Europe.",
     thumbnailUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Marksburg_von_S%C3%BCden.jpg/800px-Marksburg_von_S%C3%BCden.jpg",
+      "https://images.unsplash.com/photo-1600623047481-697d463a0f49?w=800&h=600&fit=crop&q=80",
     day: 5,
     storyBody: [
       "Of the forty-odd castles along the Rhine Gorge, Marksburg alone was never conquered or deliberately destroyed. Its survival is partly strategic — the steep approach made siege engines useless — and partly lucky: it was simply too remote to bother demolishing when the Palatinate was laid waste in the 1690s.",
