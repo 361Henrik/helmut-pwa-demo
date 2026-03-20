@@ -1,5 +1,5 @@
 import mapboxgl from "mapbox-gl";
-import { ROUTE_COORDINATES, MOCK_POIS } from "@/data/mock-route";
+import { ROUTE_COORDINATES, MOCK_POIS, CRUISE_ITINERARY } from "@/data/mock-route";
 
 /**
  * Generate a simplified corridor polygon around the route.
