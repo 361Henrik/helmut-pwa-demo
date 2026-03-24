@@ -12,6 +12,7 @@ import MapPage from "./pages/MapPage";
 import SavedPage from "./pages/SavedPage";
 import SettingsPage from "./pages/SettingsPage";
 import StoryPage from "./pages/StoryPage";
+import DemoPage from "./pages/DemoPage";
 import AuthPage from "./pages/AuthPage";
 import HelpPage from "./pages/HelpPage";
 import NotFound from "./pages/NotFound";
