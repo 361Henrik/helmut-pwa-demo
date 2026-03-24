@@ -26,6 +26,8 @@ import { toast } from "sonner";
 export default function StoryPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const fromDemo = searchParams.get("from") === "demo";
   const { user } = useAuth();
   const { isSaved, toggleSave } = useSavedStories();
 
