@@ -33,6 +33,7 @@ const App = () => (
             <Route path="/onboarding" element={<OnboardingPage />} />
             <Route path="/story/:id" element={<StoryPage />} />
             <Route path="/auth" element={<AuthPage />} />
+            <Route path="/demo" element={<DemoPage />} />
 
             {/* App shell with persistent bottom tab bar */}
             <Route element={<AppShell />}>

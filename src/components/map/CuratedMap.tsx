@@ -365,8 +365,11 @@ export function CuratedMap({
       <QuickInfoSheet
         poi={selectedPoi}
         onClose={handleCloseSheet}
+        onExpand={onSheetExpand}
         onFullStory={() => {
-          if (selectedPoi) {
+          if (onFullStoryProp) {
+            onFullStoryProp();
+          } else if (selectedPoi) {
             navigate(`/story/${selectedPoi.id}`);
           }
         }}
