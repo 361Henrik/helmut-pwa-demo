@@ -22,9 +22,10 @@ interface QuickInfoSheetProps {
   poi: POI | null;
   onClose: () => void;
   onFullStory: () => void;
+  onExpand?: () => void;
 }
 
-export function QuickInfoSheet({ poi, onClose, onFullStory }: QuickInfoSheetProps) {
+export function QuickInfoSheet({ poi, onClose, onFullStory, onExpand }: QuickInfoSheetProps) {
   const [expanded, setExpanded] = useState(false);
 
   // Reset expanded state when POI changes
@@ -144,7 +145,7 @@ export function QuickInfoSheet({ poi, onClose, onFullStory }: QuickInfoSheetProp
               {/* Collapsed CTA — "Tap for more" */}
               {!expanded && (
                 <button
-                  onClick={() => setExpanded(true)}
+                  onClick={() => { setExpanded(true); onExpand?.(); }}
                   className="mt-space-4 flex w-full items-center justify-center gap-1 text-body-small text-muted-foreground"
                 >
                   <ChevronUp className="h-4 w-4" />

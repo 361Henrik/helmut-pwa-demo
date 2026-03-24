@@ -37,9 +37,35 @@ function haversineKm(
 
 interface CuratedMapProps {
   activeCategories?: POICategory[];
+  /** Override default POI dataset (for demo mode) */
+  pois?: POI[];
+  /** Pulse-highlight a specific marker */
+  highlightPoiId?: string;
+  /** Callback when a POI is selected */
+  onPoiSelect?: (poi: POI | null) => void;
+  /** Callback when the sheet expands to Layer 3.5 */
+  onSheetExpand?: () => void;
+  /** Override default full-story navigation */
+  onFullStory?: () => void;
+  /** Externally controlled selected POI */
+  selectedPoi?: POI | null;
+  /** Hide map controls */
+  hideControls?: boolean;
+  /** Demo mode — disables category filter, proximity bar */
+  demoMode?: boolean;
 }
 
-export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
+export function CuratedMap({
+  activeCategories = [],
+  pois,
+  highlightPoiId,
+  onPoiSelect,
+  onSheetExpand,
+  onFullStory: onFullStoryProp,
+  selectedPoi: externalSelectedPoi,
+  hideControls = false,
+  demoMode = false,
+}: CuratedMapProps) {
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
@@ -47,7 +73,9 @@ export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
   const markerCategoryRef = useRef<Map<mapboxgl.Marker, POICategory>>(new Map());
   const markerCoordsRef = useRef<Map<mapboxgl.Marker, [number, number]>>(new Map());
   const vesselMarkerRef = useRef<mapboxgl.Marker | null>(null);
-  const [selectedPoi, setSelectedPoi] = useState<POI | null>(null);
+  const [internalSelectedPoi, setInternalSelectedPoi] = useState<POI | null>(null);
+  const selectedPoi = externalSelectedPoi !== undefined ? externalSelectedPoi : internalSelectedPoi;
+  const setSelectedPoi = onPoiSelect || setInternalSelectedPoi;
   const [mapReady, setMapReady] = useState(false);
   const [tokenError, setTokenError] = useState(false);
 
@@ -56,20 +84,20 @@ export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
   /** Update DOM marker visibility based on zoom + active filters */
   const updateMarkerVisibility = useCallback(
     (zoom: number) => {
-      const showDom = zoom >= CLUSTER_ZOOM_THRESHOLD;
+      const showDom = demoMode ? true : zoom >= CLUSTER_ZOOM_THRESHOLD;
       markersRef.current.forEach((marker) => {
         const cat = markerCategoryRef.current.get(marker);
         const coords = markerCoordsRef.current.get(marker);
         const catVisible =
-          activeCategories.length === 0 || (cat && activeCategories.includes(cat));
+          demoMode || activeCategories.length === 0 || (cat && activeCategories.includes(cat));
         const dist = coords ? haversineKm(VESSEL_POSITION, coords) : 999;
-        const isNearby = dist <= PROXIMITY_KM;
+        const isNearby = demoMode || dist <= PROXIMITY_KM;
         const el = marker.getElement();
         el.style.display = showDom && catVisible ? "flex" : "none";
         el.style.opacity = isNearby ? "1" : "0.3";
       });
     },
-    [activeCategories]
+    [activeCategories, demoMode]
   );
 
   /** Create all POI markers and the vessel marker */
@@ -83,22 +111,25 @@ export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
       vesselMarkerRef.current?.remove();
 
       // POI markers (48×48)
-      MOCK_POIS.forEach((poi) => {
+      const poiData = pois || MOCK_POIS;
+      poiData.forEach((poi) => {
         const el = document.createElement("div");
         el.className = "curated-marker";
         el.innerHTML = CATEGORY_SVG_ICONS[poi.category] || "";
+        const isHighlighted = highlightPoiId === poi.id;
         el.style.cssText = `
           width: 48px; height: 48px;
           background: hsl(37 31% 95%);
-          border: 2.5px solid hsl(120 9% 11%);
+          border: 2.5px solid ${isHighlighted ? "hsl(40 46% 53%)" : "hsl(120 9% 11%)"};
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
           cursor: pointer;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+          box-shadow: ${isHighlighted ? "0 0 0 4px hsla(40,46%,53%,0.3), 0 2px 12px hsla(40,46%,53%,0.4)" : "0 2px 8px rgba(0,0,0,0.15)"};
           transition: border-color 0.3s, box-shadow 0.3s;
           color: hsl(158 41% 21%);
+          ${isHighlighted ? "animation: demo-marker-pulse 2s ease-in-out infinite;" : ""}
         `;
 
         el.addEventListener("mouseenter", () => {
@@ -150,7 +181,7 @@ export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
       // Set initial DOM marker visibility
       updateMarkerVisibility(map.getZoom());
     },
-    [selectedPoi, updateMarkerVisibility]
+    [selectedPoi, updateMarkerVisibility, pois, highlightPoiId]
   );
 
   const initMap = useCallback(() => {
@@ -324,7 +355,7 @@ export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
     <div className="relative h-full w-full overflow-hidden">
       <div ref={containerRef} className="h-full w-full" />
 
-      {mapReady && (
+      {mapReady && !hideControls && (
         <MapControls
           onRecenter={handleRecenter}
           onToggleStyle={handleToggleStyle}
@@ -334,8 +365,11 @@ export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
       <QuickInfoSheet
         poi={selectedPoi}
         onClose={handleCloseSheet}
+        onExpand={onSheetExpand}
         onFullStory={() => {
-          if (selectedPoi) {
+          if (onFullStoryProp) {
+            onFullStoryProp();
+          } else if (selectedPoi) {
             navigate(`/story/${selectedPoi.id}`);
           }
         }}

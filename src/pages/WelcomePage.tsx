@@ -96,7 +96,7 @@ export default function WelcomePage() {
           <Button
             variant="ghost"
             className="w-full text-muted-foreground"
-            onClick={() => navigate("/map")}
+            onClick={() => navigate("/demo")}
           >
             Enter Demo
           </Button>
