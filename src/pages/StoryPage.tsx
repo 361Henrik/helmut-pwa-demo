@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, Bookmark, BookmarkCheck, Share2, Landmark, TreePine, Building2, Theater, Wine, Cog, Star, Bird, Paintbrush, Gem } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
