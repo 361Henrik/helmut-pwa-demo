@@ -26,7 +26,7 @@ const STEP_CONTENT: Record<
     position: "bottom",
   },
   4: {
-    title: "Tap "full story" for the complete experience",
+    title: "Tap 'full story' for the complete experience",
     position: "bottom",
   },
   5: {
