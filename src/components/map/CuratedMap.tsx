@@ -73,7 +73,9 @@ export function CuratedMap({
   const markerCategoryRef = useRef<Map<mapboxgl.Marker, POICategory>>(new Map());
   const markerCoordsRef = useRef<Map<mapboxgl.Marker, [number, number]>>(new Map());
   const vesselMarkerRef = useRef<mapboxgl.Marker | null>(null);
-  const [selectedPoi, setSelectedPoi] = useState<POI | null>(null);
+  const [internalSelectedPoi, setInternalSelectedPoi] = useState<POI | null>(null);
+  const selectedPoi = externalSelectedPoi !== undefined ? externalSelectedPoi : internalSelectedPoi;
+  const setSelectedPoi = onPoiSelect || setInternalSelectedPoi;
   const [mapReady, setMapReady] = useState(false);
   const [tokenError, setTokenError] = useState(false);
 
