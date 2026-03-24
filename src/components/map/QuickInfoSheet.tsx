@@ -22,6 +22,7 @@ interface QuickInfoSheetProps {
   poi: POI | null;
   onClose: () => void;
   onFullStory: () => void;
+  onExpand?: () => void;
 }
 
 export function QuickInfoSheet({ poi, onClose, onFullStory }: QuickInfoSheetProps) {
