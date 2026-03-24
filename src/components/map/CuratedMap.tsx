@@ -181,7 +181,7 @@ export function CuratedMap({
       // Set initial DOM marker visibility
       updateMarkerVisibility(map.getZoom());
     },
-    [selectedPoi, updateMarkerVisibility]
+    [selectedPoi, updateMarkerVisibility, pois, highlightPoiId]
   );
 
   const initMap = useCallback(() => {
