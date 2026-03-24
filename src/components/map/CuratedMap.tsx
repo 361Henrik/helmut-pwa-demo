@@ -37,9 +37,35 @@ function haversineKm(
 
 interface CuratedMapProps {
   activeCategories?: POICategory[];
+  /** Override default POI dataset (for demo mode) */
+  pois?: POI[];
+  /** Pulse-highlight a specific marker */
+  highlightPoiId?: string;
+  /** Callback when a POI is selected */
+  onPoiSelect?: (poi: POI | null) => void;
+  /** Callback when the sheet expands to Layer 3.5 */
+  onSheetExpand?: () => void;
+  /** Override default full-story navigation */
+  onFullStory?: () => void;
+  /** Externally controlled selected POI */
+  selectedPoi?: POI | null;
+  /** Hide map controls */
+  hideControls?: boolean;
+  /** Demo mode — disables category filter, proximity bar */
+  demoMode?: boolean;
 }
 
-export function CuratedMap({ activeCategories = [] }: CuratedMapProps) {
+export function CuratedMap({
+  activeCategories = [],
+  pois,
+  highlightPoiId,
+  onPoiSelect,
+  onSheetExpand,
+  onFullStory: onFullStoryProp,
+  selectedPoi: externalSelectedPoi,
+  hideControls = false,
+  demoMode = false,
+}: CuratedMapProps) {
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
