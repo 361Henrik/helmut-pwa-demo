@@ -22,7 +22,7 @@ const STEP_CONTENT: Record<
     position: "bottom",
   },
   3: {
-    title: "Swipe up or tap "for more" to learn the story",
+    title: "Swipe up or tap 'for more' to learn the story",
     position: "bottom",
   },
   4: {
