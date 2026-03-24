@@ -111,7 +111,8 @@ export function CuratedMap({
       vesselMarkerRef.current?.remove();
 
       // POI markers (48×48)
-      MOCK_POIS.forEach((poi) => {
+      const poiData = pois || MOCK_POIS;
+      poiData.forEach((poi) => {
         const el = document.createElement("div");
         el.className = "curated-marker";
         el.innerHTML = CATEGORY_SVG_ICONS[poi.category] || "";
