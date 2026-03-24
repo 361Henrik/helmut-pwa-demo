@@ -145,7 +145,7 @@ export function QuickInfoSheet({ poi, onClose, onFullStory, onExpand }: QuickInf
               {/* Collapsed CTA — "Tap for more" */}
               {!expanded && (
                 <button
-                  onClick={() => setExpanded(true)}
+                  onClick={() => { setExpanded(true); onExpand?.(); }}
                   className="mt-space-4 flex w-full items-center justify-center gap-1 text-body-small text-muted-foreground"
                 >
                   <ChevronUp className="h-4 w-4" />
