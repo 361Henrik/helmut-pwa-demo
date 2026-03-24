@@ -116,18 +116,20 @@ export function CuratedMap({
         const el = document.createElement("div");
         el.className = "curated-marker";
         el.innerHTML = CATEGORY_SVG_ICONS[poi.category] || "";
+        const isHighlighted = highlightPoiId === poi.id;
         el.style.cssText = `
           width: 48px; height: 48px;
           background: hsl(37 31% 95%);
-          border: 2.5px solid hsl(120 9% 11%);
+          border: 2.5px solid ${isHighlighted ? "hsl(40 46% 53%)" : "hsl(120 9% 11%)"};
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
           cursor: pointer;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+          box-shadow: ${isHighlighted ? "0 0 0 4px hsla(40,46%,53%,0.3), 0 2px 12px hsla(40,46%,53%,0.4)" : "0 2px 8px rgba(0,0,0,0.15)"};
           transition: border-color 0.3s, box-shadow 0.3s;
           color: hsl(158 41% 21%);
+          ${isHighlighted ? "animation: demo-marker-pulse 2s ease-in-out infinite;" : ""}
         `;
 
         el.addEventListener("mouseenter", () => {
