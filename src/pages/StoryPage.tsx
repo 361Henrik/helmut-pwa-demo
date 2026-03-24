@@ -68,7 +68,7 @@ export default function StoryPage() {
       <div className="relative flex-shrink-0 bg-deep-green/5 pb-8 pt-safe-top">
         <div className="flex items-center justify-between px-4 pt-3">
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => fromDemo ? navigate("/demo") : navigate(-1)}
             className="flex h-10 w-10 items-center justify-center rounded-full bg-background shadow-sm"
             aria-label="Go back"
           >
