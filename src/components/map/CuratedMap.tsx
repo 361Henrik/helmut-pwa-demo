@@ -355,7 +355,7 @@ export function CuratedMap({
     <div className="relative h-full w-full overflow-hidden">
       <div ref={containerRef} className="h-full w-full" />
 
-      {mapReady && (
+      {mapReady && !hideControls && (
         <MapControls
           onRecenter={handleRecenter}
           onToggleStyle={handleToggleStyle}
