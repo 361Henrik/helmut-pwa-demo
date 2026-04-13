@@ -83,7 +83,7 @@ export default function DemoPage() {
 
       <DemoOverlay step={step} onAdvance={advance} />
 
-      <DemoControls onRestart={restart} onExit={() => navigate("/")} />
+      <DemoControls onRestart={restart} />
     </div>
   );
 }
