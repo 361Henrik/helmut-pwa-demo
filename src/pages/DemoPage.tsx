@@ -69,6 +69,20 @@ export default function DemoPage() {
     }
   }, [selectedPoi, navigate]);
 
+  // Auto-simulate: tap the primary POI marker after timeout
+  const autoTap = useCallback(() => {
+    const poi = DEMO_POIS.find((p) => p.id === PRIMARY_POI_ID);
+    if (poi) {
+      setSelectedPoi(poi);
+      setTimeout(() => setStep(3), 400);
+    }
+  }, []);
+
+  // Auto-simulate: expand the sheet after timeout
+  const autoExpand = useCallback(() => {
+    handleSheetExpand();
+  }, [handleSheetExpand]);
+
   return (
     <div className="fixed inset-0 w-full h-full overflow-hidden">
       {/* Progress bar */}
@@ -92,7 +106,14 @@ export default function DemoPage() {
         demoMode
       />
 
-      <DemoOverlay step={step} onAdvance={advance} paused={paused} onRestart={restart} />
+      <DemoOverlay
+        step={step}
+        onAdvance={advance}
+        paused={paused}
+        onRestart={restart}
+        onAutoTap={autoTap}
+        onAutoExpand={autoExpand}
+      />
 
       {step < 6 && (
         <DemoControls onRestart={restart} paused={paused} onTogglePause={togglePause} />
