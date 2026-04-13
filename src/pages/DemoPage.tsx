@@ -70,7 +70,7 @@ export default function DemoPage() {
   }, [selectedPoi, navigate]);
 
   return (
-    <div className="relative h-[100dvh] w-full overflow-hidden">
+    <div className="fixed inset-0 w-full h-full overflow-hidden">
       {/* Progress bar */}
       <div className="absolute top-0 left-0 right-0 z-50 h-1 bg-border/40">
         <div
