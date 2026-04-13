@@ -23,9 +23,10 @@ interface QuickInfoSheetProps {
   onClose: () => void;
   onFullStory: () => void;
   onExpand?: () => void;
+  autoExpand?: boolean;
 }
 
-export function QuickInfoSheet({ poi, onClose, onFullStory, onExpand }: QuickInfoSheetProps) {
+export function QuickInfoSheet({ poi, onClose, onFullStory, onExpand, autoExpand }: QuickInfoSheetProps) {
   const [expanded, setExpanded] = useState(false);
 
   // Reset expanded state when POI changes
