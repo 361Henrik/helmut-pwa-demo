@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { MOCK_POIS, type POI } from "@/data/mock-route";
 import { CuratedMap } from "@/components/map/CuratedMap";
@@ -29,12 +29,24 @@ export default function DemoPage() {
   const [step, setStep] = useState<DemoStep>(getInitialStep);
   const [selectedPoi, setSelectedPoi] = useState<POI | null>(null);
 
+  // Determine which POIs and highlight to show based on step
+  const visiblePois = step <= 4 ? DEMO_POIS.filter((p) => p.id === PRIMARY_POI_ID) : DEMO_POIS;
+  const highlightPoiId = step === 2 ? PRIMARY_POI_ID : undefined;
+
+  const advance = useCallback(() => {
+    setStep((s) => (s < 6 ? ((s + 1) as DemoStep) : s));
+  }, []);
+
+  const restart = useCallback(() => {
+    setStep(1);
+    setSelectedPoi(null);
+  }, []);
+
   // When user taps a marker (Quick Info opens) → advance from step 2 to 3
   const handlePoiSelect = useCallback(
     (poi: POI | null) => {
       setSelectedPoi(poi);
       if (poi && step === 2) {
-        // Small delay so sheet opens first
         setTimeout(() => setStep(3), 400);
       }
     },
@@ -48,10 +60,10 @@ export default function DemoPage() {
     }
   }, [step]);
 
-  // When user taps "full story" → navigate with demo flag
+  // When user taps "full story" → save step and navigate
   const handleFullStory = useCallback(() => {
     if (selectedPoi) {
-      hasViewedFullStory.current = true;
+      sessionStorage.setItem("demo-step", "5");
       navigate(`/story/${selectedPoi.id}?from=demo`);
     }
   }, [selectedPoi, navigate]);
