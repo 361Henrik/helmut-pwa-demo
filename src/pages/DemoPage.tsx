@@ -41,6 +41,7 @@ export default function DemoPage() {
     setStep(1);
     setSelectedPoi(null);
     setPaused(false);
+    setAutoExpandSheet(false);
   }, []);
 
   const togglePause = useCallback(() => {
@@ -59,6 +60,7 @@ export default function DemoPage() {
 
   const handleSheetExpand = useCallback(() => {
     if (step === 3) {
+      setAutoExpandSheet(false);
       setTimeout(() => setStep(4), 300);
     }
   }, [step]);
@@ -81,8 +83,8 @@ export default function DemoPage() {
 
   // Auto-simulate: expand the sheet after timeout
   const autoExpand = useCallback(() => {
-    handleSheetExpand();
-  }, [handleSheetExpand]);
+    setAutoExpandSheet(true);
+  }, []);
 
   return (
     <div className="fixed inset-0 w-full h-full overflow-hidden">
