@@ -71,6 +71,16 @@ export default function DemoPage() {
 
   return (
     <div className="relative h-[100dvh] w-full overflow-hidden">
+      {/* Progress bar */}
+      <div className="absolute top-0 left-0 right-0 z-50 h-1 bg-border/40">
+        <div
+          className="h-full transition-all duration-700 ease-out"
+          style={{
+            width: `${(step / 6) * 100}%`,
+            backgroundColor: "hsl(40 46% 53%)",
+          }}
+        />
+      </div>
       <CuratedMap
         pois={visiblePois}
         highlightPoiId={highlightPoiId}
