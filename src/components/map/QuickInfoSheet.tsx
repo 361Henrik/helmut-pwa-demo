@@ -34,6 +34,14 @@ export function QuickInfoSheet({ poi, onClose, onFullStory, onExpand, autoExpand
     setExpanded(false);
   }, [poi?.id]);
 
+  // Auto-expand when triggered externally
+  useEffect(() => {
+    if (autoExpand && poi && !expanded) {
+      setExpanded(true);
+      onExpand?.();
+    }
+  }, [autoExpand]);
+
   const handleDragEnd = (_: unknown, info: PanInfo) => {
     if (info.offset.y > 80) {
       if (expanded) {

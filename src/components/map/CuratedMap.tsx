@@ -53,6 +53,8 @@ interface CuratedMapProps {
   hideControls?: boolean;
   /** Demo mode — disables category filter, proximity bar */
   demoMode?: boolean;
+  /** Auto-expand the QuickInfoSheet */
+  autoExpandSheet?: boolean;
 }
 
 export function CuratedMap({
