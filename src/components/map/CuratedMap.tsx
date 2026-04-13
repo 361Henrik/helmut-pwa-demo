@@ -67,6 +67,7 @@ export function CuratedMap({
   selectedPoi: externalSelectedPoi,
   hideControls = false,
   demoMode = false,
+  autoExpandSheet = false,
 }: CuratedMapProps) {
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -368,6 +369,7 @@ export function CuratedMap({
         poi={selectedPoi}
         onClose={handleCloseSheet}
         onExpand={onSheetExpand}
+        autoExpand={autoExpandSheet}
         onFullStory={() => {
           if (onFullStoryProp) {
             onFullStoryProp();
