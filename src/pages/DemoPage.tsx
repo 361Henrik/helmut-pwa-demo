@@ -28,6 +28,7 @@ export default function DemoPage() {
   const [step, setStep] = useState<DemoStep>(getInitialStep);
   const [selectedPoi, setSelectedPoi] = useState<POI | null>(null);
   const [paused, setPaused] = useState(false);
+  const [autoExpandSheet, setAutoExpandSheet] = useState(false);
 
   const visiblePois = step <= 4 ? DEMO_POIS.filter((p) => p.id === PRIMARY_POI_ID) : DEMO_POIS;
   const highlightPoiId = step === 2 && !paused ? PRIMARY_POI_ID : undefined;
