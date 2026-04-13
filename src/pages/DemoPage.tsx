@@ -106,6 +106,7 @@ export default function DemoPage() {
         onFullStory={handleFullStory}
         selectedPoi={selectedPoi}
         hideControls={step <= 1}
+        autoExpandSheet={autoExpandSheet}
         demoMode
       />
 
