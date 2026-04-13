@@ -1,6 +1,6 @@
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, Bookmark, BookmarkCheck, Share2, Landmark, TreePine, Building2, Theater, Wine, Cog, Star, Bird, Paintbrush, Gem } from "lucide-react";
+import { ArrowLeft, Landmark, TreePine, Building2, Theater, Wine, Cog, Star, Bird, Paintbrush, Gem } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useMemo } from "react";
 import { MOCK_POIS, CATEGORY_LABELS, type POICategory } from "@/data/mock-route";
@@ -19,17 +19,12 @@ const CATEGORY_ICONS: Record<POICategory, LucideIcon> = {
 };
 import { AudioPlayer } from "@/components/story/AudioPlayer";
 import { Badge } from "@/components/ui/badge";
-import { useAuth } from "@/hooks/useAuth";
-import { useSavedStories } from "@/hooks/useSavedStories";
-import { toast } from "sonner";
 
 export default function StoryPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const fromDemo = searchParams.get("from") === "demo";
-  const { user } = useAuth();
-  const { isSaved, toggleSave } = useSavedStories();
 
   const poi = useMemo(() => MOCK_POIS.find((p) => p.id === id), [id]);
 
@@ -47,52 +42,18 @@ export default function StoryPage() {
     );
   }
 
-  const saved = id ? isSaved(id) : false;
-
-  const handleToggleSave = () => {
-    if (!user) {
-      toast("Sign in to save stories", {
-        action: {
-          label: "Sign in",
-          onClick: () => navigate("/auth"),
-        },
-      });
-      return;
-    }
-    if (id) toggleSave.mutate(id);
-  };
-
   return (
     <div className="flex min-h-screen flex-col bg-background">
       {/* Category Icon Header */}
       <div className="relative flex-shrink-0 bg-deep-green/5 pb-8 pt-safe-top">
-        <div className="flex items-center justify-between px-4 pt-3">
+        <div className="flex items-center px-4 pt-3">
           <button
-            onClick={() => fromDemo ? navigate("/demo") : navigate(-1)}
+            onClick={() => fromDemo ? navigate("/") : navigate(-1)}
             className="flex h-10 w-10 items-center justify-center rounded-full bg-background shadow-sm"
             aria-label="Go back"
           >
             <ArrowLeft className="h-5 w-5 text-foreground" />
           </button>
-          <div className="flex gap-2">
-            <button
-              onClick={handleToggleSave}
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-background shadow-sm"
-              aria-label={saved ? "Remove from saved" : "Save to journey"}
-            >
-              {saved ? (
-                <BookmarkCheck className="h-5 w-5 text-primary" />
-              ) : (
-                <Bookmark className="h-5 w-5 text-foreground" />
-              )}
-            </button>
-            <button
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-background shadow-sm"
-              aria-label="Share"
-            >
-              <Share2 className="h-5 w-5 text-foreground" />
-            </button>
-          </div>
         </div>
 
         <motion.div
@@ -181,38 +142,6 @@ export default function StoryPage() {
             </p>
           </div>
         )}
-
-        {/* Save CTA */}
-        <div className="mt-8 flex items-center justify-between rounded-xl bg-card p-4">
-          <div>
-            <p className="text-body font-medium text-foreground">
-              Save to Journey
-            </p>
-            <p className="text-body-small text-muted-foreground">
-              Add this story to your personal timeline
-            </p>
-          </div>
-          <button
-            onClick={handleToggleSave}
-            className={`flex h-12 items-center gap-2 rounded-lg px-5 font-body text-sm font-medium transition-colors ${
-              saved
-                ? "bg-primary text-primary-foreground"
-                : "bg-card border border-border text-foreground"
-            }`}
-          >
-            {saved ? (
-              <>
-                <BookmarkCheck className="h-4 w-4" />
-                Saved
-              </>
-            ) : (
-              <>
-                <Bookmark className="h-4 w-4" />
-                Save
-              </>
-            )}
-          </button>
-        </div>
       </motion.div>
     </div>
   );
