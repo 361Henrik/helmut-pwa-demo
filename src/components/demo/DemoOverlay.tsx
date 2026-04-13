@@ -13,6 +13,8 @@ interface DemoOverlayProps {
   onAdvance: () => void;
   paused: boolean;
   onRestart?: () => void;
+  onAutoTap?: () => void;
+  onAutoExpand?: () => void;
 }
 
 const STEP_CONTENT: Record<
@@ -49,10 +51,12 @@ const STEP_CONTENT: Record<
 };
 
 const STEP_1_DURATION = 4000;
-const STEP_5_DURATION = 15000;
+const STEP_2_AUTO_TAP = 5000;
+const STEP_3_AUTO_EXPAND = 4000;
+const STEP_5_DURATION = 8000;
 const PULSE_DELAY = 8000;
 
-export function DemoOverlay({ step, onAdvance, paused, onRestart }: DemoOverlayProps) {
+export function DemoOverlay({ step, onAdvance, paused, onRestart, onAutoTap, onAutoExpand }: DemoOverlayProps) {
   const [pulse, setPulse] = useState(false);
   const remainingRef = useRef<number>(0);
   const startedAtRef = useRef<number>(0);
@@ -74,10 +78,16 @@ export function DemoOverlay({ step, onAdvance, paused, onRestart }: DemoOverlayP
     if (step === 1) {
       remainingRef.current = STEP_1_DURATION;
       timerTypeRef.current = "advance";
+    } else if (step === 2) {
+      remainingRef.current = STEP_2_AUTO_TAP;
+      timerTypeRef.current = "advance";
+    } else if (step === 3) {
+      remainingRef.current = STEP_3_AUTO_EXPAND;
+      timerTypeRef.current = "advance";
     } else if (step === 5) {
       remainingRef.current = STEP_5_DURATION;
       timerTypeRef.current = "advance";
-    } else if (step === 2 || step === 3 || step === 4) {
+    } else if (step === 4) {
       remainingRef.current = PULSE_DELAY;
       timerTypeRef.current = "pulse";
     } else {
@@ -89,8 +99,15 @@ export function DemoOverlay({ step, onAdvance, paused, onRestart }: DemoOverlayP
     if (!paused && remainingRef.current > 0) {
       startedAtRef.current = Date.now();
       timerIdRef.current = setTimeout(() => {
-        if (timerTypeRef.current === "advance") onAdvance();
-        else setPulse(true);
+        if (timerTypeRef.current === "pulse") {
+          setPulse(true);
+        } else if (step === 2) {
+          onAutoTap?.();
+        } else if (step === 3) {
+          onAutoExpand?.();
+        } else {
+          onAdvance();
+        }
       }, remainingRef.current);
     }
 
@@ -114,8 +131,15 @@ export function DemoOverlay({ step, onAdvance, paused, onRestart }: DemoOverlayP
       if (remainingRef.current > 0 && !pulse) {
         startedAtRef.current = Date.now();
         timerIdRef.current = setTimeout(() => {
-          if (timerTypeRef.current === "advance") onAdvance();
-          else setPulse(true);
+          if (timerTypeRef.current === "pulse") {
+            setPulse(true);
+          } else if (step === 2) {
+            onAutoTap?.();
+          } else if (step === 3) {
+            onAutoExpand?.();
+          } else {
+            onAdvance();
+          }
         }, remainingRef.current);
       }
     }

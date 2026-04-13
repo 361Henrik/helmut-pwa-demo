@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { MOCK_POIS, type POI } from "@/data/mock-route";
 import { CuratedMap } from "@/components/map/CuratedMap";
@@ -28,6 +28,7 @@ export default function DemoPage() {
   const [step, setStep] = useState<DemoStep>(getInitialStep);
   const [selectedPoi, setSelectedPoi] = useState<POI | null>(null);
   const [paused, setPaused] = useState(false);
+  const [autoExpandSheet, setAutoExpandSheet] = useState(false);
 
   const visiblePois = step <= 4 ? DEMO_POIS.filter((p) => p.id === PRIMARY_POI_ID) : DEMO_POIS;
   const highlightPoiId = step === 2 && !paused ? PRIMARY_POI_ID : undefined;
@@ -40,6 +41,7 @@ export default function DemoPage() {
     setStep(1);
     setSelectedPoi(null);
     setPaused(false);
+    setAutoExpandSheet(false);
   }, []);
 
   const togglePause = useCallback(() => {
@@ -58,6 +60,7 @@ export default function DemoPage() {
 
   const handleSheetExpand = useCallback(() => {
     if (step === 3) {
+      setAutoExpandSheet(false);
       setTimeout(() => setStep(4), 300);
     }
   }, [step]);
@@ -68,6 +71,20 @@ export default function DemoPage() {
       navigate(`/story/${selectedPoi.id}?from=demo`);
     }
   }, [selectedPoi, navigate]);
+
+  // Auto-simulate: tap the primary POI marker after timeout
+  const autoTap = useCallback(() => {
+    const poi = DEMO_POIS.find((p) => p.id === PRIMARY_POI_ID);
+    if (poi) {
+      setSelectedPoi(poi);
+      setTimeout(() => setStep(3), 400);
+    }
+  }, []);
+
+  // Auto-simulate: expand the sheet after timeout
+  const autoExpand = useCallback(() => {
+    setAutoExpandSheet(true);
+  }, []);
 
   return (
     <div className="fixed inset-0 w-full h-full overflow-hidden">
@@ -89,10 +106,18 @@ export default function DemoPage() {
         onFullStory={handleFullStory}
         selectedPoi={selectedPoi}
         hideControls={step <= 1}
+        autoExpandSheet={autoExpandSheet}
         demoMode
       />
 
-      <DemoOverlay step={step} onAdvance={advance} paused={paused} onRestart={restart} />
+      <DemoOverlay
+        step={step}
+        onAdvance={advance}
+        paused={paused}
+        onRestart={restart}
+        onAutoTap={autoTap}
+        onAutoExpand={autoExpand}
+      />
 
       {step < 6 && (
         <DemoControls onRestart={restart} paused={paused} onTogglePause={togglePause} />
