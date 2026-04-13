@@ -92,9 +92,11 @@ export default function DemoPage() {
         demoMode
       />
 
-      <DemoOverlay step={step} onAdvance={advance} paused={paused} />
+      <DemoOverlay step={step} onAdvance={advance} paused={paused} onRestart={restart} />
 
-      <DemoControls onRestart={restart} paused={paused} onTogglePause={togglePause} />
+      {step < 6 && (
+        <DemoControls onRestart={restart} paused={paused} onTogglePause={togglePause} />
+      )}
     </div>
   );
 }
