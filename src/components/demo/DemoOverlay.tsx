@@ -131,8 +131,15 @@ export function DemoOverlay({ step, onAdvance, paused, onRestart, onAutoTap, onA
       if (remainingRef.current > 0 && !pulse) {
         startedAtRef.current = Date.now();
         timerIdRef.current = setTimeout(() => {
-          if (timerTypeRef.current === "advance") onAdvance();
-          else setPulse(true);
+          if (timerTypeRef.current === "pulse") {
+            setPulse(true);
+          } else if (step === 2) {
+            onAutoTap?.();
+          } else if (step === 3) {
+            onAutoExpand?.();
+          } else {
+            onAdvance();
+          }
         }, remainingRef.current);
       }
     }
