@@ -45,11 +45,24 @@ export default function StoryPage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       {/* Category Icon Header */}
-      <div className="relative flex-shrink-0 bg-deep-green/5 pb-8 pt-safe-top">
-        <div className="flex items-center px-4 pt-3">
+      <div
+        className="relative flex-shrink-0 pt-safe-top"
+        style={{
+          height: 200,
+          background: 'linear-gradient(135deg, hsl(158 41% 21%) 0%, hsl(158 41% 21% / 0.85) 40%, hsl(40 46% 53% / 0.4) 100%)',
+        }}
+      >
+        {/* Radial glow behind icon */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'radial-gradient(circle at 50% 60%, hsl(40 46% 53% / 0.25) 0%, transparent 70%)',
+          }}
+        />
+        <div className="relative flex items-center px-4 pt-3">
           <button
             onClick={() => fromDemo ? navigate("/") : navigate(-1)}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-background shadow-sm"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-background/80 backdrop-blur-sm shadow-sm"
             aria-label="Go back"
           >
             <ArrowLeft className="h-5 w-5 text-foreground" />
@@ -57,15 +70,15 @@ export default function StoryPage() {
         </div>
 
         <motion.div
-          className="mt-6 flex flex-col items-center"
+          className="relative mt-4 flex flex-col items-center"
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         >
-          <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-deep-green/10">
+          <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-background/20 backdrop-blur-sm border border-white/10">
             {(() => {
               const Icon = CATEGORY_ICONS[poi.category];
-              return <Icon className="h-10 w-10 text-deep-green" />;
+              return <Icon className="h-10 w-10 text-white/90" />;
             })()}
           </div>
         </motion.div>
