@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export type DemoStep = 1 | 2 | 3 | 4 | 5 | 6;
@@ -6,6 +6,7 @@ export type DemoStep = 1 | 2 | 3 | 4 | 5 | 6;
 interface DemoOverlayProps {
   step: DemoStep;
   onAdvance: () => void;
+  paused: boolean;
 }
 
 const STEP_CONTENT: Record<
@@ -41,28 +42,81 @@ const STEP_CONTENT: Record<
   },
 };
 
-export function DemoOverlay({ step, onAdvance }: DemoOverlayProps) {
-  const [pulse, setPulse] = useState(false);
+const STEP_1_DURATION = 4000;
+const STEP_5_DURATION = 15000;
+const PULSE_DELAY = 8000;
 
-  // Auto-advance step 1 after 4s, and pulse hint after 8s on interactive steps
+export function DemoOverlay({ step, onAdvance, paused }: DemoOverlayProps) {
+  const [pulse, setPulse] = useState(false);
+  const remainingRef = useRef<number>(0);
+  const startedAtRef = useRef<number>(0);
+  const timerTypeRef = useRef<"advance" | "pulse" | null>(null);
+  const timerIdRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearTimer = () => {
+    if (timerIdRef.current) {
+      clearTimeout(timerIdRef.current);
+      timerIdRef.current = null;
+    }
+  };
+
+  // Reset on step change
   useEffect(() => {
     setPulse(false);
+    clearTimer();
 
     if (step === 1) {
-      const timer = setTimeout(onAdvance, 4000);
-      return () => clearTimeout(timer);
+      remainingRef.current = STEP_1_DURATION;
+      timerTypeRef.current = "advance";
+    } else if (step === 5) {
+      remainingRef.current = STEP_5_DURATION;
+      timerTypeRef.current = "advance";
+    } else if (step === 2 || step === 3 || step === 4) {
+      remainingRef.current = PULSE_DELAY;
+      timerTypeRef.current = "pulse";
+    } else {
+      timerTypeRef.current = null;
+      remainingRef.current = 0;
     }
 
-    if (step === 2 || step === 3 || step === 4) {
-      const pulseTimer = setTimeout(() => setPulse(true), 8000);
-      return () => clearTimeout(pulseTimer);
+    // Start immediately if not paused
+    if (!paused && remainingRef.current > 0) {
+      startedAtRef.current = Date.now();
+      timerIdRef.current = setTimeout(() => {
+        if (timerTypeRef.current === "advance") onAdvance();
+        else setPulse(true);
+      }, remainingRef.current);
     }
 
-    if (step === 5) {
-      const timer = setTimeout(onAdvance, 15000);
-      return () => clearTimeout(timer);
+    return clearTimer;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step]);
+
+  // Handle pause/resume
+  useEffect(() => {
+    if (timerTypeRef.current === null) return;
+
+    if (paused) {
+      // Freeze: calculate remaining time
+      if (timerIdRef.current) {
+        const elapsed = Date.now() - startedAtRef.current;
+        remainingRef.current = Math.max(0, remainingRef.current - elapsed);
+        clearTimer();
+      }
+    } else {
+      // Resume with remaining time
+      if (remainingRef.current > 0 && !pulse) {
+        startedAtRef.current = Date.now();
+        timerIdRef.current = setTimeout(() => {
+          if (timerTypeRef.current === "advance") onAdvance();
+          else setPulse(true);
+        }, remainingRef.current);
+      }
     }
-  }, [step, onAdvance]);
+
+    return clearTimer;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paused]);
 
   const content = STEP_CONTENT[step];
 
@@ -73,10 +127,13 @@ export function DemoOverlay({ step, onAdvance }: DemoOverlayProps) {
         <motion.div
           key={step}
           initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: pulse ? [0.7, 1, 0.7] : 1, y: 0 }}
+          animate={{
+            opacity: pulse && !paused ? [0.7, 1, 0.7] : 1,
+            y: 0,
+          }}
           exit={{ opacity: 0, y: -8 }}
           transition={
-            pulse
+            pulse && !paused
               ? { opacity: { repeat: Infinity, duration: 1.5 }, y: { duration: 0.3 } }
               : { duration: 0.3 }
           }
