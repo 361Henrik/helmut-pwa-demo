@@ -3,24 +3,23 @@ import { motion } from "framer-motion";
 function Waveform() {
   const bars = Array.from({ length: 20 });
   return (
-    <div className="flex items-center gap-[3px] h-8">
+    <div className="flex items-end gap-[3px] h-8">
       {bars.map((_, i) => (
         <motion.span
           key={i}
-          className="w-[3px] rounded-full"
-          style={{ backgroundColor: "hsl(40 46% 53% / 0.75)" }}
-          animate={{
-            scaleY: [0.3, 1, 0.5, 0.9, 0.3],
+          className="w-[3px] rounded-full block"
+          style={{
+            backgroundColor: "hsl(40 46% 53% / 0.75)",
+            height: 24,
+            originY: 1,
           }}
+          animate={{ scaleY: [0.3, 1, 0.5, 0.9, 0.3] }}
           transition={{
             duration: 1.4,
             repeat: Infinity,
             ease: "easeInOut",
             delay: (i % 6) * 0.1,
           }}
-          initial={{ height: 24 }}
-          // height baseline
-          {...{ style: { backgroundColor: "hsl(40 46% 53% / 0.75)", height: 24 } }}
         />
       ))}
     </div>
