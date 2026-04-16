@@ -13,7 +13,7 @@ interface DemoOverlayProps {
 // Step durations match revised beat sequence
 const STEP_1_DURATION = 10000; // Beat 1: Emotional hook
 const STEP_2_DURATION = 10000; // Beat 2: Live View
-const STEP_3_DURATION = 26000; // Beat 3: Editorial WOW
+const STEP_3_DURATION = 14000; // Beat 3: Editorial WOW
 const STEP_4_DURATION = 12000; // Beat 4: Map
 const STEP_5_DURATION = 12000; // Beat 5: Operator brand
 const STEP_6_DURATION = 16000; // Beat 6: Insights361
@@ -105,9 +105,9 @@ export function DemoOverlay({ step, onAdvance, paused }: DemoOverlayProps) {
           transition={{ duration: 0.4 }}
           className="pointer-events-none absolute bottom-20 left-0 right-0 z-30 flex flex-col items-center gap-3 px-6"
         >
-          <div className="rounded-full bg-deep-green/90 px-5 py-2.5 shadow-lg backdrop-blur-sm">
-            <p className="text-body-small font-medium text-deep-green-foreground text-center">
-              23 curated stories across this route
+          <div className="rounded-full bg-warm-white/95 px-5 py-2.5 shadow-xl backdrop-blur-md border border-deep-green/10">
+            <p className="font-body text-[14px] font-medium text-deep-green text-center">
+              Context for every kilometre — not just the famous ones
             </p>
           </div>
         </motion.div>

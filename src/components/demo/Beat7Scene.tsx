@@ -36,14 +36,14 @@ export function Beat7Scene({ onRestart }: Beat7SceneProps) {
       </motion.div>
 
       {/* Headlines */}
-      <div className="text-center max-w-md">
+      <div className="text-center max-w-sm">
         {LINES.map((line, i) => (
           <motion.h2
             key={i}
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 + i * 0.4, duration: 0.7 }}
-            className="font-display text-5xl md:text-6xl font-medium leading-tight text-warm-white"
+            className="font-display text-[36px] font-medium leading-[1.15] text-warm-white"
           >
             {line}
           </motion.h2>
@@ -53,7 +53,7 @@ export function Beat7Scene({ onRestart }: Beat7SceneProps) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.6, duration: 0.6 }}
-          className="mt-8 font-body text-base text-warm-white/70"
+          className="mt-6 font-body text-[15px] text-warm-white/80"
         >
           One platform. Your narrative, entirely.
         </motion.p>
