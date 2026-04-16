@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 
 export type DemoStep = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
@@ -10,14 +9,14 @@ interface DemoOverlayProps {
   onRestart?: () => void;
 }
 
-// Step durations match revised beat sequence
-const STEP_1_DURATION = 10000; // Beat 1: Emotional hook
-const STEP_2_DURATION = 10000; // Beat 2: Live View
-const STEP_3_DURATION = 14000; // Beat 3: Editorial WOW
-const STEP_4_DURATION = 12000; // Beat 4: Map
-const STEP_5_DURATION = 12000; // Beat 5: Operator brand
-const STEP_6_DURATION = 16000; // Beat 6: Insights361
-// Step 7: no auto-advance
+// Phase durations — tighter, app-like pacing (~54s total)
+const STEP_1_DURATION = 8000;  // Phase 1: Silence
+const STEP_2_DURATION = 8000;  // Phase 2: Awareness
+const STEP_3_DURATION = 10000; // Phase 3: Live View
+const STEP_4_DURATION = 10000; // Phase 4: Depth
+const STEP_5_DURATION = 10000; // Phase 5: Map Context
+const STEP_6_DURATION = 8000;  // Phase 6: Operator Layer
+// Phase 7: no auto-advance
 
 export function DemoOverlay({ step, onAdvance, paused }: DemoOverlayProps) {
   const remainingRef = useRef<number>(0);
@@ -32,27 +31,20 @@ export function DemoOverlay({ step, onAdvance, paused }: DemoOverlayProps) {
     }
   };
 
-  // Reset on step change
   useEffect(() => {
     clearTimer();
 
-    if (step === 1) {
-      remainingRef.current = STEP_1_DURATION;
-      timerTypeRef.current = "advance";
-    } else if (step === 2) {
-      remainingRef.current = STEP_2_DURATION;
-      timerTypeRef.current = "advance";
-    } else if (step === 3) {
-      remainingRef.current = STEP_3_DURATION;
-      timerTypeRef.current = "advance";
-    } else if (step === 4) {
-      remainingRef.current = STEP_4_DURATION;
-      timerTypeRef.current = "advance";
-    } else if (step === 5) {
-      remainingRef.current = STEP_5_DURATION;
-      timerTypeRef.current = "advance";
-    } else if (step === 6) {
-      remainingRef.current = STEP_6_DURATION;
+    const map: Record<number, number> = {
+      1: STEP_1_DURATION,
+      2: STEP_2_DURATION,
+      3: STEP_3_DURATION,
+      4: STEP_4_DURATION,
+      5: STEP_5_DURATION,
+      6: STEP_6_DURATION,
+    };
+
+    if (step >= 1 && step <= 6) {
+      remainingRef.current = map[step];
       timerTypeRef.current = "advance";
     } else {
       timerTypeRef.current = null;
@@ -70,7 +62,6 @@ export function DemoOverlay({ step, onAdvance, paused }: DemoOverlayProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step]);
 
-  // Handle pause/resume
   useEffect(() => {
     if (timerTypeRef.current === null) return;
 
@@ -93,27 +84,6 @@ export function DemoOverlay({ step, onAdvance, paused }: DemoOverlayProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paused]);
 
-  // Only step 4 (map beat) renders a small floating hint
-  if (step === 4) {
-    return (
-      <AnimatePresence mode="wait">
-        <motion.div
-          key="step4"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -8 }}
-          transition={{ duration: 0.4 }}
-          className="pointer-events-none absolute bottom-20 left-0 right-0 z-30 flex flex-col items-center gap-3 px-6"
-        >
-          <div className="rounded-full bg-warm-white/95 px-5 py-2.5 shadow-xl backdrop-blur-md border border-deep-green/10">
-            <p className="font-body text-[14px] font-medium text-deep-green text-center">
-              Context for every kilometre — not just the famous ones
-            </p>
-          </div>
-        </motion.div>
-      </AnimatePresence>
-    );
-  }
-
+  // No floating overlays — each scene owns its own UI now.
   return null;
 }
