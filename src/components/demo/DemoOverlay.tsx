@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-export type DemoStep = 1 | 2 | 3 | 4 | 5 | 6 | 7;
+export type DemoStep = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
 interface DemoOverlayProps {
   step: DemoStep;
@@ -9,14 +9,15 @@ interface DemoOverlayProps {
   onRestart?: () => void;
 }
 
-// Phase durations — tighter, app-like pacing (~54s total)
+// Phase durations — tighter, app-like pacing
 const STEP_1_DURATION = 8000;  // Phase 1: Silence
 const STEP_2_DURATION = 8000;  // Phase 2: Awareness
 const STEP_3_DURATION = 10000; // Phase 3: Live View
 const STEP_4_DURATION = 10000; // Phase 4: Depth
 const STEP_5_DURATION = 10000; // Phase 5: Map Context
 const STEP_6_DURATION = 8000;  // Phase 6: Operator Layer
-// Phase 7: no auto-advance
+const STEP_7_DURATION = 11000; // Phase 7: Insights361
+// Phase 8: no auto-advance
 
 export function DemoOverlay({ step, onAdvance, paused }: DemoOverlayProps) {
   const remainingRef = useRef<number>(0);
@@ -41,9 +42,10 @@ export function DemoOverlay({ step, onAdvance, paused }: DemoOverlayProps) {
       4: STEP_4_DURATION,
       5: STEP_5_DURATION,
       6: STEP_6_DURATION,
+      7: STEP_7_DURATION,
     };
 
-    if (step >= 1 && step <= 6) {
+    if (step >= 1 && step <= 7) {
       remainingRef.current = map[step];
       timerTypeRef.current = "advance";
     } else {

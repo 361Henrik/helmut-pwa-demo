@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { PhoneChrome } from "./PhoneChrome";
+import { useBrand } from "./BrandContext";
 
 /** Decorative QR placeholder — 12x12 grid of squares */
 function QRPlaceholder() {
@@ -30,6 +31,7 @@ function QRPlaceholder() {
  * Lives inside the phone chrome — deep-green base, warm-white type.
  */
 export function Beat2Scene() {
+  const brand = useBrand();
   return (
     <PhoneChrome showStatusBar>
       <div className="absolute inset-0 flex flex-col items-center justify-center px-8">
@@ -42,15 +44,23 @@ export function Beat2Scene() {
           <p className="font-body text-[10px] uppercase tracking-[0.3em] text-warm-white/60">
             Operator
           </p>
-          <h1
-            className="mt-2 font-display font-medium tracking-tight text-warm-white"
-            style={{ fontSize: 30 }}
-          >
-            Scenic Waterways
-          </h1>
+          {brand.logo ? (
+            <img
+              src={brand.logo}
+              alt={brand.name}
+              className="mx-auto mt-3 max-h-14 max-w-[220px] object-contain"
+            />
+          ) : (
+            <h1
+              className="mt-2 font-display font-medium tracking-tight text-warm-white"
+              style={{ fontSize: 30 }}
+            >
+              {brand.name}
+            </h1>
+          )}
           <span
             className="mt-3 inline-block h-px w-12"
-            style={{ backgroundColor: "#C49A5C", opacity: 0.7 }}
+            style={{ backgroundColor: brand.accent, opacity: 0.7 }}
           />
         </motion.div>
 

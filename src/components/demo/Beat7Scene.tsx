@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { RotateCcw } from "lucide-react";
 import { PhoneChrome } from "./PhoneChrome";
+import { useBrand } from "./BrandContext";
 
 interface Beat7SceneProps {
   onRestart: () => void;
@@ -9,11 +10,16 @@ interface Beat7SceneProps {
 const LINES = ["Your brand.", "Your stories.", "Your guests."];
 
 export function Beat7Scene({ onRestart }: Beat7SceneProps) {
+  const brand = useBrand();
   const handleCTA = () => {
-    if (window.parent !== window) {
-      window.parent.location.href = "#contact";
+    const target = brand.cta;
+    const isExternal = /^https?:\/\//i.test(target);
+    if (isExternal && window.parent !== window) {
+      window.parent.location.href = target;
+    } else if (window.parent !== window) {
+      window.parent.location.href = target;
     } else {
-      window.location.href = "#contact";
+      window.location.href = target;
     }
   };
 
@@ -27,11 +33,11 @@ export function Beat7Scene({ onRestart }: Beat7SceneProps) {
           className="absolute top-12 left-1/2 -translate-x-1/2 flex flex-col items-center"
         >
           <span className="font-body text-[11px] uppercase tracking-[0.3em] text-warm-white/60">
-            Scenic Waterways
+            {brand.name}
           </span>
           <span
             className="mt-2 h-px w-10"
-            style={{ backgroundColor: "#C49A5C", opacity: 0.7 }}
+            style={{ backgroundColor: brand.accent, opacity: 0.7 }}
           />
         </motion.div>
 
@@ -69,12 +75,12 @@ export function Beat7Scene({ onRestart }: Beat7SceneProps) {
               onClick={handleCTA}
               className="rounded-full px-7 py-3.5 font-body font-medium transition-opacity hover:opacity-90"
               style={{
-                backgroundColor: "#C49A5C",
+                backgroundColor: brand.accent,
                 color: "#1B3D2F",
                 fontSize: 15,
               }}
             >
-              Request a conversation →
+              {brand.ctaLabel} →
             </button>
 
             <button
